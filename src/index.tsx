@@ -4,14 +4,23 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {Test} from "./pages/Test";
+import {InnerPage} from "./pages/InnerPage";
+
+export type TestPageLoader = {
+    name: string
+}
 
 const router = createBrowserRouter([
     {
         element: <Test/>,
-        path: "/:name?",
-        loader: ({params}) => {
-            return {name: params.name};
+        path: "/",
+        loader: (): TestPageLoader => {
+            return {name: "Test "};
         }
+    },
+    {
+        element: <InnerPage/>,
+        path: "/lol"
     }
 ]);
 
