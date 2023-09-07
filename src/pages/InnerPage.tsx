@@ -1,5 +1,7 @@
-import React, {ReactNode} from 'react';
+import React, {ReactNode, useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
+import {useFetch} from "../hooks/useFetch";
+import {TEST_PATH} from "../util/RequestConstants";
 
 type InnerPageProps = {
     className?: string;
@@ -7,9 +9,24 @@ type InnerPageProps = {
 };
 export const InnerPage = (props: InnerPageProps) => {
     const navigate = useNavigate();
+    const [data, setData] = useState<any>({status: "Loading.."});
+
+    const {getJson} = useFetch();
     console.log("render inner page.");
+
+    useEffect(() => {
+        getJson<any>(TEST_PATH)
+            .then(res => {
+                setData(res);
+                console.log(JSON.stringify(res));
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }, [getJson]);
+
     return <div>
-        Change into the inner page.
+        {JSON.stringify(data)}
         <input type={"button"} onClick={() => navigate(-1)} value={"Back to test."}/>
     </div>;
 };

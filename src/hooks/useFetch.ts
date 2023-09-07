@@ -1,7 +1,9 @@
 import {useCallback} from "react";
 
+type RequestParams = { [key: string]: string }
+
 export function useFetch() {
-    type RequestParams = { [key: string]: string }
+    console.log("Fetch render.");
 
     function requestParamsString(params: RequestParams): string {
         let reqParamString = "?";
@@ -11,15 +13,22 @@ export function useFetch() {
         }
         return reqParamString.substring(0, reqParamString.length - 1);
     }
-    
+
     const getJson = useCallback(<TResponse>(path: string, requestParams?: RequestParams): Promise<TResponse> => {
+        if (requestParams) {
+            path += requestParamsString(requestParams);
+        }
+
         return fetch(path, {
             method: "GET",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-        }) as Promise<TResponse>;
+        }).then(res => {
+            return res.json() as Promise<TResponse>;
+        });
+
     }, []);
 
     const postJson = useCallback(<TRequest, TResponse>(path: string, body?: TRequest): Promise<TResponse> => {
@@ -30,17 +39,25 @@ export function useFetch() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(body)
-        }) as Promise<TResponse>;
+        }).then(res => {
+            return res.json() as Promise<TResponse>;
+        });
     }, []);
 
     const deleteJson = useCallback(<TResponse>(path: string, requestParams?: RequestParams): Promise<TResponse> => {
+        if (requestParams) {
+            path += requestParamsString(requestParams);
+        }
+
         return fetch(path, {
             method: "DELETE",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-        }) as Promise<TResponse>;
+        }).then(res => {
+            return res.json() as Promise<TResponse>;
+        });
     }, []);
 
     return {getJson, postJson, deleteJson};
