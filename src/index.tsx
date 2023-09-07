@@ -5,6 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {Test} from "./pages/Test";
 import {InnerPage} from "./pages/InnerPage";
+import {ROUTE_INNER, ROUTE_ROOT} from "./util/RouteConstants";
 
 export type TestPageLoader = {
     name: string
@@ -13,17 +14,17 @@ export type TestPageLoader = {
 const router = createBrowserRouter([
     {
         element: <Test/>,
-        path: "/",
+        path: ROUTE_ROOT,
     },
     {
         element: <InnerPage/>,
-        path: "/lol"
+        path: ROUTE_INNER
     }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
     .render(
-            <RouterProvider router={router}/>
+        <RouterProvider router={router}/>
     );
 
 // If you want to start measuring performance in your app, pass a function
