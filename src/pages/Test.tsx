@@ -7,13 +7,11 @@ type TestProps = {
     children?: ReactNode;
 };
 export const Test = (props: TestProps) => {
-    const loader = useLoaderData() as TestPageLoader;
     const navigate = useNavigate();
-    console.log(loader.name);
 
     return (
         <div>
-            {loader.name}
+            Test page.
             <input type={"button"} value={"To inner page."} onClick={() => navigate("/lol")}/>
         </div>
     );

@@ -14,9 +14,6 @@ const router = createBrowserRouter([
     {
         element: <Test/>,
         path: "/",
-        loader: (): TestPageLoader => {
-            return {name: "Test "};
-        }
     },
     {
         element: <InnerPage/>,
