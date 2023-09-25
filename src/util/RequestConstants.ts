@@ -1,1 +1,1 @@
-export const TEST_PATH = "https://reqres.in/api/users/2";
+export const TEST_PATH = "/api/test";
