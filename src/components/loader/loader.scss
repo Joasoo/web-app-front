@@ -1,0 +1,22 @@
+.overlay {
+  background: rgba(0, 0, 0, 0.2);
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.no-overlay {
+  width: fit-content;
+  height: fit-content;
+}
+
+.img-overlay {
+  background: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+}

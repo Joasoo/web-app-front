@@ -1,7 +1,7 @@
 import React, {ReactNode} from 'react';
-import {useLoaderData, useNavigate} from "react-router-dom";
-import {TestPageLoader} from "../index";
+import {useNavigate} from "react-router-dom";
 import {ROUTE_INNER} from "../util/RouteConstants";
+import {Loader} from "../components/loader/Loader";
 
 type TestProps = {
     className?: string;
@@ -13,6 +13,7 @@ export const Test = (props: TestProps) => {
     return (
         <div>
             Test page.
+            <Loader size="lg"/>
             <input type={"button"} value={"To inner page."} onClick={() => navigate(ROUTE_INNER)}/>
         </div>
     );
