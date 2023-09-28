@@ -1,13 +1,12 @@
 import React, {ReactNode} from 'react';
-import {Link, useNavigate} from "react-router-dom";
 import {ROUTE_REGISTER} from "../util/RouteConstants";
+import {Link} from "react-router-dom";
 
 type LoginPageProps = {
     className?: string;
     children?: ReactNode;
 };
 export const LoginPage = (props: LoginPageProps) => {
-    const navigate = useNavigate()
 
     return (
         <div>
