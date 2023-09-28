@@ -5,7 +5,9 @@ import reportWebVitals from './reportWebVitals';
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {Test} from "./pages/Test";
 import {InnerPage} from "./pages/InnerPage";
-import {ROUTE_INNER, ROUTE_ROOT} from "./util/RouteConstants";
+import {LoginPage} from "./pages/LoginPage"
+
+import {ROUTE_INNER, ROUTE_LOGIN, ROUTE_ROOT} from "./util/RouteConstants";
 
 export type TestPageLoader = {
     name: string
@@ -19,6 +21,10 @@ const router = createBrowserRouter([
     {
         element: <InnerPage/>,
         path: ROUTE_INNER
+    },
+    {
+        element: <LoginPage/>,
+        path: ROUTE_LOGIN
     }
 ]);
 
