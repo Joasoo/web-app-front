@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="600" height="600" xmlns="http://www.w3.org/2000/svg">
+    <title>oops</title>
+
+    <g>
+        <title>Layer 1</title>
+        <g id="svg_6">
+            <ellipse fill="#fff" fill-opacity="0" stroke="#d00" cx="300" cy="312.27217" id="svg_warning_1"
+                     rx="192.63159" ry="192.63159" stroke-width="16"/>
+            <text fill="#dd0000" stroke="#d00" x="306.95029" y="163.27676" id="svg_warning_2" font-size="24"
+                  font-family="'Noto Sans Mono'" text-anchor="start" xml:space="preserve"
+                  transform="matrix(20.2789, 0, 0, 16.2104, -6006.03, -2195.83)" font-weight="bold">!</text>
+        </g>
+    </g>
+</svg>
