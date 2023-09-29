@@ -12,6 +12,8 @@ export const LoginPage = (props: LoginPageProps) => {
         <div>
             <h1 className={"text-center my-5 pb-3"}>Webpage name</h1>
             <form className={"d-flexbox w-25 mx-auto p-3 border border-2 border-secondary rounded"}>
+                <h2 className={"text-center"}>Login</h2>
+                <hr className={"mx-4 mt-3 mb-4"}/>
                 <input className={"d-block w-75 mx-auto my-3 rounded text-center"}
                        type={"email"}
                        placeholder={"Enter your email"}/>
