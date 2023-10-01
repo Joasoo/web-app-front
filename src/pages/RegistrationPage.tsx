@@ -1,16 +1,19 @@
 import React, {ReactNode} from 'react';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import {ROUTE_LOGIN} from "../util/RouteConstants";
 
 type RegistrationPageProps = {
     className?: string;
     children?: ReactNode;
 };
 export const RegistrationPage = (props: RegistrationPageProps) => {
+    const navigate = useNavigate();
+
     return (
         <div>
             <form className={"d-flexbox w-50 mx-auto mt-5 p-3 border border-2 border-secondary rounded"}>
                 <h2 className={"text-center"}>Register</h2>
-                <hr className={"mx-4 my-3"} />
+                <hr className={"mx-4 my-3"}/>
                 <div className={"container"}>
                     <div className={"row my-4"}>
                         <div className={"col d-flex justify-content-between"}>
@@ -45,7 +48,7 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
                         </div>
                     </div>
 
-                    <hr className={"mx-3 my-3"} />
+                    <hr className={"mx-3 my-3"}/>
 
                     <div className={"row my-4"}>
                         <div className={"col d-flex justify-content-between"}>
@@ -85,15 +88,19 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
                         <small>*</small>&nbsp;
                         <input type={"checkbox"}/>&nbsp;
                         <label>I have read and agreed to the&nbsp;
-                        <Link to={"/terms-of-service"}>Terms of Service</Link> and&nbsp;
-                        <Link to={"/privacy-policy"}>Privacy Policy</Link></label>
+                            <Link to={"/terms-of-service"}>Terms of Service</Link> and&nbsp;
+                            <Link to={"/privacy-policy"}>Privacy Policy</Link></label>
                     </div>
 
-                    <input className={"d-block mx-auto py-1 px-3 mt-3 mb-2 btn btn-primary"}
+                    <input className={"py-1 px-3 mt-3 mb-2 btn btn-primary"}
+                           type={"button"}
+                           value={"Back"} onClick={() => navigate(ROUTE_LOGIN)}/>
+
+                    <input className={"py-1 px-3 mt-3 mb-2 btn btn-primary"}
                            type={"button"}
                            value={"Create account"}/>
 
                 </div>
             </form>
-    </div>)
+        </div>)
 }
