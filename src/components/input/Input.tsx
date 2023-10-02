@@ -3,6 +3,44 @@ import "./input.scss";
 import {HTMLInputTypeAttribute, ReactElement} from "react";
 import {Loader} from "../loader/Loader";
 
+const subtextSize=  "0.9em";
+
+type ConfigType = {
+    [key in SubtextType["type"]]: {
+        icon?: ReactElement,
+        subtextClass?: string,
+        borderClass?: string,
+    }
+}
+
+const inputConfig: ConfigType = {
+    "danger": {
+        icon: <i className="col bi-dash-circle fit-content text-danger px-1" style={{fontSize: subtextSize}}/>,
+        subtextClass: "text-danger",
+        borderClass: "border-danger"
+    },
+    "warning": {
+        icon: <i className="col bi-exclamation-circle fit-content text-warning px-1" style={{fontSize: subtextSize}}/>,
+        subtextClass: "text-warning",
+        borderClass: "border-warning"
+    },
+    "success": {
+        icon: <i className="col bi-check-circle fit-content text-success px-1" style={{fontSize: subtextSize}}/>,
+        subtextClass: "text-success",
+        borderClass: "border-success"
+    },
+    "loading": {
+        icon: <Loader className="fit-content" size={"1.4em"}/>,
+        borderClass: "border-black border-2"
+    },
+    "info": {
+        icon: <i className="col bi-exclamation-circle fit-content text-info px-1" style={{fontSize: subtextSize}}/>,
+        subtextClass: "text-info",
+        borderClass: "border-info"
+    }
+}
+
+
 export type SubtextType = {
     value: string;
     type: "danger" | "warning" | "success" | "loading" | "info"
@@ -11,51 +49,19 @@ export type SubtextType = {
 export type InputProps = {
     value: string | undefined;
     onChange: (value: string) => void;
-    placeholder?: string;
+    text?: string;
+    textAlign?: "start" | "center" | "end"
     type?: HTMLInputTypeAttribute;
-    subtext?: SubtextType
+    subtext?: SubtextType;
     className?: string;
 }
-
-const fontSize = {fontSize: "1em"};
-
-type ConfigType = {
-    [key in SubtextType["type"]]: {
-        icon?: ReactElement,
-        subtextColorClass?: string
-    }
-}
-
-const inputConfig: ConfigType = {
-    "danger": {
-        icon: <i className="col bi-dash-circle fit-content text-danger" style={fontSize}/>,
-        subtextColorClass: "text-danger"
-    },
-    "warning": {
-        icon: <i className="col bi-exclamation-circle fit-content text-warning" style={fontSize}/>,
-        subtextColorClass: "text-warning"
-    },
-    "success": {
-        icon: <i className="col bi-check-circle fit-content text-success" style={fontSize}/>,
-        subtextColorClass: "text-success"
-    },
-    "loading": {
-        icon: <Loader className="col fit-content" size={"1em"}/>
-    },
-    "info": {
-        icon: <i className="col bi-exclamation-circle fit-content text-info" style={fontSize}/>,
-        subtextColorClass: "text-info"
-    }
-}
-
 export const Input = (props: InputProps) => {
     return (
-        <div className={"container"}>
-            <div className={"row"}>
-                <input className={(props.className ?? "") +
-                    " custom-input rounded-2 form-element-bg col" +
-                    (props.subtext ? ` border-${props.subtext.type}` : "")}
-                       placeholder={props.placeholder}
+        <div className={`d-flex flex-column ${props.className ?? ""}`}>
+            <div className={"mx-auto"}>
+                <input className={`custom-input rounded-2 form-element-bg col text-${props.textAlign ?? "start"} 
+                ${(props.subtext ? inputConfig[props.subtext?.type].borderClass : "")}`}
+                       placeholder={props.text}
                        value={props.value}
                        onChange={(e) => {
                            props.onChange(e.target.value);
@@ -65,12 +71,14 @@ export const Input = (props: InputProps) => {
             </div>
             {
                 props.subtext ?
-                    <div className={"row align-items-center flex-nowrap"}>
-                        {inputConfig[props.subtext.type].icon}
-                        <div
-                            className={`${inputConfig[props.subtext.type].subtextColorClass ?? ""} col-11 m-0 p-0 fw-semibold`}>
+                    <div className={"d-flex flex-row align-items-center"}>
+                        <span>{inputConfig[props.subtext.type].icon}</span>
+                        <span
+                            className={`${inputConfig[props.subtext.type].subtextClass ?? ""} fw-semibold custom-subtext`}
+                            style={{fontSize: subtextSize}}
+                        >
                             {props.subtext?.value}
-                        </div>
+                        </span>
                     </div>
                     : ""
             }
