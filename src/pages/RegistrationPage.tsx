@@ -62,7 +62,8 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
                             </select>
                         </div>
                         <div className={"col d-flex justify-content-between"}>
-                            <label>Education: Todo - make multi-value input</label>
+                            <label>Workplace:</label>
+                            <input type={"text"} className={"w-auto rounded text-center"}/>
                         </div>
                     </div>
 
@@ -73,13 +74,6 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
                         </div>
                         <div className={"col d-flex justify-content-between"}>
                             <label>Hometown:</label>
-                            <input type={"text"} className={"w-auto rounded text-center"}/>
-                        </div>
-                    </div>
-
-                    <div className={"row my-4"}>
-                        <div className={"col-6 d-flex justify-content-between"}>
-                            <label>Workplace:</label>
                             <input type={"text"} className={"w-auto rounded text-center"}/>
                         </div>
                     </div>
