@@ -1,15 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import './index.scss';
 import reportWebVitals from './reportWebVitals';
-import 'bootstrap/dist/css/bootstrap.css';
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {Test} from "./pages/Test";
 import {InnerPage} from "./pages/InnerPage";
 import {LoginPage} from "./pages/LoginPage"
-
 import {ROUTE_INNER, ROUTE_LOGIN, ROUTE_REGISTER, ROUTE_ROOT} from "./util/RouteConstants";
+
 import {RegistrationPage} from "./pages/RegistrationPage";
+import 'bootstrap/dist/css/bootstrap.css';
 
 export type TestPageLoader = {
     name: string
