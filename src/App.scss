@@ -1,0 +1,22 @@
+.form-element-bg {
+    background: #d9d9d9;
+}
+
+.fit-content {
+    width: fit-content !important;
+}
+
+@mixin flex-center {
+    display: flex;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.flex-center {
+    @include flex-center;
+}
+
+.stretch-max {
+    width: 100vw !important;
+    height: 100vh !important;
+}
