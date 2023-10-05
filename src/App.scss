@@ -16,6 +16,10 @@
     @include flex-center;
 }
 
+.no-wrap {
+    white-space: nowrap;
+}
+
 .stretch-max {
     width: 100vw !important;
     height: 100vh !important;

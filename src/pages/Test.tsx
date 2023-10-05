@@ -14,7 +14,7 @@ export const Test = (props: TestProps) => {
     return (
         <div>
             Test page.
-            <Loader size="5em" overlay/>
+            <Loader size="5em"/>
             <input type={"button"} value={"To inner page."} onClick={() => navigate(ROUTE_LOGIN)}/>
         </div>
     );
