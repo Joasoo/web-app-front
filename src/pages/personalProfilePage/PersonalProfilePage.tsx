@@ -55,6 +55,7 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                         setHometown(res.hometown);
                         setWorkplace(res.workplace);
                         setDateOfBirth(res.dateOfBirth);
+                        setProfileBio(res.bio)
                     })
                     .catch((err) => {
                         console.log(err);
