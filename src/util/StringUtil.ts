@@ -6,7 +6,7 @@ dayjs.extend(utc);
 const DATE_DISPLAY_FORMAT = "DD.MM.YYYY";
 
 const DATE_ISO_FORMAT = "YYYY-MM-DDTHH:mm:ss.SSS"
-export function toDateString(value?: string | Date): string {
+export function formatDateString(value?: string | Date): string {
     if (!value) return "";
     return dayjs(value).format(DATE_DISPLAY_FORMAT);
 }
