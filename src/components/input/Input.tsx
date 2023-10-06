@@ -61,7 +61,7 @@ export const Input = (props: InputProps) => {
     return (
         <div className={`d-flex flex-column align-items-center ${props.className ?? ""}`}>
             <div>
-                <input className={`custom-input rounded-2 form-element-bg col text-${props.textAlign ?? "start"} ${props.disabled ? "disabled" : ""} 
+                <input className={`custom-input rounded-2 form-element-bg col text-${props.textAlign ?? "start"} ${props.disabled ? "cursor-disabled" : ""} 
                 ${(props.subtext ? inputConfig[props.subtext?.type].borderClass : "")}`}
                        placeholder={props.text ?? ""}
                        value={props.value ?? ""}

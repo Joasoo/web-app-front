@@ -24,3 +24,7 @@
     width: 100vw !important;
     height: 100vh !important;
 }
+
+.cursor-disabled:hover {
+    cursor: not-allowed;
+}
