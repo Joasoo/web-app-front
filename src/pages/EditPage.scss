@@ -7,6 +7,22 @@
   width: 75%;
 }
 
+.input-box {
+  width: fit-content(100%);
+}
+
+.list-box {
+  padding-bottom: 0.2rem;
+  padding-top: 0.2rem;
+}
+
+.reset-btn {
+  width: 5rem;
+  padding-bottom: 0.2rem;
+  padding-top: 0.2rem;
+  transform: scale(94%);
+}
+
 .picture-box {
   width: 10rem;
   aspect-ratio: 1 / 1;
