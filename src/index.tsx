@@ -10,7 +10,7 @@ import {ROUTE_INNER, ROUTE_LOGIN, ROUTE_PROFILE, ROUTE_REGISTER, ROUTE_ROOT} fro
 
 import {RegistrationPage} from "./pages/RegistrationPage";
 import 'bootstrap/dist/css/bootstrap.css';
-import {PersonalProfilePage} from "./pages/PersonalProfilePage";
+import {PersonalProfilePage} from "./pages/personalProfilePage/PersonalProfilePage";
 
 export type TestPageLoader = {
     name: string

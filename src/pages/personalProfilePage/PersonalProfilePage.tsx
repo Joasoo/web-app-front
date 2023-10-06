@@ -1,12 +1,11 @@
 import React, {ReactNode, useEffect, useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
 import "./PersonalProfilePage.scss"
-import "../App.scss"
-import {useFetch} from "../hooks/useFetch";
-import {REQUEST_PROFILE_BIO, REQUEST_PROFILE_DATA, REQUEST_POST} from "../util/RequestConstants";
-import {Input} from "../components/input/Input";
+import "../../App.scss"
+import {useFetch} from "../../hooks/useFetch";
+import {REQUEST_PROFILE_DATA, REQUEST_POST} from "../../util/RequestConstants";
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
-import {ProfileDataModel} from "../model/profileData.model";
+import {ProfileDataModel} from "../../model/profileData.model";
 
 
 type ProfilePageProps = {
@@ -26,10 +25,12 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
     const [profileBio, setProfileBio] = useState<string | undefined>()
     const [newPostText, setNewPostText] = useState<string | undefined>()
     const profileId = new URLSearchParams(window.location.search).get("id");
+    const maxPostSize = 1000;
 
     const makePost = () => {
         if (profileId && newPostText) {
             console.log("Make a post for profile id: " + profileId)
+            setNewPostText("")
             /*            postJson(
                             REQUEST_POST,
                             {
@@ -59,13 +60,13 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                         console.log(err);
                     })
 
-/*                getJson<ProfileBioModel>(REQUEST_PROFILE_BIO, requestParams)
-                    .then((res) => {
-                        setProfileBio(res.bio)
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    })*/
+                /*                getJson<ProfileBioModel>(REQUEST_PROFILE_BIO, requestParams)
+                                    .then((res) => {
+                                        setProfileBio(res.bio)
+                                    })
+                                    .catch((err) => {
+                                        console.log(err);
+                                    })*/
             }
         }
     )
@@ -111,7 +112,6 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                                 {
                                     relationshipStatus ? <p>Relationship status: {relationshipStatus}</p> : undefined
                                 }
-
                                 {
                                     dateOfBirth ? <p>Birthday: {dateOfBirth}</p> : undefined
                                 }
@@ -140,21 +140,36 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                         <Tab>Photos</Tab>
                     </TabList>
 
-                    <TabPanel>
-                        <h4 className={"mb-4"}>Create a new post</h4>
-                        <Input
-                            value={newPostText}
-                            onChange={setNewPostText}
-                            text={"Write your post here"}
-                            className={"mx-auto"}
-                        />
+                    <TabPanel className={"align-items-start"}>
+                        <h4>Create a new post</h4>
+                        <div className={"d-flex w-100"}>
+                            <textarea
+                                className={"new-post d-flex w-75 my-3 rounded-2 bg-secondary-subtle align-items-start"}
+                                value={newPostText}
+                                onChange={e => e.target.value.length <= maxPostSize ?
+                                    setNewPostText(e.target.value) : null}
+                                placeholder={"Write your post here..."}
+                            />
+                            <text className={"align-self-center mx-3 text-secondary"}>
+                                {newPostText?.length}/{maxPostSize}
+                            </text>
+                        </div>
 
-                        <input
-                            className={"w-auto btn btn-primary"}
-                            type={"button"}
-                            value={"Create post"}
-                            onClick={makePost}
-                        />
+                        <div className={"d-flex"}>
+                            <input
+                                className={"w-auto btn btn-primary align-self-start"}
+                                type={"button"}
+                                value={"Create post"}
+                                onClick={makePost}
+                            />
+                            <input
+                                className={"mx-3 btn btn-secondary"}
+                                type={"button"}
+                                value={"Clear"}
+                                onClick={() => setNewPostText("")}
+                            />
+                        </div>
+
                         <h4 className={"mt-5"}>Posts</h4>
                     </TabPanel>
 
