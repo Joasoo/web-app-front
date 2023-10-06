@@ -60,14 +60,6 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                     .catch((err) => {
                         console.log(err);
                     })
-
-                /*                getJson<ProfileBioModel>(REQUEST_PROFILE_BIO, requestParams)
-                                    .then((res) => {
-                                        setProfileBio(res.bio)
-                                    })
-                                    .catch((err) => {
-                                        console.log(err);
-                                    })*/
             }
         }
     )
