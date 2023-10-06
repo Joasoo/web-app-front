@@ -1,5 +1,6 @@
 import React, {ReactNode} from 'react';
 import {Link, useNavigate} from "react-router-dom";
+import "./EditPage.scss"
 import {ROUTE_EDIT} from "../util/RouteConstants";
 
 type EditPageProps = {
@@ -10,51 +11,53 @@ export const EditPage = (props: EditPageProps) => {
     const navigate = useNavigate();
 
     return (
-        <div className={"d-flex flex-column w-50 mt-5 mx-auto border border-2 border-secondary rounded-3"}> {/*suur konteiner*/}
-            <div className={"d-flex border border-2 rounded-3"}> {/*ülemine konteiner fotode ja bio jaoks*/}
-                <div className={"d-flex flex-column w-100 justify-content-between border rounded-3"}> {/*profile foto ja bio konteiner*/}
-                    <div className={"mx-auto w-50 justify-content-between border"}> {/*profile foto*/}
-                        <div className={"d-flex flex-column  mx-auto justify-content-between border rounded-3"}>
-                            <div className={"border border-2 rounded-3"}>
-                                <div className={"profile-picture rounded-circle bg bg-secondary"}/>
-                            </div>
-                            <div className={"border border-2 rounded-3"}>
-                                Edit photo button
-                            </div>
-                        </div>
+        <div className={"edit-box flex-column mx-auto border border-2 border-secondary rounded-3"}> {/*suur konteiner*/}
+            {/*ülemine konteiner fotode ja bio jaoks*/}
+            <div className={"container w-75"}>
+                <div className={"row my-3"}>
+                    <div className={"col d-flex flex-column"}>
+                        <div className={"picture-box mx-auto rounded-circle bg bg-secondary-subtle"}/>
+                        <input className={"btn btn-primary mx-auto w-50"} type={"button"} value={"Edit Profile Photo"}/>
                     </div>
-                    <div className={"mx-auto w-50 justify-content-between border"}> {/*bio*/}
-                        <div className={"d-flex flex-column  mx-auto justify-content-between border rounded-3"}>
-                            <div className={"border border-2 rounded-3"}>
-                                ## BIO text here ##
-                            </div>
-                            <div className={"border border-2 rounded-3"}>
-                                Edit BIO button
-                            </div>
-                        </div>
+
+                    <div className={"col d-flex flex-column"}>
+                        <div className={"bg-picture-box bg bg-secondary-subtle rounded-3"}/>
+                        <input className={"btn btn-primary mx-auto w-50"} type={"button"} value={"Edit Background Photo"}/>
                     </div>
+
                 </div>
-                <div className={"d-flex flex-column w-100 justify-content-between border rounded-3"}> {/*background foto konteiner*/}
-                    <div className={"mx-auto w-50 justify-content-between border"}> {/*background foto*/}
-                        <div className={"d-flex flex-column  mx-auto justify-content-between border rounded-3"}>
-                            <div className={"border border-2 rounded-3"}>
-                                ## BackGround Photo ##
-                                <svg>
-                                    <circle radius={50} cx={50} cy={50} fill="grey" stroke="black" strokeWidth={"3"}>ef</circle>
-                                </svg>
-                            </div>
-                            <div className={"border border-2 rounded-3"}>
-                                Edit photo button
-                            </div>
+                <div className={"row my-3"}>
+                    <div className={"col d-flex flex-column"}>
+                        <div className={"text-box"}>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                            nisi ut aliquip ex ea commodo consequat.
                         </div>
+                        <input className={"btn btn-primary mx-auto w-50"} type={"button"} value={"Edit BIO"}/>
                     </div>
-                    <div className={"mx-auto w-50 justify-content-between border"}> {/*empty for now*/}
-                        Empty spot
+                    <div className={"col d-flex flex-column"}>
+                        <div>
+
+                        </div>
+
                     </div>
+
                 </div>
             </div>
 
-            <div className={"d-flex w-100  border border-2 rounded-3"}> {/*alumine konteiner infoväljade jaoks*/}
+            <div className={"container w-75"}> {/*alumine konteiner infoväljade jaoks*/}
+                <div className={"row my-1"}>
+                    <div className={"col-2"}></div>
+                    <div className={"col-5"}></div>
+                    <div className={"col-2"}>
+                        Privacy level
+                    </div>
+                    <div className={"col-2"}></div>
+                </div>
+                <hr/>
+                <div className={"row my-1"}>tekst line 1</div>
+                <div className={"row my-1"}>tekst line 1</div>
                 Container for editing data fields
             </div>
 
