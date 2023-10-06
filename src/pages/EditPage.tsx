@@ -16,7 +16,7 @@ export const EditPage = (props: EditPageProps) => {
                     <div className={"mx-auto w-50 justify-content-between border"}> {/*profile foto*/}
                         <div className={"d-flex flex-column  mx-auto justify-content-between border rounded-3"}>
                             <div className={"border border-2 rounded-3"}>
-                                ## Photo ##
+                                <div className={"profile-picture rounded-circle bg bg-secondary"}/>
                             </div>
                             <div className={"border border-2 rounded-3"}>
                                 Edit photo button
