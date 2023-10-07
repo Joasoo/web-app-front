@@ -1,0 +1,82 @@
+.profile-box {
+  display: flex;
+  margin-top: 2rem;
+  margin-right: 8rem;
+  margin-left: 8rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.profile-background {
+  padding: 8rem;
+}
+
+.profile-picture {
+  width: 10rem;
+  aspect-ratio: 1 / 1;
+  margin-top: -5rem;
+}
+
+.new-post {
+  height: 10rem;
+  resize: none;
+}
+
+.react-tabs {
+  -webkit-tap-highlight-color: transparent;
+
+  &__tab-list {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: 2rem;
+    padding: 0;
+  }
+
+  &__tab {
+    display: inline-block;
+    border: 1px solid transparent;
+    border-bottom: none;
+    bottom: -1px;
+    position: relative;
+    list-style: none;
+    padding: 6px 12px;
+    cursor: pointer;
+
+    &--selected {
+      background: #fff;
+      border-color: #aaa;
+      color: black;
+      border-radius: 5px 5px 0 0;
+    }
+
+    &--disabled {
+      color: GrayText;
+      cursor: default;
+    }
+
+    &:focus {
+      outline: none;
+
+      &:after {
+        content: "";
+        position: absolute;
+        height: 5px;
+        left: -4px;
+        right: -4px;
+        bottom: -5px;
+        background: #fff;
+      }
+    }
+  }
+
+  &__tab-panel {
+    display: none;
+
+    &--selected {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 3rem;
+    }
+  }
+}
