@@ -1,5 +1,5 @@
 import React, {ReactNode, useEffect, useState} from 'react';
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import "./PersonalProfilePage.scss"
 import "../../App.scss"
 import {useFetch} from "../../hooks/useFetch";
@@ -15,8 +15,8 @@ type ProfilePageProps = {
 export const PersonalProfilePage = (props: ProfilePageProps) => {
     const navigate = useNavigate();
     const {getJson, postJson} = useFetch()
-    const [firstName, setFirstName] = useState<string | undefined>()
-    const [lastName, setLastName] = useState<string | undefined>()
+    const [firstName, setFirstName] = useState<string | undefined>("Markus")
+    const [lastName, setLastName] = useState<string | undefined>("Joasoo")
     const [residence, setResidence] = useState<string | undefined>()
     const [hometown, setHometown] = useState<string | undefined>()
     const [workplace, setWorkplace] = useState<string | undefined>()
@@ -94,19 +94,19 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                                 <h4>Information</h4>
                                 <hr/>
                                 {
-                                    residence ? <p>Residence: {residence}</p> : undefined
+                                    residence ? <p>Residence: {residence}</p> : ""
                                 }
                                 {
-                                    hometown ? <p>Hometown: {hometown}</p> : undefined
+                                    hometown ? <p>Hometown: {hometown}</p> : ""
                                 }
                                 {
-                                    workplace ? <p>Workplace: {workplace}</p> : undefined
+                                    workplace ? <p>Workplace: {workplace}</p> : ""
                                 }
                                 {
-                                    relationshipStatus ? <p>Relationship status: {relationshipStatus}</p> : undefined
+                                    relationshipStatus ? <p>Relationship status: {relationshipStatus}</p> : ""
                                 }
                                 {
-                                    dateOfBirth ? <p>Birthday: {dateOfBirth}</p> : undefined
+                                    dateOfBirth ? <p>Birthday: {dateOfBirth}</p> : ""
                                 }
                             </div>
                         </div>
@@ -144,7 +144,7 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                                 placeholder={"Write your post here..."}
                             />
                             <text className={"align-self-center mx-3 text-secondary"}>
-                                {newPostText?.length}/{maxPostSize}
+                                {newPostText ? newPostText.length : 0}/{maxPostSize}
                             </text>
                         </div>
 
