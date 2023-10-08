@@ -2,7 +2,7 @@ import React, {ReactNode, useEffect, useState} from 'react';
 import "./PersonalProfilePage.scss"
 import "../../App.scss"
 import {useFetch} from "../../hooks/useFetch";
-import {PROFILE_DATA, PERSON_POST_LIST, ADD_POST} from "../../util/RequestConstants";
+import {PROFILE_DATA, PERSON_POST_LIST, ADD_POST, DELETE_POST} from "../../util/RequestConstants";
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 import {ProfileDataModel} from "../../model/profile-data.model";
 import {Post} from "./Post";
@@ -10,14 +10,17 @@ import {PostModel} from "../../model/post.model";
 import {Loader} from "../../components/loader/Loader";
 import {AddPostModel} from "../../model/add-post.model";
 import {formatDateString} from "../../util/StringUtil";
+import {DeletePostModel} from "../../model/delete-post.model";
 
 
 type ProfilePageProps = {
     className?: string;
     children?: ReactNode;
 };
+
+
 export const PersonalProfilePage = (props: ProfilePageProps) => {
-    const {getJson, postJson} = useFetch()
+    const {getJson, postJson, deleteJson} = useFetch()
     const [profileData, setProfileData] = useState<ProfileDataModel>()
     const [newPostText, setNewPostText] = useState<string | undefined>()
     const [postList, setPostList] = useState<PostModel[]>([]);
@@ -38,7 +41,7 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                     })
             }
         }
-    , [])
+        , [])
 
     function refreshPosts() {
         if (profileId) {
@@ -51,6 +54,17 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                     console.log(err)
                 })
         }
+    }
+
+    function deletePost(id: string) {
+        const requestParams = {id}
+        deleteJson(DELETE_POST, requestParams)
+            .then(() => {
+                refreshPosts()
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
 
     function makePost() {
@@ -174,7 +188,7 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                                         content={post.content}
                                         author={post.author}
                                         createdAt={formatDateString(post.createdAt)}
-                                        isOwner={true}
+                                        onClickDelete={deletePost}
                                     />;
                                 }
                             ) : ""}

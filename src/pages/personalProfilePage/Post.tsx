@@ -6,8 +6,9 @@ type PostProps = {
     id: string;
     content: string;
     author: AuthorModel;
-    isOwner: boolean;
     createdAt: string;
+    onClickEdit?: (value: string) => void;
+    onClickDelete?: (value: string) => void;
     className?: string;
 }
 
@@ -31,23 +32,26 @@ export const Post = (props: PostProps) => {
                 </pre>
             </div>
 
-            {
-                props.isOwner ?
-                    <div className={"d-flex flex-column justify-content-center"}>
-                        <input
-                            className={"mx-3 my-1 btn btn-primary"}
-                            type={"button"}
-                            value={"Edit"}
-                        />
 
-                        <input
-                            className={"mx-3 my-1 btn btn-danger"}
-                            type={"button"}
-                            value={"Delete"}
-                        />
-                    </div>
-                    : ""
-            }
+            <div className={"d-flex flex-column justify-content-center"}>
+                {props.onClickEdit ?
+                    <input
+                        className={"mx-3 my-1 btn btn-primary"}
+                        type={"button"}
+                        value={"Edit"}
+                    />
+                    : ""}
+
+                { props.onClickDelete ?
+                    <input
+                        className={"mx-3 my-1 btn btn-danger"}
+                        type={"button"}
+                        value={"Delete"}
+                        onClick={() => props.onClickDelete?.(props.id)}
+                    />
+                    : ""}
+            </div>
+
         </div>
     )
 }
