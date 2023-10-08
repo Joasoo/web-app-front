@@ -1,8 +1,11 @@
 import React, {ReactNode, useEffect, useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
+import {useFetch} from "../hooks/useFetch";
 import "./EditPage.scss"
 import {ROUTE_EDIT} from "../util/RouteConstants";
-import {useFetch} from "../hooks/useFetch";
+import {EDIT_PROFILE_DATA} from "../util/RequestConstants";
+import {EditDataModel} from "../model/edit-data.model";
+import {Loader} from "../components/loader/Loader";
 
 type EditPageProps = {
     className? : string;
@@ -13,26 +16,60 @@ export const EditPage = (props: EditPageProps) => {
     const navigate = useNavigate();
     const {getJson, postJson} = useFetch()
 
-    const [firstName, setFirstName] = useState<string | undefined>()
-    const [lastName, setLastName] = useState<string | undefined>()
-    const [email, setEmail] = useState<string | undefined>()
-    const [residence, setResidence] = useState<string | undefined>()
-    const [hometown, setHometown] = useState<string | undefined>()
-    const [workplace, setWorkplace] = useState<string | undefined>()
-    const [relationshipStatus, setRelationshipStatus] = useState<string | undefined>()
-    const [dateOfBirth, setDateOfBirth] = useState<string | undefined>()
-    const [profileBio, setProfileBio] = useState<string | undefined>()
-
-    const originalFirstName = ''
-    const originalLastName = ''
-    const originalEmail = ''
-    const originalResidence = ''
-    const originalHometown = ''
-    const originalWorkplace = ''
-    const originalRelationshipStatus = ''
-    const originalDateOfBirth = ''
-    const originalBio = ''
+    const [firstName, setFirstName] = useState<string>()
+    const [lastName, setLastName] = useState<string>()
+    const [email, setEmail] = useState<string>()
+    const [residence, setResidence] = useState<string>()
+    const [hometown, setHometown] = useState<string>()
+    const [workplace, setWorkplace] = useState<string>()
+    const [relationshipStatus, setRelationshipStatus] = useState<string>()
+    const [dateOfBirth, setDateOfBirth] = useState<string>()
+    const [profileBio, setProfileBio] = useState<string>()
+    const [loading, setLoading] = useState<boolean>(false)
+    let [editData, setEditData] = useState<EditDataModel>()
     const profileId = new URLSearchParams(window.location.search).get("id");
+
+    useEffect(() => {
+        getOriginalData();
+        setLoading(false);
+    }, []);
+
+    function getOriginalData() {
+        if (profileId) {
+            const requestParams = {"id": profileId}
+            const getEditData = getJson<EditDataModel>(EDIT_PROFILE_DATA, requestParams)
+                .then( res => {
+                    setEditData(res);
+                })
+        }
+    }
+
+    function makeEdit() {
+        if (profileId) {
+            console.log("person with id: " + profileId + " is editing info...")
+            let newEditDataModel = new EditDataModel(
+                firstName,
+                lastName,
+                dateOfBirth,
+                email,
+                residence,
+                hometown,
+                workplace,
+                profileBio
+            )
+            postJson(EDIT_PROFILE_DATA, newEditDataModel)
+                .then(() => {
+                    getOriginalData()
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
+    }
+
+    if (loading) {
+        return <Loader overlay/>
+    }
 
     return (
         <div className={"edit-box flex-column mx-auto border border-2 border-secondary rounded-3"}> {/*suur konteiner*/}
@@ -53,18 +90,13 @@ export const EditPage = (props: EditPageProps) => {
                 <div className={"row my-3"}>
                     <div className={"col d-flex flex-column"}>
                         <div className={"text-box"}>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                            nisi ut aliquip ex ea commodo consequat.
+                            {
+                                editData?.profileBio ? <p>{editData?.profileBio}</p> : ""
+                            }
                         </div>
                         <input className={"btn btn-primary mx-auto w-50"} type={"button"} value={"Edit Profile Bio"} onClick={() => {}}/>
                     </div>
                     <div className={"col d-flex flex-column"}>
-                        <div>
-
-                        </div>
-
                     </div>
 
                 </div>
@@ -85,7 +117,11 @@ export const EditPage = (props: EditPageProps) => {
                         <p className={"text-start fw-bold"}>First Name:</p>
                     </div>
                     <div className={"col-5"}>
-                        <input type={"text"} className={"w-100 rounded text-center"} placeholder={firstName}/>
+                        <input type={"text"}
+                               className={"w-100 rounded text-center"}
+                               placeholder={editData?.firstName ? editData.firstName : ""}
+                               onChange={e => setFirstName(e.target.value)}
+                        />
                     </div>
                     <div className={"col-2 w-25"}>
                         <select className={"list-box form-select-sm w-75 text-center rounded border-2 border-secondary"}>
@@ -96,7 +132,7 @@ export const EditPage = (props: EditPageProps) => {
                         </select>
                     </div>
                     <div className={"col-2"}>
-                        <input className={"reset-btn btn btn-secondary"} value={"Reset"} onClick={() => setFirstName(originalFirstName)}/>
+                        <input className={"reset-btn btn btn-secondary"} value={"Reset"} onClick={() => setFirstName(editData?.firstName)}/>
                     </div>
                 </div>
                 <div className={"row"}>
@@ -104,7 +140,7 @@ export const EditPage = (props: EditPageProps) => {
                         <p className={"text-start fw-bold"}>Last Name:</p>
                     </div>
                     <div className={"col-5"}>
-                        <input type={"text"} className={"w-100 rounded text-center"} placeholder={lastName}/>
+                        <input type={"text"} className={"w-100 rounded text-center"} placeholder={editData?.lastName ? editData.lastName : ""}/>
                     </div>
                     <div className={"col-2 w-25"}>
                         <select className={"list-box form-select-sm w-75 text-center rounded border-2 border-secondary"}>
@@ -115,7 +151,7 @@ export const EditPage = (props: EditPageProps) => {
                         </select>
                     </div>
                     <div className={"col-2"}>
-                        <input className={"reset-btn btn btn-secondary"} value={"Reset"} onClick={() => setLastName(originalLastName)}/>
+                        <input className={"reset-btn btn btn-secondary"} value={"Reset"} onClick={() => setLastName(editData?.lastName)}/>
                     </div>
                 </div>
                 <div className={"row"}>
@@ -123,7 +159,7 @@ export const EditPage = (props: EditPageProps) => {
                         <p className={"text-start fw-bold"}>Date Of Birth:</p>
                     </div>
                     <div className={"col-5"}>
-                        <input type={"text"} className={"w-100 rounded text-center"} placeholder={dateOfBirth}/>
+                        <input type={"text"} className={"w-100 rounded text-center"} placeholder={editData?.dateOfBirth ? editData.dateOfBirth : ""}/>
                     </div>
                     <div className={"col-2 w-25"}>
                         <select className={"list-box form-select-sm w-75 text-center rounded border-2 border-secondary"}>
@@ -134,7 +170,7 @@ export const EditPage = (props: EditPageProps) => {
                         </select>
                     </div>
                     <div className={"col-2"}>
-                        <input className={"reset-btn btn btn-secondary"} value={"Reset"} onClick={() => setDateOfBirth(originalDateOfBirth)}/>
+                        <input className={"reset-btn btn btn-secondary"} value={"Reset"} onClick={() => setDateOfBirth(editData?.dateOfBirth)}/>
                     </div>
                 </div>
                 <div className={"row"}>
@@ -142,7 +178,7 @@ export const EditPage = (props: EditPageProps) => {
                         <p className={"text-start fw-bold"}>E-Mail:</p>
                     </div>
                     <div className={"col-5"}>
-                        <input type={"text"} className={"w-100 rounded text-center"} placeholder={email}/>
+                        <input type={"text"} className={"w-100 rounded text-center"} placeholder={editData?.email ? editData.email : ""}/>
                     </div>
                     <div className={"col-2 w-25"}>
                         <select className={"list-box form-select-sm w-75 text-center rounded border-2 border-secondary"}>
@@ -153,7 +189,7 @@ export const EditPage = (props: EditPageProps) => {
                         </select>
                     </div>
                     <div className={"col-2"}>
-                        <input className={"reset-btn btn btn-secondary"} value={"Reset"} onClick={() => setEmail(originalEmail)}/>
+                        <input className={"reset-btn btn btn-secondary"} value={"Reset"} onClick={() => setEmail(editData?.email)}/>
                     </div>
                 </div>
                 <div className={"row"}>
@@ -161,7 +197,7 @@ export const EditPage = (props: EditPageProps) => {
                         <p className={"text-start fw-bold"}>Residence:</p>
                     </div>
                     <div className={"col-5"}>
-                        <input type={"text"} className={"w-100 rounded text-center"} placeholder={residence}/>
+                        <input type={"text"} className={"w-100 rounded text-center"} placeholder={editData?.residence ? editData.residence : ""}/>
                     </div>
                     <div className={"col-2 w-25"}>
                         <select className={"list-box form-select-sm w-75 text-center rounded border-2 border-secondary"}>
@@ -172,7 +208,7 @@ export const EditPage = (props: EditPageProps) => {
                         </select>
                     </div>
                     <div className={"col-2"}>
-                        <input className={"reset-btn btn btn-secondary"} value={"Reset"} onClick={() => setResidence(originalResidence)}/>
+                        <input className={"reset-btn btn btn-secondary"} value={"Reset"} onClick={() => setResidence(editData?.residence)}/>
                     </div>
                 </div>
                 <div className={"row"}>
@@ -180,7 +216,7 @@ export const EditPage = (props: EditPageProps) => {
                         <p className={"text-start fw-bold"}>Hometown:</p>
                     </div>
                     <div className={"col-5"}>
-                        <input type={"text"} className={"w-100 rounded text-center"} placeholder={hometown}/>
+                        <input type={"text"} className={"w-100 rounded text-center"} placeholder={editData?.hometown ? editData.hometown : ""}/>
                     </div>
                     <div className={"col-2 w-25"}>
                         <select className={"list-box form-select-sm w-75 text-center rounded border-2 border-secondary"}>
@@ -191,7 +227,7 @@ export const EditPage = (props: EditPageProps) => {
                         </select>
                     </div>
                     <div className={"col-2"}>
-                        <input className={"reset-btn btn btn-secondary"} value={"Reset"} onClick={() => setHometown(originalHometown)}/>
+                        <input className={"reset-btn btn btn-secondary"} value={"Reset"} onClick={() => setHometown(editData?.hometown)}/>
                     </div>
                 </div>
                 <div className={"row"}>
@@ -199,7 +235,7 @@ export const EditPage = (props: EditPageProps) => {
                         <p className={"text-start fw-bold"}>Workplace:</p>
                     </div>
                     <div className={"col-5"}>
-                        <input type={"text"} className={"w-100 rounded text-center"} placeholder={workplace}/>
+                        <input type={"text"} className={"w-100 rounded text-center"} placeholder={editData?.workplace ? editData.workplace : ""}/>
                     </div>
                     <div className={"col-2 w-25"}>
                         <select className={"list-box form-select-sm w-75 text-center rounded border-2 border-secondary"}>
@@ -210,7 +246,7 @@ export const EditPage = (props: EditPageProps) => {
                         </select>
                     </div>
                     <div className={"col-2"}>
-                        <input className={"reset-btn btn btn-secondary"} value={"Reset"} onClick={() => setWorkplace(originalWorkplace)}/>
+                        <input className={"reset-btn btn btn-secondary"} value={"Reset"} onClick={() => setWorkplace(editData?.workplace)}/>
                     </div>
                 </div>
                 <div className={"row"}>
@@ -218,7 +254,7 @@ export const EditPage = (props: EditPageProps) => {
                         <p className={"text-start fw-bold"}>Marital Status:</p>
                     </div>
                     <div className={"col-5"}>
-                        <input type={"text"} className={"w-100 rounded text-center"} placeholder={relationshipStatus}/>
+                        <input type={"text"} className={"w-100 rounded text-center"} placeholder={""}/>
                     </div>
                     <div className={"col-2 w-25"}>
                         <select className={"list-box form-select-sm w-75 text-center rounded border-2 border-secondary"}>
@@ -229,8 +265,14 @@ export const EditPage = (props: EditPageProps) => {
                         </select>
                     </div>
                     <div className={"col-2"}>
-                        <input className={"reset-btn btn btn-secondary"} value={"Reset"} onClick={() => setRelationshipStatus(originalRelationshipStatus)}/>
+                        <input className={"reset-btn btn btn-secondary"} value={"Reset"} onClick={() => setRelationshipStatus("")}/>
                     </div>
+                </div>
+                <div className={"row"}>
+                    <div className={"col-2"}/>
+                    <div className={"col-5"}/>
+                    <div className={"col-2"}><input className={"btn btn-primary w-75"} value={"Save"} onClick={makeEdit}/></div>
+                    <div className={"col-2"}><input className={"btn btn-primary w-75"} value={"Cancel"}/></div>
                 </div>
             </div>
 
