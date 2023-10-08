@@ -271,8 +271,8 @@ export const EditPage = (props: EditPageProps) => {
                 <div className={"row"}>
                     <div className={"col-2"}/>
                     <div className={"col-5"}/>
-                    <div className={"col-2"}><input className={"btn btn-primary w-75"} value={"Save"} onClick={makeEdit}/></div>
-                    <div className={"col-2"}><input className={"btn btn-primary w-75"} value={"Cancel"}/></div>
+                    <div className={"col-2"}><input className={"btn btn-primary w-75 bg-success border-success"} value={"Save"} onClick={makeEdit}/></div>
+                    <div className={"col-2"}><input className={"btn btn-primary w-75 bg-danger border-danger"} value={"Cancel"}/></div>
                 </div>
             </div>
 
