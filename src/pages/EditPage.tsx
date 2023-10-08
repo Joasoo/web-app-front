@@ -3,7 +3,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {useFetch} from "../hooks/useFetch";
 import "./EditPage.scss"
 import {ROUTE_EDIT} from "../util/RouteConstants";
-import {EDIT_PROFILE_DATA} from "../util/RequestConstants";
+import {EDIT_PROFILE_DATA, GET_PROFILE_DATA} from "../util/RequestConstants";
 import {EditDataModel} from "../model/edit-data.model";
 import {Loader} from "../components/loader/Loader";
 
@@ -37,7 +37,7 @@ export const EditPage = (props: EditPageProps) => {
     function getOriginalData() {
         if (profileId) {
             const requestParams = {"id": profileId}
-            const getEditData = getJson<EditDataModel>(EDIT_PROFILE_DATA, requestParams)
+            getJson<EditDataModel>(GET_PROFILE_DATA, requestParams)
                 .then( res => {
                     setEditData(res);
                 })
