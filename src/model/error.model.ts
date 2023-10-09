@@ -3,6 +3,5 @@ export class ErrorModel {
         public path: string,
         public timestamp: string,
         public cause: string
-    ) {
-    }
+    ) {}
 }

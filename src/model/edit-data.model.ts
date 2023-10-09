@@ -10,6 +10,5 @@ export class EditDataModel {
         public workplace: string,
         public relationShipStatus: string,
         public profileBio: string
-    ) {
-    }
+    ) {}
 }

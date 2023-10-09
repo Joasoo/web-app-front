@@ -1,61 +1,73 @@
-import {useCallback} from "react";
+import { useCallback } from 'react'
 
 type RequestParams = { [key: string]: string }
-type RequestMethod = "GET" | "POST" | "PUT" | "DELETE";
+type RequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE'
 
 export function useFetch() {
-
     function requestParamsString(params: RequestParams): string {
-        let reqParamString = "?";
+        let reqParamString = '?'
         for (const paramsKey in params) {
-            const value = params[paramsKey];
-            reqParamString += `${paramsKey}=${value}&`;
+            const value = params[paramsKey]
+            reqParamString += `${paramsKey}=${value}&`
         }
-        return reqParamString.substring(0, reqParamString.length - 1);
+        return reqParamString.substring(0, reqParamString.length - 1)
     }
 
-    function makeFetch<TRequest, TResponse>(path: string,
-                                            method: RequestMethod,
-                                            requestParams?: RequestParams,
-                                            body?: TRequest): Promise<TResponse> {
+    function makeFetch<TRequest, TResponse>(
+        path: string,
+        method: RequestMethod,
+        requestParams?: RequestParams,
+        body?: TRequest
+    ): Promise<TResponse> {
         if (requestParams) {
-            path += requestParamsString(requestParams);
+            path += requestParamsString(requestParams)
         }
 
-        return new Promise<TResponse>(
-            (resolve, reject) => {
-                fetch(path, {
-                    method: method,
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(body)
+        return new Promise<TResponse>((resolve, reject) => {
+            fetch(path, {
+                method: method,
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(body),
+            }).then((res) => {
+                res.json().then((val) => {
+                    res.ok ? resolve(val) : reject(val)
                 })
-                    .then(res => {
-                        res.json()
-                            .then(val => {
-                                res.ok ? resolve(val) : reject(val);
-                            })
-                });
-            }
-        )
-
-
+            })
+        })
     }
 
-    const getJson = useCallback(<TResponse>(path: string, requestParams?: RequestParams): Promise<TResponse> => {
-        return makeFetch(path, "GET", requestParams);
-    }, []);
+    const getJson = useCallback(
+        <TResponse>(
+            path: string,
+            requestParams?: RequestParams
+        ): Promise<TResponse> => {
+            return makeFetch(path, 'GET', requestParams)
+        },
+        []
+    )
 
-    const postJson = useCallback(<TRequest, TResponse>(path: string, body?: TRequest): Promise<TResponse> => {
-        return makeFetch(path, "POST", undefined, body);
+    const postJson = useCallback(
+        <TRequest, TResponse>(
+            path: string,
+            body?: TRequest
+        ): Promise<TResponse> => {
+            return makeFetch(path, 'POST', undefined, body)
+        },
+        []
+    )
 
-    }, []);
+    const deleteJson = useCallback(
+        <TResponse>(
+            path: string,
+            requestParams?: RequestParams
+        ): Promise<TResponse> => {
+            return makeFetch(path, 'DELETE', requestParams)
+        },
+        []
+    )
 
-    const deleteJson = useCallback(<TResponse>(path: string, requestParams?: RequestParams): Promise<TResponse> => {
-        return makeFetch(path, "DELETE", requestParams);
-    }, []);
-
-    return {getJson, postJson, deleteJson};
+    return { getJson, postJson, deleteJson }
 }
