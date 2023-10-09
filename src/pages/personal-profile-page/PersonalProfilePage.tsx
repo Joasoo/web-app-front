@@ -7,6 +7,7 @@ import { useFetch } from '../../hooks/useFetch'
 import { AddPostModel } from '../../model/add-post.model'
 import { PostModel } from '../../model/post.model'
 import { ProfileDataModel } from '../../model/profile-data.model'
+import { StorageUtil } from '../../util/BrowerStorageUtil'
 import {
     PATH_POST_ADD,
     PATH_POST_DELETE,
@@ -30,16 +31,39 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
     const [postList, setPostList] = useState<PostModel[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const navigate = useNavigate()
-    const profileId = new URLSearchParams(window.location.search).get('id')
+    const foreignProfileId = new URLSearchParams(window.location.search).get(
+        'id'
+    )
     const maxPostSize = 1000
 
     useEffect(() => {
-        if (profileId) {
+        if (foreignProfileId) {
+            /*todo logic for foreign/friends page*/
             const getProfileData = getJson<ProfileDataModel>(
-                PATH_PROFILE + `/${profileId}`
+                PATH_PROFILE + `/${foreignProfileId}`
             )
             const getPosts = getJson<PostModel[]>(
-                PATH_POST_PERSON + `/${profileId}`
+                PATH_POST_PERSON + `/${foreignProfileId}`
+            )
+            Promise.all([getProfileData, getPosts]).then((res) => {
+                setProfileData(res[0])
+                setPostList(res[1])
+                setLoading(false)
+            })
+        } else {
+            /*todo Logic for personal page*/
+            const id = StorageUtil.get<number>('SESSION', 'personId')
+            const token = StorageUtil.get<string>('SESSION', 'token')
+            console.log(token)
+            const getProfileData = getJson<ProfileDataModel>(
+                PATH_PROFILE + `/${id}`,
+                undefined,
+                token
+            )
+            const getPosts = getJson<PostModel[]>(
+                PATH_POST_PERSON + `/${id}`,
+                undefined,
+                token
             )
             Promise.all([getProfileData, getPosts]).then((res) => {
                 setProfileData(res[0])
@@ -50,8 +74,8 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
     }, [])
 
     function refreshPosts() {
-        if (profileId) {
-            getJson<PostModel[]>(PATH_POST_PERSON + `/${profileId}`)
+        if (foreignProfileId) {
+            getJson<PostModel[]>(PATH_POST_PERSON + `/${foreignProfileId}`)
                 .then((res) => {
                     setPostList(res)
                 })
@@ -62,7 +86,7 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
     }
 
     function deletePost(id: string) {
-        deleteJson(PATH_POST_DELETE + profileId)
+        deleteJson(PATH_POST_DELETE + `/${foreignProfileId}`)
             .then(() => {
                 refreshPosts()
             })
@@ -72,10 +96,10 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
     }
 
     function makePost() {
-        if (profileId && newPostText) {
-            console.log('Make a post for profile id: ' + profileId)
+        if (foreignProfileId && newPostText) {
+            console.log('Make a post for profile id: ' + foreignProfileId)
             setNewPostText('')
-            let newModel = new AddPostModel(profileId, newPostText)
+            let newModel = new AddPostModel(foreignProfileId, newPostText)
             postJson(PATH_POST_ADD, newModel)
                 .then(() => {
                     refreshPosts()
@@ -116,7 +140,9 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                         type={'button'}
                         value={'Edit Profile'}
                         onClick={() =>
-                            navigate(ROUTE_PROFILE_EDIT + '?id=' + profileId)
+                            navigate(
+                                ROUTE_PROFILE_EDIT + '?id=' + foreignProfileId
+                            )
                         }
                     />
                 </div>
@@ -185,6 +211,7 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                     </TabList>
 
                     <TabPanel className={'align-items-start'}>
+                        {/*todo move the inside of the tab panels into separate components? (<PostsPanel/>)?*/}
                         <h4>Create a new post</h4>
                         <div className={'d-flex w-100'}>
                             <textarea
