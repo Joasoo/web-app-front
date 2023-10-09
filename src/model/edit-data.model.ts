@@ -1,5 +1,6 @@
 export class EditDataModel {
     constructor(
+        public id: string,
         public firstName: string,
         public lastName: string,
         public dateOfBirth: string,
@@ -7,7 +8,7 @@ export class EditDataModel {
         public residence: string,
         public hometown: string,
         public workplace: string,
-        //public relationShipStatus: string,
+        public relationShipStatus: string,
         public profileBio: string
     ) {
     }

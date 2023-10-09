@@ -11,8 +11,8 @@ import {ROUTE_EDIT, ROUTE_INNER, ROUTE_LOGIN, ROUTE_PROFILE, ROUTE_REGISTER, ROU
 import {RegistrationPage} from "./pages/RegistrationPage";
 import 'bootstrap/dist/css/bootstrap.css';
 import {PersonalProfilePage} from "./pages/personal-profile-page/PersonalProfilePage";
-import {EditPage} from "./pages/EditPage";
-import {EDIT_PROFILE_DATA} from "./util/RequestConstants";
+import {EditPage} from "./pages/edit-profile-page/EditPage";
+import {SAVE_PROFILE_DATA} from "./util/RequestConstants";
 
 export type TestPageLoader = {
     name: string
