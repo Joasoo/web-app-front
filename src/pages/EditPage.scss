@@ -1,0 +1,46 @@
+.edit-box {
+  display: flex;
+  margin-top: 2rem;
+  margin-left: 8rem;
+  margin-right: 8rem;
+
+  width: 75%;
+}
+
+.input-box {
+  width: fit-content(100%);
+}
+
+.list-box {
+  padding-bottom: 0.2rem;
+  padding-top: 0.2rem;
+}
+
+.reset-btn {
+  width: 5rem;
+  padding-bottom: 0.2rem;
+  padding-top: 0.2rem;
+  transform: scale(94%);
+}
+
+.picture-box {
+  width: 10rem;
+  aspect-ratio: 1 / 1;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.bg-picture-box {
+  justify-content: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 5rem;
+}
+
+.text-box {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  background: lightgrey;
+  padding: 1rem;
+  border-radius: 1rem;
+}
