@@ -107,7 +107,6 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
                 .catch((err) => {
                     console.log(err)
                 })
-
             console.log(getModel())
         }
         setLoading(false)
