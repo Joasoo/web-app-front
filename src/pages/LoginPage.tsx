@@ -1,6 +1,6 @@
 import React, {ReactNode, useState} from 'react';
-import {ROUTE_REGISTER} from "../util/RouteConstants";
-import {Link} from "react-router-dom";
+import {ROUTE_PROFILE, ROUTE_REGISTER} from "../util/RouteConstants";
+import {Link, useNavigate} from "react-router-dom";
 import {Input, SubtextType} from "../components/input/Input";
 import {useFetch} from "../hooks/useFetch";
 import {LoginModel} from "../model/login.model";
@@ -24,6 +24,7 @@ const inputOption: { [key in InputOptionKey]: SubtextType } = {
 }
 
 export const LoginPage = (props: LoginPageProps) => {
+    const navigate = useNavigate();
     const [email, setEmail] = useState<string>();
     const [password, setPassword] = useState<string>();
     const [emailSubtext, setEmailSubtext] = useState<SubtextType>();
@@ -49,10 +50,15 @@ export const LoginPage = (props: LoginPageProps) => {
         postJson<LoginModel, void>(LOGIN_PATH, {
             email: email as string,
             password: password as string
-        }).then((res) => {
-            console.log(res);
-            /*todo do navigate to profile if successful.*/
         })
+            .then((res) => {
+                console.log(res);
+                navigate(ROUTE_PROFILE);
+                /*todo do navigate to profile if successful.*/
+            })
+            .catch((err) => {
+                console.log(err);
+            })
     }
 
     return (
