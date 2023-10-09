@@ -4,7 +4,9 @@ import {Link, useNavigate} from "react-router-dom";
 import {Input, SubtextType} from "../components/input/Input";
 import {useFetch} from "../hooks/useFetch";
 import {LoginModel} from "../model/login.model";
-import {LOGIN_PATH} from "../util/RequestConstants";
+import {PATH_AUTH_LOGIN} from "../util/RequestConstants";
+import {ErrorModel} from "../model/error.model";
+import {Loader} from "../components/loader/Loader";
 
 type LoginPageProps = {
     className?: string;
@@ -25,6 +27,8 @@ const inputOption: { [key in InputOptionKey]: SubtextType } = {
 
 export const LoginPage = (props: LoginPageProps) => {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState<boolean>(false);
+    const [err, setErr] = useState<ErrorModel>();
     const [email, setEmail] = useState<string>();
     const [password, setPassword] = useState<string>();
     const [emailSubtext, setEmailSubtext] = useState<SubtextType>();
@@ -46,28 +50,34 @@ export const LoginPage = (props: LoginPageProps) => {
     }
 
     function handleLogin() {
-        if (!handleValidation()) return;
-        postJson<LoginModel, void>(LOGIN_PATH, {
-            email: email as string,
-            password: password as string
-        })
-            .then((res) => {
-                console.log(res);
-                navigate(ROUTE_PROFILE);
-                /*todo do navigate to profile if successful.*/
+        setLoading(true);
+        setErr(undefined);
+        if (handleValidation()) {
+            postJson<LoginModel, void>(PATH_AUTH_LOGIN, {
+                email: email as string,
+                password: password as string
             })
-            .catch((err) => {
-                console.log(err);
-            })
+                .then((res) => {
+                    console.log(res);
+                    navigate(ROUTE_PROFILE);
+                    /*todo do navigate to profile if successful.*/
+                })
+                .catch((err) => {
+                    setErr(err);
+                })
+        }
+        setLoading(false);
     }
 
+    if (loading) return <Loader overlay/>
     return (
         <div className={"d-flex flex-column stretch-max align-items-center"}>
             <h1 className={"m-5"}>Webpage name</h1>
             <div className={"d-flexbox px-3 py-4 border border-2 border-secondary rounded"}>
                 <h2 className={"text-center"}>Login</h2>
-                <hr className={"mx-4 mt-3 mb-4"}/>
+                <hr className={"mx-4 mt-3 mb-1"}/>
                 <div className={"d-flex flex-column align-items-center mb-3"}>
+                    <span className={"fw-semibold text-danger mx-auto mb-2"}>{err?.cause}</span>
                     <Input
                         className={"mb-3"}
                         type={"email"}

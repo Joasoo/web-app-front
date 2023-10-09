@@ -6,7 +6,7 @@ import {Input, SubtextType} from "../components/input/Input";
 import {RegistrationModel} from "../model/registration.model";
 import {toISOString} from "../util/StringUtil";
 import {useFetch} from "../hooks/useFetch";
-import {LOGIN_PATH, REGISTER_PATH} from "../util/RequestConstants";
+import {PATH_AUTH_LOGIN, PATH_AUTH_REGISTER} from "../util/RequestConstants";
 import {Checkbox} from "../components/checkbox/Checkbox";
 import {Loader} from "../components/loader/Loader";
 
@@ -95,7 +95,7 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
         console.log(toISOString(dateOfBirth));
         if (handleValidation()) {
             /*todo Perform request.*/
-            postJson<RegistrationModel, void>(REGISTER_PATH, getModel())
+            postJson<RegistrationModel, void>(PATH_AUTH_REGISTER, getModel())
                 .then(res => {
                     /*todo save token*/
                     navigate(ROUTE_LOGIN);

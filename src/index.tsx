@@ -3,30 +3,15 @@ import ReactDOM from 'react-dom/client';
 import './index.scss';
 import reportWebVitals from './reportWebVitals';
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import {Test} from "./pages/Test";
-import {InnerPage} from "./pages/InnerPage";
 import {LoginPage} from "./pages/LoginPage"
-import {ROUTE_EDIT, ROUTE_INNER, ROUTE_LOGIN, ROUTE_PROFILE, ROUTE_REGISTER, ROUTE_ROOT} from "./util/RouteConstants";
+import {ROUTE_PROFILE_EDIT, ROUTE_LOGIN, ROUTE_PROFILE, ROUTE_REGISTER} from "./util/RouteConstants";
 
 import {RegistrationPage} from "./pages/RegistrationPage";
 import 'bootstrap/dist/css/bootstrap.css';
 import {PersonalProfilePage} from "./pages/personal-profile-page/PersonalProfilePage";
 import {EditPage} from "./pages/edit-profile-page/EditPage";
-import {SAVE_PROFILE_DATA} from "./util/RequestConstants";
-
-export type TestPageLoader = {
-    name: string
-}
 
 const router = createBrowserRouter([
-    {
-        element: <Test/>,
-        path: ROUTE_ROOT,
-    },
-    {
-        element: <InnerPage/>,
-        path: ROUTE_INNER
-    },
     {
         element: <LoginPage/>,
         path: ROUTE_LOGIN
@@ -41,7 +26,7 @@ const router = createBrowserRouter([
     },
     {
         element: <EditPage/>,
-        path: ROUTE_EDIT
+        path: ROUTE_PROFILE_EDIT
     }
 ]);
 
