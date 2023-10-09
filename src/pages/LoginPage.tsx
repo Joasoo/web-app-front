@@ -4,7 +4,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {Input, SubtextType} from "../components/input/Input";
 import {useFetch} from "../hooks/useFetch";
 import {LoginModel} from "../model/login.model";
-import {LOGIN_PATH} from "../util/RequestConstants";
+import {PATH_AUTH_LOGIN} from "../util/RequestConstants";
 import {ErrorModel} from "../model/error.model";
 import {Loader} from "../components/loader/Loader";
 
@@ -53,7 +53,7 @@ export const LoginPage = (props: LoginPageProps) => {
         setLoading(true);
         setErr(undefined);
         if (handleValidation()) {
-            postJson<LoginModel, void>(LOGIN_PATH, {
+            postJson<LoginModel, void>(PATH_AUTH_LOGIN, {
                 email: email as string,
                 password: password as string
             })

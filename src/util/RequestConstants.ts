@@ -1,10 +1,12 @@
-export const TEST_PATH = "/api/test";
-export const VIEW_PROFILE_DATA = "/api/profile/";
-export const PERSON_POST_LIST = "/api/post/person/"
-export const ADD_POST = "api/post/add"
-export const DELETE_POST = "api/post/delete/"
-export const AUTH_PATH = "/api/auth"
-export const LOGIN_PATH = AUTH_PATH + "/login";
-export const REGISTER_PATH = AUTH_PATH + "/register";
-export const SAVE_PROFILE_DATA = "/api/profile/edit/save";
-export const EDIT_PROFILE_DATA = "/api/profile/edit/";
+export const PATH_POST = "/api/post";
+export const PATH_POST_PERSON = PATH_POST + "/person";
+export const PATH_POST_ADD = PATH_POST + "/add";
+export const PATH_POST_DELETE = PATH_POST + "/delete";
+
+export const PATH_AUTH = "/api/auth"
+export const PATH_AUTH_LOGIN = PATH_AUTH + "/login";
+export const PATH_AUTH_REGISTER = PATH_AUTH + "/register";
+
+export const PATH_PROFILE = "/api/profile";
+export const PATH_PROFILE_EDIT = PATH_PROFILE + "/edit";
+export const PATH_PROFILE_EDIT_SAVE = PATH_PROFILE_EDIT + "/save";

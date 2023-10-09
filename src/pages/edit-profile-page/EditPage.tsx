@@ -1,9 +1,8 @@
 import React, {ReactNode, useEffect, useState} from 'react';
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {useFetch} from "../../hooks/useFetch";
 import "./EditPage.scss"
-import {ROUTE_EDIT} from "../../util/RouteConstants";
-import {SAVE_PROFILE_DATA, EDIT_PROFILE_DATA} from "../../util/RequestConstants";
+import {PATH_PROFILE_EDIT_SAVE, PATH_PROFILE_EDIT} from "../../util/RequestConstants";
 import {EditDataModel} from "../../model/edit-data.model";
 import {Loader} from "../../components/loader/Loader";
 
@@ -13,7 +12,6 @@ type EditPageProps = {
 };
 
 export const EditPage = (props: EditPageProps) => {
-    const navigate = useNavigate();
     const {getJson, postJson} = useFetch()
 
     const [firstName, setFirstName] = useState<string>("")
@@ -36,7 +34,7 @@ export const EditPage = (props: EditPageProps) => {
     function getOriginalData() {
         setLoading(true);
         if (profileId) {
-            getJson<EditDataModel>(EDIT_PROFILE_DATA + profileId)
+            getJson<EditDataModel>(PATH_PROFILE_EDIT + `/${profileId}`)
                 .then(res => {
                     setEditData(res)
                     setFirstName(res.firstName)
@@ -68,7 +66,7 @@ export const EditPage = (props: EditPageProps) => {
                 relationshipStatus,
                 profileBio,
             )
-            postJson(SAVE_PROFILE_DATA, newEditDataModel)
+            postJson(PATH_PROFILE_EDIT_SAVE, newEditDataModel)
                 .then(() => {
                     getOriginalData()
                 })

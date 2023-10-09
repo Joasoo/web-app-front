@@ -2,7 +2,12 @@ import React, {ReactNode, useEffect, useState} from 'react';
 import "./PersonalProfilePage.scss"
 import "../../App.scss"
 import {useFetch} from "../../hooks/useFetch";
-import {VIEW_PROFILE_DATA, PERSON_POST_LIST, ADD_POST, DELETE_POST} from "../../util/RequestConstants";
+import {
+    PATH_POST_ADD,
+    PATH_POST_DELETE,
+    PATH_PROFILE,
+    PATH_POST_PERSON
+} from "../../util/RequestConstants";
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 import {ProfileDataModel} from "../../model/profile-data.model";
 import {Post} from "./Post";
@@ -11,7 +16,7 @@ import {Loader} from "../../components/loader/Loader";
 import {AddPostModel} from "../../model/add-post.model";
 import {formatDateString} from "../../util/StringUtil";
 import {useNavigate} from "react-router-dom";
-import {ROUTE_EDIT} from "../../util/RouteConstants";
+import {ROUTE_PROFILE_EDIT} from "../../util/RouteConstants";
 
 
 type ProfilePageProps = {
@@ -32,8 +37,8 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
 
     useEffect(() => {
             if (profileId) {
-                const getProfileData = getJson<ProfileDataModel>(VIEW_PROFILE_DATA + profileId);
-                const getPosts = getJson<PostModel[]>(PERSON_POST_LIST + profileId);
+                const getProfileData = getJson<ProfileDataModel>(PATH_PROFILE + profileId);
+                const getPosts = getJson<PostModel[]>(PATH_POST_PERSON + `/${profileId}`);
                 Promise.all([getProfileData, getPosts])
                     .then(res => {
                         setProfileData(res[0]);
@@ -46,7 +51,7 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
 
     function refreshPosts() {
         if (profileId) {
-            getJson<PostModel[]>(PERSON_POST_LIST + profileId)
+            getJson<PostModel[]>(PATH_POST_PERSON + `/${profileId}`)
                 .then((res) => {
                     setPostList(res)
                 })
@@ -57,7 +62,7 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
     }
 
     function deletePost(id: string) {
-        deleteJson(DELETE_POST + profileId)
+        deleteJson(PATH_POST_DELETE + profileId)
             .then(() => {
                 refreshPosts()
             })
@@ -72,7 +77,7 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
             setNewPostText("")
             let newModel = new AddPostModel(profileId, newPostText)
             postJson(
-                ADD_POST, newModel
+                PATH_POST_ADD, newModel
             ).then(() => {
                 refreshPosts()
             })
@@ -98,7 +103,7 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                     <input className={"btn btn-primary align-self-end"}
                            type={"button"}
                            value={"Edit Profile"}
-                           onClick={() => navigate(ROUTE_EDIT + "?id=" + profileId)}
+                           onClick={() => navigate(ROUTE_PROFILE_EDIT + "?id=" + profileId)}
                     />
                 </div>
 
