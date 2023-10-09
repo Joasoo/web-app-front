@@ -5,6 +5,8 @@ import { Loader } from '../components/loader/Loader'
 import { useFetch } from '../hooks/useFetch'
 import { ErrorModel } from '../model/error.model'
 import { LoginModel } from '../model/login.model'
+import { TokenModel } from '../model/token.model'
+import { StorageUtil } from '../util/BrowerStorageUtil'
 import { PATH_AUTH_LOGIN } from '../util/RequestConstants'
 import { ROUTE_PROFILE, ROUTE_REGISTER } from '../util/RouteConstants'
 
@@ -53,14 +55,15 @@ export const LoginPage = (props: LoginPageProps) => {
         setLoading(true)
         setErr(undefined)
         if (handleValidation()) {
-            postJson<LoginModel, void>(PATH_AUTH_LOGIN, {
+            postJson<LoginModel, TokenModel>(PATH_AUTH_LOGIN, {
                 email: email as string,
                 password: password as string,
             })
                 .then((res) => {
                     console.log(res)
+                    StorageUtil.put('SESSION', 'token', res.token)
+                    StorageUtil.put('SESSION', 'personId', res.id)
                     navigate(ROUTE_PROFILE)
-                    /*todo do navigate to profile if successful.*/
                 })
                 .catch((err) => {
                     setErr(err)
