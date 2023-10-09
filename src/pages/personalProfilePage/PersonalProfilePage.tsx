@@ -1,69 +1,91 @@
 import React, {ReactNode, useEffect, useState} from 'react';
-import {useNavigate} from "react-router-dom";
 import "./PersonalProfilePage.scss"
 import "../../App.scss"
 import {useFetch} from "../../hooks/useFetch";
-import {REQUEST_PROFILE_DATA, REQUEST_POST} from "../../util/RequestConstants";
+import {PROFILE_DATA, PERSON_POST_LIST, ADD_POST, DELETE_POST} from "../../util/RequestConstants";
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
-import {ProfileDataModel} from "../../model/profileData.model";
+import {ProfileDataModel} from "../../model/profile-data.model";
+import {Post} from "./Post";
+import {PostModel} from "../../model/post.model";
+import {Loader} from "../../components/loader/Loader";
+import {AddPostModel} from "../../model/add-post.model";
+import {formatDateString} from "../../util/StringUtil";
+import {DeletePostModel} from "../../model/delete-post.model";
 
 
 type ProfilePageProps = {
     className?: string;
     children?: ReactNode;
 };
+
+
 export const PersonalProfilePage = (props: ProfilePageProps) => {
-    const navigate = useNavigate();
-    const {getJson, postJson} = useFetch()
-    const [firstName, setFirstName] = useState<string | undefined>("Markus")
-    const [lastName, setLastName] = useState<string | undefined>("Joasoo")
-    const [residence, setResidence] = useState<string | undefined>()
-    const [hometown, setHometown] = useState<string | undefined>()
-    const [workplace, setWorkplace] = useState<string | undefined>()
-    const [relationshipStatus, setRelationshipStatus] = useState<string | undefined>()
-    const [dateOfBirth, setDateOfBirth] = useState<string | undefined>()
-    const [profileBio, setProfileBio] = useState<string | undefined>()
+    const {getJson, postJson, deleteJson} = useFetch()
+    const [profileData, setProfileData] = useState<ProfileDataModel>()
     const [newPostText, setNewPostText] = useState<string | undefined>()
+    const [postList, setPostList] = useState<PostModel[]>([]);
+    const [loading, setLoading] = useState<boolean>(true)
     const profileId = new URLSearchParams(window.location.search).get("id");
     const maxPostSize = 1000;
-
-    const makePost = () => {
-        if (profileId && newPostText) {
-            console.log("Make a post for profile id: " + profileId)
-            setNewPostText("")
-            /*            postJson(
-                            REQUEST_POST,
-                            {
-                                profileId: profileId,
-                                content: newPostText
-                            }
-                        )
-                            .catch((err) => {
-                                console.log(err)
-                            })*/
-        }
-    }
 
     useEffect(() => {
             if (profileId) {
                 const requestParams = {"id": profileId}
-                getJson<ProfileDataModel>(REQUEST_PROFILE_DATA, requestParams)
-                    .then((res) => {
-                        setFirstName(res.firstName);
-                        setLastName(res.lastName);
-                        setResidence(res.residence);
-                        setHometown(res.hometown);
-                        setWorkplace(res.workplace);
-                        setDateOfBirth(res.dateOfBirth);
-                        setProfileBio(res.bio)
-                    })
-                    .catch((err) => {
-                        console.log(err);
+                const getProfileData = getJson<ProfileDataModel>(PROFILE_DATA, requestParams);
+                const getPosts = getJson<PostModel[]>(PERSON_POST_LIST, requestParams);
+                Promise.all([getProfileData, getPosts])
+                    .then(res => {
+                        setProfileData(res[0]);
+                        setPostList(res[1]);
+                        setLoading(false);
                     })
             }
         }
-    )
+        , [])
 
+    function refreshPosts() {
+        if (profileId) {
+            const requestParams = {"id": profileId}
+            getJson<PostModel[]>(PERSON_POST_LIST, requestParams)
+                .then((res) => {
+                    setPostList(res)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
+    }
+
+    function deletePost(id: string) {
+        const requestParams = {id}
+        deleteJson(DELETE_POST, requestParams)
+            .then(() => {
+                refreshPosts()
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+
+    function makePost() {
+        if (profileId && newPostText) {
+            console.log("Make a post for profile id: " + profileId)
+            setNewPostText("")
+            let newModel = new AddPostModel(profileId, newPostText)
+            postJson(
+                ADD_POST, newModel
+            ).then(() => {
+                refreshPosts()
+            })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
+    }
+
+    if (loading) {
+        return <Loader overlay/>
+    }
 
     return (
         <div>
@@ -79,13 +101,10 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                            value={"Edit Profile"}/>
                 </div>
 
-                {(firstName && lastName) ?
-                    <div className={"d-flex justify-content-center"}>
-                        <h2>{firstName} {lastName}</h2>
-                    </div>
-                    : undefined
+                <div className={"d-flex justify-content-center"}>
+                    <h2>{profileData?.firstName} {profileData?.lastName}</h2>
+                </div>
 
-                }
 
                 <div className={"container"}>
                     <div className={"row my-5"}>
@@ -94,19 +113,16 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                                 <h4>Information</h4>
                                 <hr/>
                                 {
-                                    residence ? <p>Residence: {residence}</p> : ""
+                                    profileData?.residence ? <p>Residence: {profileData?.residence}</p> : ""
                                 }
                                 {
-                                    hometown ? <p>Hometown: {hometown}</p> : ""
+                                    profileData?.hometown ? <p>Hometown: {profileData?.hometown}</p> : ""
                                 }
                                 {
-                                    workplace ? <p>Workplace: {workplace}</p> : ""
+                                    profileData?.workplace ? <p>Workplace: {profileData?.workplace}</p> : ""
                                 }
                                 {
-                                    relationshipStatus ? <p>Relationship status: {relationshipStatus}</p> : ""
-                                }
-                                {
-                                    dateOfBirth ? <p>Birthday: {dateOfBirth}</p> : ""
+                                    profileData?.dateOfBirth ? <p>Birthday: {profileData.dateOfBirth}</p> : ""
                                 }
                             </div>
                         </div>
@@ -119,7 +135,7 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                                 <h4>Bio</h4>
                                 <hr/>
                                 {
-                                    profileBio ?? undefined
+                                    profileData?.bio ?? undefined
                                 }
                             </div>
                         </div>
@@ -164,6 +180,19 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                         </div>
 
                         <h4 className={"mt-5"}>Posts</h4>
+                        <>
+                            {Array.isArray(postList) ? postList?.map((post) => {
+                                    return <Post
+                                        key={post.id}
+                                        id={post.id}
+                                        content={post.content}
+                                        author={post.author}
+                                        createdAt={formatDateString(post.createdAt)}
+                                        onClickDelete={deletePost}
+                                    />;
+                                }
+                            ) : ""}
+                        </>
                     </TabPanel>
 
                     <TabPanel>
