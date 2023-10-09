@@ -3,7 +3,7 @@ import "./input.scss";
 import {HTMLInputTypeAttribute, ReactElement} from "react";
 import {Loader} from "../loader/Loader";
 
-const subtextSize=  "0.9em";
+const subtextSize = "0.9em";
 
 type ConfigType = {
     [key in SubtextType["type"]]: {
@@ -49,29 +49,35 @@ export type SubtextType = {
 export type InputProps = {
     value: string | undefined;
     onChange: (value: string) => void;
+    onFocus?: (value: string) => void;
     text?: string;
     textAlign?: "start" | "center" | "end"
     type?: HTMLInputTypeAttribute;
+    disabled?: boolean;
     subtext?: SubtextType;
     className?: string;
 }
 export const Input = (props: InputProps) => {
     return (
-        <div className={`d-flex flex-column ${props.className ?? ""}`}>
-            <div className={"mx-auto"}>
-                <input className={`custom-input rounded-2 form-element-bg col text-${props.textAlign ?? "start"} 
+        <div className={`d-flex flex-column align-items-center ${props.className ?? ""}`}>
+            <div>
+                <input className={`custom-input rounded-2 form-element-bg col text-${props.textAlign ?? "start"} ${props.disabled ? "cursor-disabled" : ""} 
                 ${(props.subtext ? inputConfig[props.subtext?.type].borderClass : "")}`}
-                       placeholder={props.text}
-                       value={props.value}
+                       placeholder={props.text ?? ""}
+                       value={props.value ?? ""}
                        onChange={(e) => {
                            props.onChange(e.target.value);
                        }}
+                       onFocus={(e) => {
+                           if (props.onFocus) props.onFocus(e.target.value);
+                       }}
                        type={props.type}
+                       disabled={props.disabled}
                 />
             </div>
             {
                 props.subtext ?
-                    <div className={"d-flex flex-row align-items-center"}>
+                    <div className={"d-flex flex-row align-items-center justify-content-start"}>
                         <span>{inputConfig[props.subtext.type].icon}</span>
                         <span
                             className={`${inputConfig[props.subtext.type].subtextClass ?? ""} fw-semibold custom-subtext`}

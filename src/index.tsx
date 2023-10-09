@@ -6,11 +6,11 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {Test} from "./pages/Test";
 import {InnerPage} from "./pages/InnerPage";
 import {LoginPage} from "./pages/LoginPage"
-import {ROUTE_EDIT, ROUTE_INNER, ROUTE_LOGIN, ROUTE_REGISTER, ROUTE_ROOT} from "./util/RouteConstants";
+import {ROUTE_INNER, ROUTE_LOGIN, ROUTE_PROFILE, ROUTE_REGISTER, ROUTE_ROOT} from "./util/RouteConstants";
 
 import {RegistrationPage} from "./pages/RegistrationPage";
 import 'bootstrap/dist/css/bootstrap.css';
-import {EditPage} from "./pages/EditPage";
+import {PersonalProfilePage} from "./pages/personalProfilePage/PersonalProfilePage";
 
 export type TestPageLoader = {
     name: string
@@ -34,8 +34,8 @@ const router = createBrowserRouter([
         path: ROUTE_REGISTER
     },
     {
-        element: <EditPage/>,
-        path: ROUTE_EDIT
+        element: <PersonalProfilePage/>,
+        path: ROUTE_PROFILE
     }
 ]);
 

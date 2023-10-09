@@ -3,7 +3,6 @@ import {useCallback} from "react";
 type RequestParams = { [key: string]: string }
 
 export function useFetch() {
-    console.log("Fetch render.");
 
     function requestParamsString(params: RequestParams): string {
         let reqParamString = "?";
