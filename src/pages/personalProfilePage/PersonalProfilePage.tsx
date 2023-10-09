@@ -159,9 +159,9 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                                     setNewPostText(e.target.value) : null}
                                 placeholder={"Write your post here..."}
                             />
-                            <text className={"align-self-center mx-3 text-secondary"}>
+                            <div className={"align-self-center mx-3 text-secondary"}>
                                 {newPostText ? newPostText.length : 0}/{maxPostSize}
-                            </text>
+                            </div>
                         </div>
 
                         <div className={"d-flex"}>
