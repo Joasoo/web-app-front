@@ -6,3 +6,5 @@ export const DELETE_POST = "api/post/delete"
 export const AUTH_PATH = "/api/auth"
 export const LOGIN_PATH = AUTH_PATH + "/login";
 export const REGISTER_PATH = AUTH_PATH + "/register";
+export const EDIT_PROFILE_DATA = "/api/edit/profile";
+export const GET_PROFILE_DATA = "/api/edit/person";
