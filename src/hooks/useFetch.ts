@@ -1,5 +1,3 @@
-import { useCallback } from 'react'
-
 type RequestParams = { [key: string]: string }
 type RequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE'
 
@@ -13,12 +11,12 @@ export function useFetch() {
         return reqParamString.substring(0, reqParamString.length - 1)
     }
 
-    function makeFetch<TRequest, TResponse>(
+    const makeFetch = <TRequest, TResponse>(
         path: string,
         method: RequestMethod,
         requestParams?: RequestParams,
         body?: TRequest
-    ): Promise<TResponse> {
+    ): Promise<TResponse> => {
         if (requestParams) {
             path += requestParamsString(requestParams)
         }
@@ -39,35 +37,27 @@ export function useFetch() {
         })
     }
 
-    const getJson = useCallback(
-        <TResponse>(
-            path: string,
-            requestParams?: RequestParams
-        ): Promise<TResponse> => {
-            return makeFetch(path, 'GET', requestParams)
-        },
-        []
-    )
+    const getJson = <TResponse>(
+        path: string,
+        requestParams?: RequestParams
+    ): Promise<TResponse> => {
+        console.log('rerender getjson')
+        return makeFetch(path, 'GET', requestParams)
+    }
 
-    const postJson = useCallback(
-        <TRequest, TResponse>(
-            path: string,
-            body?: TRequest
-        ): Promise<TResponse> => {
-            return makeFetch(path, 'POST', undefined, body)
-        },
-        []
-    )
+    const postJson = <TRequest, TResponse>(
+        path: string,
+        body?: TRequest
+    ): Promise<TResponse> => {
+        return makeFetch(path, 'POST', undefined, body)
+    }
 
-    const deleteJson = useCallback(
-        <TResponse>(
-            path: string,
-            requestParams?: RequestParams
-        ): Promise<TResponse> => {
-            return makeFetch(path, 'DELETE', requestParams)
-        },
-        []
-    )
+    const deleteJson = <TResponse>(
+        path: string,
+        requestParams?: RequestParams
+    ): Promise<TResponse> => {
+        return makeFetch(path, 'DELETE', requestParams)
+    }
 
     return { getJson, postJson, deleteJson }
 }

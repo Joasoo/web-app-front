@@ -36,7 +36,7 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
     useEffect(() => {
         if (profileId) {
             const getProfileData = getJson<ProfileDataModel>(
-                PATH_PROFILE + profileId
+                PATH_PROFILE + `/${profileId}`
             )
             const getPosts = getJson<PostModel[]>(
                 PATH_POST_PERSON + `/${profileId}`
