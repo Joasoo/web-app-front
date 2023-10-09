@@ -5,4 +5,4 @@ export const ROUTE_REGISTER = "/register"
 export const ROUTE_PROFILE = "/profile"
 export const ROUTE_TOS = "/terms-of-service";
 export const ROUTE_PRIVACY_POLICY = "/privacy-policy";
-export const ROUTE_EDIT = "/edit";
+export const ROUTE_EDIT = "/profile/edit";
