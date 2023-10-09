@@ -5,10 +5,9 @@ export class RegistrationModel {
         public email: string,
         public dateOfBirth: string,
         public password: string,
-        public relationshipStatus?: any, /*todo change with model.*/
+        public relationshipStatus?: any /*todo change with model.*/,
         public workplace?: string,
         public residence?: string,
-        public hometown?: string,
-    ) {
-    }
+        public hometown?: string
+    ) {}
 }

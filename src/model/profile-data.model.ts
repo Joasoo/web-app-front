@@ -1,5 +1,3 @@
-
-
 export class ProfileDataModel {
     constructor(
         public firstName: string,
@@ -9,7 +7,6 @@ export class ProfileDataModel {
         public workplace: string,
         public residence: string,
         public hometown: string,
-        public bio: string,
-    )
-    {}
+        public bio: string
+    ) {}
 }

@@ -1,53 +1,53 @@
-import React, {ReactNode, useEffect, useState} from 'react';
-import "./PersonalProfilePage.scss"
-import "../../App.scss"
-import {useFetch} from "../../hooks/useFetch";
+import { ReactNode, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
+import '../../App.scss'
+import { Loader } from '../../components/loader/Loader'
+import { useFetch } from '../../hooks/useFetch'
+import { AddPostModel } from '../../model/add-post.model'
+import { PostModel } from '../../model/post.model'
+import { ProfileDataModel } from '../../model/profile-data.model'
 import {
     PATH_POST_ADD,
     PATH_POST_DELETE,
+    PATH_POST_PERSON,
     PATH_PROFILE,
-    PATH_POST_PERSON
-} from "../../util/RequestConstants";
-import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
-import {ProfileDataModel} from "../../model/profile-data.model";
-import {Post} from "./Post";
-import {PostModel} from "../../model/post.model";
-import {Loader} from "../../components/loader/Loader";
-import {AddPostModel} from "../../model/add-post.model";
-import {formatDateString} from "../../util/StringUtil";
-import {useNavigate} from "react-router-dom";
-import {ROUTE_PROFILE_EDIT} from "../../util/RouteConstants";
-
+} from '../../util/RequestConstants'
+import { ROUTE_PROFILE_EDIT } from '../../util/RouteConstants'
+import { formatDateString } from '../../util/StringUtil'
+import './PersonalProfilePage.scss'
+import { Post } from './Post'
 
 type ProfilePageProps = {
-    className?: string;
-    children?: ReactNode;
-};
-
+    className?: string
+    children?: ReactNode
+}
 
 export const PersonalProfilePage = (props: ProfilePageProps) => {
-    const {getJson, postJson, deleteJson} = useFetch()
+    const { getJson, postJson, deleteJson } = useFetch()
     const [profileData, setProfileData] = useState<ProfileDataModel>()
     const [newPostText, setNewPostText] = useState<string | undefined>()
-    const [postList, setPostList] = useState<PostModel[]>([]);
+    const [postList, setPostList] = useState<PostModel[]>([])
     const [loading, setLoading] = useState<boolean>(true)
-    const navigate = useNavigate();
-    const profileId = new URLSearchParams(window.location.search).get("id");
-    const maxPostSize = 1000;
+    const navigate = useNavigate()
+    const profileId = new URLSearchParams(window.location.search).get('id')
+    const maxPostSize = 1000
 
     useEffect(() => {
-            if (profileId) {
-                const getProfileData = getJson<ProfileDataModel>(PATH_PROFILE + profileId);
-                const getPosts = getJson<PostModel[]>(PATH_POST_PERSON + `/${profileId}`);
-                Promise.all([getProfileData, getPosts])
-                    .then(res => {
-                        setProfileData(res[0]);
-                        setPostList(res[1]);
-                        setLoading(false);
-                    })
-            }
+        if (profileId) {
+            const getProfileData = getJson<ProfileDataModel>(
+                PATH_PROFILE + profileId
+            )
+            const getPosts = getJson<PostModel[]>(
+                PATH_POST_PERSON + `/${profileId}`
+            )
+            Promise.all([getProfileData, getPosts]).then((res) => {
+                setProfileData(res[0])
+                setPostList(res[1])
+                setLoading(false)
+            })
         }
-        , [])
+    }, [])
 
     function refreshPosts() {
         if (profileId) {
@@ -73,14 +73,13 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
 
     function makePost() {
         if (profileId && newPostText) {
-            console.log("Make a post for profile id: " + profileId)
-            setNewPostText("")
+            console.log('Make a post for profile id: ' + profileId)
+            setNewPostText('')
             let newModel = new AddPostModel(profileId, newPostText)
-            postJson(
-                PATH_POST_ADD, newModel
-            ).then(() => {
-                refreshPosts()
-            })
+            postJson(PATH_POST_ADD, newModel)
+                .then(() => {
+                    refreshPosts()
+                })
                 .catch((err) => {
                     console.log(err)
                 })
@@ -88,61 +87,91 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
     }
 
     if (loading) {
-        return <Loader overlay/>
+        return <Loader overlay />
     }
 
     return (
         <div>
-            <div className={"profile-box flex-column border border-2 border-secondary rounded"}>
-                <div className={"profile-background bg bg-secondary-subtle border rounded"}/>
-                <div className={"flex-center"}>
-                    <div className={"profile-picture rounded-circle bg bg-secondary"}/>
-                </div>
-
-                <div className={"d-flex justify-content-end"}>
-                    <input className={"btn btn-primary align-self-end"}
-                           type={"button"}
-                           value={"Edit Profile"}
-                           onClick={() => navigate(ROUTE_PROFILE_EDIT + "?id=" + profileId)}
+            <div
+                className={
+                    'profile-box flex-column border border-2 border-secondary rounded'
+                }
+            >
+                <div
+                    className={
+                        'profile-background bg bg-secondary-subtle border rounded'
+                    }
+                />
+                <div className={'flex-center'}>
+                    <div
+                        className={
+                            'profile-picture rounded-circle bg bg-secondary'
+                        }
                     />
                 </div>
 
-                <div className={"d-flex justify-content-center"}>
-                    <h2>{profileData?.firstName} {profileData?.lastName}</h2>
+                <div className={'d-flex justify-content-end'}>
+                    <input
+                        className={'btn btn-primary align-self-end'}
+                        type={'button'}
+                        value={'Edit Profile'}
+                        onClick={() =>
+                            navigate(ROUTE_PROFILE_EDIT + '?id=' + profileId)
+                        }
+                    />
                 </div>
 
+                <div className={'d-flex justify-content-center'}>
+                    <h2>
+                        {profileData?.firstName} {profileData?.lastName}
+                    </h2>
+                </div>
 
-                <div className={"container"}>
-                    <div className={"row my-5"}>
-                        <div className={"col-5"}>
-                            <div className={"border border-2 rounded px-4 py-3 text-break"}>
+                <div className={'container'}>
+                    <div className={'row my-5'}>
+                        <div className={'col-5'}>
+                            <div
+                                className={
+                                    'border border-2 rounded px-4 py-3 text-break'
+                                }
+                            >
                                 <h4>Information</h4>
-                                <hr/>
-                                {
-                                    profileData?.residence ? <p>Residence: {profileData?.residence}</p> : ""
-                                }
-                                {
-                                    profileData?.hometown ? <p>Hometown: {profileData?.hometown}</p> : ""
-                                }
-                                {
-                                    profileData?.workplace ? <p>Workplace: {profileData?.workplace}</p> : ""
-                                }
-                                {
-                                    profileData?.dateOfBirth ? <p>Birthday: {profileData.dateOfBirth}</p> : ""
-                                }
+                                <hr />
+                                {profileData?.residence ? (
+                                    <p>Residence: {profileData?.residence}</p>
+                                ) : (
+                                    ''
+                                )}
+                                {profileData?.hometown ? (
+                                    <p>Hometown: {profileData?.hometown}</p>
+                                ) : (
+                                    ''
+                                )}
+                                {profileData?.workplace ? (
+                                    <p>Workplace: {profileData?.workplace}</p>
+                                ) : (
+                                    ''
+                                )}
+                                {profileData?.dateOfBirth ? (
+                                    <p>Birthday: {profileData.dateOfBirth}</p>
+                                ) : (
+                                    ''
+                                )}
                             </div>
                         </div>
 
-                        <div className={"col"}/>
+                        <div className={'col'} />
                         {/* For empty space between Information and Bio */}
 
-                        <div className={"col-5"}>
-                            <div className={"border border-2 rounded px-4 py-3 text-break"}>
-                                <h4>Bio</h4>
-                                <hr/>
-                                {
-                                    profileData?.bio ?? undefined
+                        <div className={'col-5'}>
+                            <div
+                                className={
+                                    'border border-2 rounded px-4 py-3 text-break'
                                 }
+                            >
+                                <h4>Bio</h4>
+                                <hr />
+                                {profileData?.bio ?? undefined}
                             </div>
                         </div>
                     </div>
@@ -155,61 +184,73 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                         <Tab>Photos</Tab>
                     </TabList>
 
-                    <TabPanel className={"align-items-start"}>
+                    <TabPanel className={'align-items-start'}>
                         <h4>Create a new post</h4>
-                        <div className={"d-flex w-100"}>
+                        <div className={'d-flex w-100'}>
                             <textarea
-                                className={"new-post d-flex w-75 my-3 rounded-2 bg-secondary-subtle align-items-start"}
+                                className={
+                                    'new-post d-flex w-75 my-3 rounded-2 bg-secondary-subtle align-items-start'
+                                }
                                 value={newPostText}
-                                onChange={e => e.target.value.length <= maxPostSize ?
-                                    setNewPostText(e.target.value) : null}
-                                placeholder={"Write your post here..."}
+                                onChange={(e) =>
+                                    e.target.value.length <= maxPostSize
+                                        ? setNewPostText(e.target.value)
+                                        : null
+                                }
+                                placeholder={'Write your post here...'}
                             />
-                            <div className={"align-self-center mx-3 text-secondary"}>
-                                {newPostText ? newPostText.length : 0}/{maxPostSize}
+                            <div
+                                className={
+                                    'align-self-center mx-3 text-secondary'
+                                }
+                            >
+                                {newPostText ? newPostText.length : 0}/
+                                {maxPostSize}
                             </div>
                         </div>
 
-                        <div className={"d-flex"}>
+                        <div className={'d-flex'}>
                             <input
-                                className={"w-auto btn btn-primary align-self-start"}
-                                type={"button"}
-                                value={"Create post"}
+                                className={
+                                    'w-auto btn btn-primary align-self-start'
+                                }
+                                type={'button'}
+                                value={'Create post'}
                                 onClick={makePost}
                             />
                             <input
-                                className={"mx-3 btn btn-secondary"}
-                                type={"button"}
-                                value={"Clear"}
-                                onClick={() => setNewPostText("")}
+                                className={'mx-3 btn btn-secondary'}
+                                type={'button'}
+                                value={'Clear'}
+                                onClick={() => setNewPostText('')}
                             />
                         </div>
 
-                        <h4 className={"mt-5"}>Posts</h4>
+                        <h4 className={'mt-5'}>Posts</h4>
                         <>
-                            {Array.isArray(postList) ? postList?.map((post) => {
-                                    return <Post
-                                        key={post.id}
-                                        id={post.id}
-                                        content={post.content}
-                                        author={post.author}
-                                        createdAt={formatDateString(post.createdAt)}
-                                        onClickDelete={deletePost}
-                                    />;
-                                }
-                            ) : ""}
+                            {Array.isArray(postList)
+                                ? postList?.map((post) => {
+                                      return (
+                                          <Post
+                                              key={post.id}
+                                              id={post.id}
+                                              content={post.content}
+                                              author={post.author}
+                                              createdAt={formatDateString(
+                                                  post.createdAt
+                                              )}
+                                              onClickDelete={deletePost}
+                                          />
+                                      )
+                                  })
+                                : ''}
                         </>
                     </TabPanel>
 
-                    <TabPanel>
-                        (!) Friends not implemented
-                    </TabPanel>
+                    <TabPanel>(!) Friends not implemented</TabPanel>
 
-                    <TabPanel>
-                        (!) Photos not implemented
-                    </TabPanel>
+                    <TabPanel>(!) Photos not implemented</TabPanel>
                 </Tabs>
-
             </div>
         </div>
     )
