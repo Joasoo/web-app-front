@@ -1,15 +1,15 @@
 import React, {ReactNode, useEffect, useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
-import {useFetch} from "../hooks/useFetch";
+import {useFetch} from "../../hooks/useFetch";
 import "./EditPage.scss"
-import {ROUTE_EDIT} from "../util/RouteConstants";
-import {EDIT_PROFILE_DATA, GET_PROFILE_DATA} from "../util/RequestConstants";
-import {EditDataModel} from "../model/edit-data.model";
-import {Loader} from "../components/loader/Loader";
+import {ROUTE_EDIT} from "../../util/RouteConstants";
+import {SAVE_PROFILE_DATA, EDIT_PROFILE_DATA} from "../../util/RequestConstants";
+import {EditDataModel} from "../../model/edit-data.model";
+import {Loader} from "../../components/loader/Loader";
 
 type EditPageProps = {
-    className? : string;
-    children? : ReactNode
+    className?: string;
+    children?: ReactNode
 };
 
 export const EditPage = (props: EditPageProps) => {
@@ -31,23 +31,33 @@ export const EditPage = (props: EditPageProps) => {
 
     useEffect(() => {
         getOriginalData();
-        setLoading(false);
     }, []);
 
     function getOriginalData() {
+        setLoading(true);
         if (profileId) {
-            const requestParams = {"id": profileId}
-            getJson<EditDataModel>(GET_PROFILE_DATA, requestParams)
-                .then( res => {
-                    setEditData(res);
+            getJson<EditDataModel>(EDIT_PROFILE_DATA + profileId)
+                .then(res => {
+                    setEditData(res)
+                    setFirstName(res.firstName)
+                    setLastName(res.lastName)
+                    setEmail(res.email)
+                    setResidence(res.residence)
+                    setHometown(res.hometown)
+                    setWorkplace(res.workplace)
+                    setRelationshipStatus(res.relationShipStatus)
+                    setDateOfBirth(res.dateOfBirth)
+                    setProfileBio(res.profileBio)
+                    setLoading(false);
                 })
         }
     }
 
-    function makeEdit() {
+    function saveChanges() {
         if (profileId) {
             console.log("person with id: " + profileId + " is editing info...")
             let newEditDataModel = new EditDataModel(
+                profileId,
                 firstName,
                 lastName,
                 dateOfBirth,
@@ -55,9 +65,10 @@ export const EditPage = (props: EditPageProps) => {
                 residence,
                 hometown,
                 workplace,
-                profileBio
+                relationshipStatus,
+                profileBio,
             )
-            postJson(EDIT_PROFILE_DATA, newEditDataModel)
+            postJson(SAVE_PROFILE_DATA, newEditDataModel)
                 .then(() => {
                     getOriginalData()
                 })
@@ -83,7 +94,8 @@ export const EditPage = (props: EditPageProps) => {
 
                     <div className={"col d-flex flex-column"}>
                         <div className={"bg-picture-box bg bg-secondary-subtle rounded-3"}/>
-                        <input className={"btn btn-primary mx-auto w-50"} type={"button"} value={"Edit Background Photo"}/>
+                        <input className={"btn btn-primary mx-auto w-50"} type={"button"}
+                               value={"Edit Background Photo"}/>
                     </div>
 
                 </div>
@@ -94,7 +106,9 @@ export const EditPage = (props: EditPageProps) => {
                                 editData?.profileBio ? <p>{editData?.profileBio}</p> : ""
                             }
                         </div>
-                        <input className={"btn btn-primary mx-auto w-50"} type={"button"} value={"Edit Profile Bio"} onClick={() => {}}/>
+                        <input className={"btn btn-primary mx-auto w-50"} type={"button"} value={"Edit Profile Bio"}
+                               onClick={() => {
+                               }}/>
                     </div>
                     <div className={"col d-flex flex-column"}>
                     </div>
@@ -119,12 +133,13 @@ export const EditPage = (props: EditPageProps) => {
                     <div className={"col-5"}>
                         <input type={"text"}
                                className={"w-100 rounded text-center"}
-                               placeholder={editData?.firstName ?? ""}
+                               value={firstName}
                                onChange={e => setFirstName(e.target.value)}
                         />
                     </div>
                     <div className={"col-2 w-25"}>
-                        <select className={"list-box form-select-sm w-75 text-center rounded border-2 border-secondary"}>
+                        <select
+                            className={"list-box form-select-sm w-75 text-center rounded border-2 border-secondary"}>
                             <option selected>Select</option>
                             <option value="1">Private</option>
                             <option value="2">Friends</option>
@@ -132,7 +147,10 @@ export const EditPage = (props: EditPageProps) => {
                         </select>
                     </div>
                     <div className={"col-2"}>
-                        <input className={"reset-btn btn btn-secondary"} value={"Reset"} onClick={() => setFirstName(editData?.firstName ?? "")}/>
+                        <input className={"reset-btn btn btn-secondary"}
+                               value={"Reset"}
+                               onClick={() => setFirstName(editData?.firstName ?? "")}
+                        />
                     </div>
                 </div>
                 <div className={"row"}>
@@ -140,10 +158,16 @@ export const EditPage = (props: EditPageProps) => {
                         <p className={"text-start fw-bold"}>Last Name:</p>
                     </div>
                     <div className={"col-5"}>
-                        <input type={"text"} className={"w-100 rounded text-center"} placeholder={editData?.lastName ?? ""}/>
+                        <input
+                            type={"text"}
+                            className={"w-100 rounded text-center"}
+                            value={lastName}
+                            onChange={e => setLastName(e.target.value)}
+                        />
                     </div>
                     <div className={"col-2 w-25"}>
-                        <select className={"list-box form-select-sm w-75 text-center rounded border-2 border-secondary"}>
+                        <select
+                            className={"list-box form-select-sm w-75 text-center rounded border-2 border-secondary"}>
                             <option selected>Select</option>
                             <option value="1">Private</option>
                             <option value="2">Friends</option>
@@ -151,7 +175,10 @@ export const EditPage = (props: EditPageProps) => {
                         </select>
                     </div>
                     <div className={"col-2"}>
-                        <input className={"reset-btn btn btn-secondary"} value={"Reset"} onClick={() => setLastName(editData?.lastName ?? "")}/>
+                        <input className={"reset-btn btn btn-secondary"}
+                               value={"Reset"}
+                               onClick={() => setLastName(editData?.lastName ?? "")}
+                        />
                     </div>
                 </div>
                 <div className={"row"}>
@@ -159,10 +186,16 @@ export const EditPage = (props: EditPageProps) => {
                         <p className={"text-start fw-bold"}>Date Of Birth:</p>
                     </div>
                     <div className={"col-5"}>
-                        <input type={"text"} className={"w-100 rounded text-center"} placeholder={editData?.dateOfBirth ?? ""}/>
+                        <input
+                            type={"text"}
+                            className={"w-100 rounded text-center"}
+                            value={dateOfBirth}
+                            onChange={e => setDateOfBirth(e.target.value)}
+                        />
                     </div>
                     <div className={"col-2 w-25"}>
-                        <select className={"list-box form-select-sm w-75 text-center rounded border-2 border-secondary"}>
+                        <select
+                            className={"list-box form-select-sm w-75 text-center rounded border-2 border-secondary"}>
                             <option selected>Select</option>
                             <option value="1">Private</option>
                             <option value="2">Friends</option>
@@ -170,7 +203,11 @@ export const EditPage = (props: EditPageProps) => {
                         </select>
                     </div>
                     <div className={"col-2"}>
-                        <input className={"reset-btn btn btn-secondary"} value={"Reset"} onClick={() => setDateOfBirth(editData?.dateOfBirth ?? "")}/>
+                        <input
+                            className={"reset-btn btn btn-secondary"}
+                            value={"Reset"}
+                            onClick={() => setDateOfBirth(editData?.dateOfBirth ?? "")}
+                        />
                     </div>
                 </div>
                 <div className={"row"}>
@@ -178,10 +215,16 @@ export const EditPage = (props: EditPageProps) => {
                         <p className={"text-start fw-bold"}>E-Mail:</p>
                     </div>
                     <div className={"col-5"}>
-                        <input type={"text"} className={"w-100 rounded text-center"} placeholder={editData?.email ?? ""}/>
+                        <input
+                            type={"text"}
+                            className={"w-100 rounded text-center"}
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                        />
                     </div>
                     <div className={"col-2 w-25"}>
-                        <select className={"list-box form-select-sm w-75 text-center rounded border-2 border-secondary"}>
+                        <select
+                            className={"list-box form-select-sm w-75 text-center rounded border-2 border-secondary"}>
                             <option selected>Select</option>
                             <option value="1">Private</option>
                             <option value="2">Friends</option>
@@ -189,7 +232,10 @@ export const EditPage = (props: EditPageProps) => {
                         </select>
                     </div>
                     <div className={"col-2"}>
-                        <input className={"reset-btn btn btn-secondary"} value={"Reset"} onClick={() => setEmail(editData?.email ?? "")}/>
+                        <input className={"reset-btn btn btn-secondary"}
+                               value={"Reset"}
+                               onClick={() => setEmail(editData?.email ?? "")}
+                        />
                     </div>
                 </div>
                 <div className={"row"}>
@@ -197,10 +243,16 @@ export const EditPage = (props: EditPageProps) => {
                         <p className={"text-start fw-bold"}>Residence:</p>
                     </div>
                     <div className={"col-5"}>
-                        <input type={"text"} className={"w-100 rounded text-center"} placeholder={editData?.residence ?? ""}/>
+                        <input
+                            type={"text"}
+                            className={"w-100 rounded text-center"}
+                            value={residence}
+                            onChange={e => setResidence(e.target.value)}
+                        />
                     </div>
                     <div className={"col-2 w-25"}>
-                        <select className={"list-box form-select-sm w-75 text-center rounded border-2 border-secondary"}>
+                        <select
+                            className={"list-box form-select-sm w-75 text-center rounded border-2 border-secondary"}>
                             <option selected>Select</option>
                             <option value="1">Private</option>
                             <option value="2">Friends</option>
@@ -208,7 +260,8 @@ export const EditPage = (props: EditPageProps) => {
                         </select>
                     </div>
                     <div className={"col-2"}>
-                        <input className={"reset-btn btn btn-secondary"} value={"Reset"} onClick={() => setResidence(editData?.residence ?? "")}/>
+                        <input className={"reset-btn btn btn-secondary"} value={"Reset"}
+                               onClick={() => setResidence(editData?.residence ?? "")}/>
                     </div>
                 </div>
                 <div className={"row"}>
@@ -216,10 +269,15 @@ export const EditPage = (props: EditPageProps) => {
                         <p className={"text-start fw-bold"}>Hometown:</p>
                     </div>
                     <div className={"col-5"}>
-                        <input type={"text"} className={"w-100 rounded text-center"} placeholder={editData?.hometown ?? ""}/>
+                        <input type={"text"}
+                               className={"w-100 rounded text-center"}
+                               value={hometown}
+                               onChange={e => setHometown(e.target.value)}
+                        />
                     </div>
                     <div className={"col-2 w-25"}>
-                        <select className={"list-box form-select-sm w-75 text-center rounded border-2 border-secondary"}>
+                        <select
+                            className={"list-box form-select-sm w-75 text-center rounded border-2 border-secondary"}>
                             <option selected>Select</option>
                             <option value="1">Private</option>
                             <option value="2">Friends</option>
@@ -227,7 +285,11 @@ export const EditPage = (props: EditPageProps) => {
                         </select>
                     </div>
                     <div className={"col-2"}>
-                        <input className={"reset-btn btn btn-secondary"} value={"Reset"} onClick={() => setHometown(editData?.hometown ?? "")}/>
+                        <input
+                            className={"reset-btn btn btn-secondary"}
+                            value={"Reset"}
+                            onClick={() => setHometown(editData?.hometown ?? "")}
+                        />
                     </div>
                 </div>
                 <div className={"row"}>
@@ -235,10 +297,16 @@ export const EditPage = (props: EditPageProps) => {
                         <p className={"text-start fw-bold"}>Workplace:</p>
                     </div>
                     <div className={"col-5"}>
-                        <input type={"text"} className={"w-100 rounded text-center"} placeholder={editData?.workplace ?? ""}/>
+                        <input
+                            type={"text"}
+                            className={"w-100 rounded text-center"}
+                            value={workplace}
+                            onChange={e => setWorkplace(e.target.value)}
+                        />
                     </div>
                     <div className={"col-2 w-25"}>
-                        <select className={"list-box form-select-sm w-75 text-center rounded border-2 border-secondary"}>
+                        <select
+                            className={"list-box form-select-sm w-75 text-center rounded border-2 border-secondary"}>
                             <option selected>Select</option>
                             <option value="1">Private</option>
                             <option value="2">Friends</option>
@@ -246,7 +314,11 @@ export const EditPage = (props: EditPageProps) => {
                         </select>
                     </div>
                     <div className={"col-2"}>
-                        <input className={"reset-btn btn btn-secondary"} value={"Reset"} onClick={() => setWorkplace(editData?.workplace ?? "")}/>
+                        <input
+                            className={"reset-btn btn btn-secondary"}
+                            value={"Reset"}
+                            onClick={() => setWorkplace(editData?.workplace ?? "")}
+                        />
                     </div>
                 </div>
                 <div className={"row"}>
@@ -254,10 +326,14 @@ export const EditPage = (props: EditPageProps) => {
                         <p className={"text-start fw-bold"}>Marital Status:</p>
                     </div>
                     <div className={"col-5"}>
-                        <input type={"text"} className={"w-100 rounded text-center"} placeholder={""}/>
+                        <input
+                            type={"text"}
+                            className={"w-100 rounded text-center"}
+                            value={""}/>
                     </div>
                     <div className={"col-2 w-25"}>
-                        <select className={"list-box form-select-sm w-75 text-center rounded border-2 border-secondary"}>
+                        <select
+                            className={"list-box form-select-sm w-75 text-center rounded border-2 border-secondary"}>
                             <option selected>Select</option>
                             <option value="1">Private</option>
                             <option value="2">Friends</option>
@@ -265,14 +341,17 @@ export const EditPage = (props: EditPageProps) => {
                         </select>
                     </div>
                     <div className={"col-2"}>
-                        <input className={"reset-btn btn btn-secondary"} value={"Reset"} onClick={() => setRelationshipStatus("")}/>
+                        <input className={"reset-btn btn btn-secondary"} value={"Reset"}
+                               onClick={() => setRelationshipStatus("")}/>
                     </div>
                 </div>
                 <div className={"row"}>
                     <div className={"col-2"}/>
                     <div className={"col-5"}/>
-                    <div className={"col-2"}><input className={"btn btn-primary w-75 bg-success border-success"} value={"Save"} onClick={makeEdit}/></div>
-                    <div className={"col-2"}><input className={"btn btn-primary w-75 bg-danger border-danger"} value={"Cancel"}/></div>
+                    <div className={"col-2"}><input className={"btn btn-primary w-75 bg-success border-success"}
+                                                    value={"Save"} onClick={saveChanges}/></div>
+                    <div className={"col-2"}><input className={"btn btn-primary w-75 bg-danger border-danger"}
+                                                    value={"Cancel"}/></div>
                 </div>
             </div>
 

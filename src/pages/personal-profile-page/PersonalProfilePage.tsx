@@ -2,7 +2,7 @@ import React, {ReactNode, useEffect, useState} from 'react';
 import "./PersonalProfilePage.scss"
 import "../../App.scss"
 import {useFetch} from "../../hooks/useFetch";
-import {PROFILE_DATA, PERSON_POST_LIST, ADD_POST, DELETE_POST} from "../../util/RequestConstants";
+import {VIEW_PROFILE_DATA, PERSON_POST_LIST, ADD_POST, DELETE_POST} from "../../util/RequestConstants";
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 import {ProfileDataModel} from "../../model/profile-data.model";
 import {Post} from "./Post";
@@ -10,7 +10,8 @@ import {PostModel} from "../../model/post.model";
 import {Loader} from "../../components/loader/Loader";
 import {AddPostModel} from "../../model/add-post.model";
 import {formatDateString} from "../../util/StringUtil";
-import {DeletePostModel} from "../../model/delete-post.model";
+import {useNavigate} from "react-router-dom";
+import {ROUTE_EDIT} from "../../util/RouteConstants";
 
 
 type ProfilePageProps = {
@@ -25,14 +26,14 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
     const [newPostText, setNewPostText] = useState<string | undefined>()
     const [postList, setPostList] = useState<PostModel[]>([]);
     const [loading, setLoading] = useState<boolean>(true)
+    const navigate = useNavigate();
     const profileId = new URLSearchParams(window.location.search).get("id");
     const maxPostSize = 1000;
 
     useEffect(() => {
             if (profileId) {
-                const requestParams = {"id": profileId}
-                const getProfileData = getJson<ProfileDataModel>(PROFILE_DATA, requestParams);
-                const getPosts = getJson<PostModel[]>(PERSON_POST_LIST, requestParams);
+                const getProfileData = getJson<ProfileDataModel>(VIEW_PROFILE_DATA + profileId);
+                const getPosts = getJson<PostModel[]>(PERSON_POST_LIST + profileId);
                 Promise.all([getProfileData, getPosts])
                     .then(res => {
                         setProfileData(res[0]);
@@ -45,8 +46,7 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
 
     function refreshPosts() {
         if (profileId) {
-            const requestParams = {"id": profileId}
-            getJson<PostModel[]>(PERSON_POST_LIST, requestParams)
+            getJson<PostModel[]>(PERSON_POST_LIST + profileId)
                 .then((res) => {
                     setPostList(res)
                 })
@@ -57,8 +57,7 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
     }
 
     function deletePost(id: string) {
-        const requestParams = {id}
-        deleteJson(DELETE_POST, requestParams)
+        deleteJson(DELETE_POST + profileId)
             .then(() => {
                 refreshPosts()
             })
@@ -98,7 +97,9 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                 <div className={"d-flex justify-content-end"}>
                     <input className={"btn btn-primary align-self-end"}
                            type={"button"}
-                           value={"Edit Profile"}/>
+                           value={"Edit Profile"}
+                           onClick={() => navigate(ROUTE_EDIT + "?id=" + profileId)}
+                    />
                 </div>
 
                 <div className={"d-flex justify-content-center"}>
