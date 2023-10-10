@@ -33,7 +33,7 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
     const navigate = useNavigate()
     const foreignProfileId = new URLSearchParams(window.location.search).get(
         'id'
-    )
+    ) /*todo distinguishing between personal and friend account not implemented properly. Can't make posts from personal account.*/
     const maxPostSize = 1000
 
     useEffect(() => {
