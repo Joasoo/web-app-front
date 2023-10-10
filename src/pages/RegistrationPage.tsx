@@ -248,10 +248,12 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
                                 <FormRow className={formClasses}>
                                     <label>Relationship status:</label>
                                     <DropdownSelect
+                                        withEmptyOption
                                         options={relOptions ?? []}
                                         value={relationship}
                                         setValue={(value) => {
                                             setRelationship(value)
+                                            console.log(value)
                                         }}
                                         formatLabel={(value) => value.value}
                                     />
