@@ -10,3 +10,5 @@ export const PATH_AUTH_REGISTER = PATH_AUTH + '/register'
 export const PATH_PROFILE = '/api/profile'
 export const PATH_PROFILE_EDIT = PATH_PROFILE + '/edit'
 export const PATH_PROFILE_EDIT_SAVE = PATH_PROFILE_EDIT + '/save'
+export const PATH_PROFILE_RELATIONSHIP_STATUS =
+    PATH_PROFILE + '/relationship-status'

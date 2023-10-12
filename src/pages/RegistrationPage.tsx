@@ -1,12 +1,17 @@
-import { ReactNode, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Checkbox } from '../components/checkbox/Checkbox'
+import { DropdownSelect } from '../components/dropdown/DropdownSelect'
 import { FormRow } from '../components/FormRow'
 import { Input, SubtextType } from '../components/input/Input'
 import { Loader } from '../components/loader/Loader'
 import { useFetch } from '../hooks/useFetch'
 import { RegistrationModel } from '../model/registration.model'
-import { PATH_AUTH_REGISTER } from '../util/RequestConstants'
+import { StatusCodeModel } from '../model/status-code.model'
+import {
+    PATH_AUTH_REGISTER,
+    PATH_PROFILE_RELATIONSHIP_STATUS,
+} from '../util/RequestConstants'
 import {
     ROUTE_LOGIN,
     ROUTE_PRIVACY_POLICY,
@@ -32,7 +37,7 @@ const errorSubtext: { [key: string]: SubtextType } = {
 
 export const RegistrationPage = (props: RegistrationPageProps) => {
     const navigate = useNavigate()
-    const { postJson } = useFetch()
+    const { postJson, getJson } = useFetch()
     const [loading, setLoading] = useState<boolean>(false)
 
     const [firstName, setFirstName] = useState('')
@@ -41,7 +46,8 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
     const [dateOfBirth, setDateOfBirth] = useState('')
     const [password, setPassword] = useState('')
     const [repeatPassword, setRepeatPassword] = useState('')
-    const [relationship, setRelationship] = useState('')
+    const [relOptions, setRelOptions] = useState<StatusCodeModel[]>()
+    const [relationship, setRelationship] = useState<StatusCodeModel>()
     const [workplace, setWorkplace] = useState('')
     const [residence, setResidence] = useState('')
     const [hometown, setHometown] = useState('')
@@ -54,6 +60,19 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
     const [pwdSub, setPwdSub] = useState<SubtextType>()
     const [confPwdSub, setConfPwdSub] = useState<SubtextType>()
     const [showTermsErr, setShowTermsErr] = useState<boolean>(false)
+
+    useEffect(() => {
+        setLoading(true)
+        getJson<StatusCodeModel[]>(PATH_PROFILE_RELATIONSHIP_STATUS)
+            .then((res) => {
+                setRelOptions(res)
+                setLoading(false)
+            })
+            .catch((err) => {
+                console.log(err)
+                setLoading(false)
+            })
+    }, [])
 
     function handleValidation(): boolean {
         let valid = true
@@ -101,7 +120,6 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
             /*todo Perform request.*/
             postJson<RegistrationModel, void>(PATH_AUTH_REGISTER, getModel())
                 .then((res) => {
-                    /*todo save token*/
                     navigate(ROUTE_LOGIN)
                 })
                 .catch((err) => {
@@ -229,19 +247,16 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
                             <div className={'row my-4'}>
                                 <FormRow className={formClasses}>
                                     <label>Relationship status:</label>
-                                    <select
-                                        className={
-                                            'w-auto text-center form-select form-select-sm'
-                                        }
-                                    >
-                                        {' '}
-                                        {/*todo: change to custom comp.*/}
-                                        <option selected></option>
-                                        <option>Single</option>
-                                        <option>In a relationship</option>
-                                        <option>Married</option>
-                                        <option>Complicated</option>
-                                    </select>
+                                    <DropdownSelect
+                                        withEmptyOption
+                                        options={relOptions ?? []}
+                                        value={relationship}
+                                        setValue={(value) => {
+                                            setRelationship(value)
+                                            console.log(value)
+                                        }}
+                                        formatLabel={(value) => value.value}
+                                    />
                                 </FormRow>
                                 <FormRow className={formClasses}>
                                     <span>Workplace:</span>
