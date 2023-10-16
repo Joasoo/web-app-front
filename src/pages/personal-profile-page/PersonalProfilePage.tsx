@@ -2,6 +2,8 @@ import { ReactNode, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 import '../../App.scss'
+import { Card } from '../../components/card/Card'
+import { FormRow } from '../../components/FormRow'
 import { Loader } from '../../components/loader/Loader'
 import { useFetch } from '../../hooks/useFetch'
 import { AddPostModel } from '../../model/add-post.model'
@@ -21,11 +23,11 @@ type ProfilePageProps = {
 
 export const PersonalProfilePage = (props: ProfilePageProps) => {
     const { getJson, postJson, deleteJson } = useFetch()
+    const navigate = useNavigate()
     const [profileData, setProfileData] = useState<ProfileDataModel>()
-    const [newPostText, setNewPostText] = useState<string | undefined>()
+    const [newPostText, setNewPostText] = useState<string>('')
     const [postList, setPostList] = useState<PostModel[]>([])
     const [loading, setLoading] = useState<boolean>(true)
-    const navigate = useNavigate()
     const foreignProfileId = new URLSearchParams(window.location.search).get(
         'id'
     ) /*todo distinguishing between personal and friend account not implemented properly. Can't make posts from personal account.*/
@@ -93,13 +95,17 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
         }
     }
 
+    function getFormRow(text: ReactNode) {
+        return <FormRow className={'my-1'}>{text}</FormRow>
+    }
+
     if (loading) {
         return <Loader overlay />
     }
 
     return (
         <div>
-            <div className={'profile-box flex-column border border-2 border-secondary rounded'}>
+            <div className={'profile-box'}>
                 <div className={'profile-background bg bg-secondary-subtle border rounded'} />
                 <div className={'flex-center'}>
                     <div className={'profile-picture rounded-circle bg bg-secondary'} />
@@ -123,25 +129,50 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                 <div className={'container'}>
                     <div className={'row my-5'}>
                         <div className={'col-5'}>
-                            <div className={'border border-2 rounded px-4 py-3 text-break'}>
+                            <Card className={'text-break p-4'}>
                                 <h4>Information</h4>
                                 <hr />
-                                {profileData?.residence ? <p>Residence: {profileData?.residence}</p> : ''}
-                                {profileData?.hometown ? <p>Hometown: {profileData?.hometown}</p> : ''}
-                                {profileData?.workplace ? <p>Workplace: {profileData?.workplace}</p> : ''}
-                                {profileData?.dateOfBirth ? <p>Birthday: {profileData.dateOfBirth}</p> : ''}
-                            </div>
+                                {profileData?.residence
+                                    ? getFormRow(
+                                          <>
+                                              <b className={'me-2'}>Residence:</b> {profileData?.residence}
+                                          </>
+                                      )
+                                    : ''}
+                                {profileData?.hometown
+                                    ? getFormRow(
+                                          <>
+                                              <b className={'me-2'}>Hometown:</b> {profileData?.hometown}
+                                          </>
+                                      )
+                                    : ''}
+                                {profileData?.workplace
+                                    ? getFormRow(
+                                          <>
+                                              <b className={'me-2'}>Workplace:</b> {profileData?.workplace}
+                                          </>
+                                      )
+                                    : ''}
+                                {profileData?.dateOfBirth
+                                    ? getFormRow(
+                                          <>
+                                              <b className={'me-2'}>Birthday:</b>{' '}
+                                              {formatDateString(profileData.dateOfBirth)}
+                                          </>
+                                      )
+                                    : ''}
+                            </Card>
                         </div>
 
                         <div className={'col'} />
                         {/* For empty space between Information and Bio */}
 
                         <div className={'col-5'}>
-                            <div className={'border border-2 rounded px-4 py-3 text-break'}>
+                            <Card className={'p-4 text-break'}>
                                 <h4>Bio</h4>
                                 <hr />
                                 {profileData?.bio ?? undefined}
-                            </div>
+                            </Card>
                         </div>
                     </div>
                 </div>
@@ -165,7 +196,7 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                                 }
                                 placeholder={'Write your post here...'}
                             />
-                            <div className={'align-self-center mx-3 text-secondary'}>
+                            <div className={'align-self-center mx-3 color-text-1'}>
                                 {newPostText ? newPostText.length : 0}/{maxPostSize}
                             </div>
                         </div>
