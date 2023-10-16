@@ -10,10 +10,7 @@ export const Checkbox = (props: CheckboxProps) => {
         <input
             disabled={props.disabled}
             checked={props.value}
-            className={
-                (props.className ?? '') +
-                (props.disabled ? ' cursor-disabled' : '')
-            }
+            className={(props.className ?? '') + (props.disabled ? ' cursor-disabled' : '')}
             type={'checkbox'}
             onClick={() => props.onClick(!props.value)}
         />

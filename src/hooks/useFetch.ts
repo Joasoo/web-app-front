@@ -38,35 +38,21 @@ export function useFetch() {
                 body: JSON.stringify(body),
             }).then((res) => {
                 res.json().then((val: TResponse | ErrorModel) => {
-                    res.ok
-                        ? resolve(val as TResponse)
-                        : reject(val as ErrorModel)
+                    res.ok ? resolve(val as TResponse) : reject(val as ErrorModel)
                 })
             })
         })
     }
 
-    const getJson = <TResponse>(
-        path: string,
-        requestParams?: RequestParams,
-        token?: string
-    ): Promise<TResponse> => {
+    const getJson = <TResponse>(path: string, requestParams?: RequestParams, token?: string): Promise<TResponse> => {
         return makeFetch(path, 'GET', requestParams, undefined, token)
     }
 
-    const postJson = <TRequest, TResponse>(
-        path: string,
-        body?: TRequest,
-        token?: string
-    ): Promise<TResponse> => {
+    const postJson = <TRequest, TResponse>(path: string, body?: TRequest, token?: string): Promise<TResponse> => {
         return makeFetch(path, 'POST', undefined, body, token)
     }
 
-    const deleteJson = <TResponse>(
-        path: string,
-        requestParams?: RequestParams,
-        token?: string
-    ): Promise<TResponse> => {
+    const deleteJson = <TResponse>(path: string, requestParams?: RequestParams, token?: string): Promise<TResponse> => {
         return makeFetch(path, 'DELETE', requestParams, undefined, token)
     }
 

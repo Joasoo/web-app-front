@@ -10,10 +10,7 @@ export class StorageUtil {
                 break
             }
             case 'SESSION': {
-                sessionStorage.setItem(
-                    key,
-                    StorageUtil.serializeObject<T>(value)
-                )
+                sessionStorage.setItem(key, StorageUtil.serializeObject<T>(value))
                 break
             }
         }
@@ -25,19 +22,13 @@ export class StorageUtil {
         switch (storage) {
             case 'LOCAL': {
                 if (localStorage.getItem(key) == null) {
-                    localStorage.setItem(
-                        key,
-                        StorageUtil.serializeObject<T>(value)
-                    )
+                    localStorage.setItem(key, StorageUtil.serializeObject<T>(value))
                 }
                 break
             }
             case 'SESSION': {
                 if (sessionStorage.getItem(key) == null) {
-                    sessionStorage.setItem(
-                        key,
-                        StorageUtil.serializeObject<T>(value)
-                    )
+                    sessionStorage.setItem(key, StorageUtil.serializeObject<T>(value))
                 }
             }
         }
@@ -64,11 +55,7 @@ export class StorageUtil {
     /**
      * Return a value from storage with the given key or _default, if no value exists.
      */
-    static getOrDefault<TReturn, TDefault>(
-        storage: StorageType,
-        key: string,
-        _default: TDefault
-    ): TReturn | TDefault {
+    static getOrDefault<TReturn, TDefault>(storage: StorageType, key: string, _default: TDefault): TReturn | TDefault {
         switch (storage) {
             case 'LOCAL': {
                 const value = localStorage.getItem(key)
