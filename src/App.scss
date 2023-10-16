@@ -15,33 +15,8 @@ $color-background-1: #1e1e1e;
 $color-success: #588f45;
 $color-danger: #d72a2a;
 
-@mixin flex-center {
-    display: flex;
-    align-items: center !important;
-    justify-content: center !important;
-}
-
-.fit-content {
-    width: fit-content !important;
-}
-
-.flex-center {
-    @include flex-center;
-}
-
-.no-wrap {
-    white-space: nowrap;
-}
-
-.stretch-max {
-    width: 100vw !important;
-    height: 100vh !important;
-}
-
-.cursor-disabled:hover {
-    cursor: not-allowed;
-}
-
 #root {
     background-color: $color-background-1;
+    min-height: 100vh;
+    color: $color-text-1;
 }

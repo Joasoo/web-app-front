@@ -26,20 +26,23 @@ export function useFetch() {
         }
 
         return new Promise<TResponse>((resolve, reject) => {
-            const auth: any = {}
-            if (token) auth['Authorization'] = `Bearer ${token}`
             fetch(path, {
                 method: method,
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
-                    ...auth,
+                    ...{ Authorization: `Bearer ${token}` },
                 },
                 body: JSON.stringify(body),
             }).then((res) => {
-                res.json().then((val: TResponse | ErrorModel) => {
-                    res.ok ? resolve(val as TResponse) : reject(val as ErrorModel)
-                })
+                res.json()
+                    .then((json) => {
+                        res.ok ? resolve(json as TResponse) : reject(json as ErrorModel)
+                    })
+                    .catch((err) => {
+                        /*todo Handle JSON parsing error?*/
+                        console.log(err)
+                    })
             })
         })
     }

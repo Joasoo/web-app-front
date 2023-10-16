@@ -75,11 +75,10 @@ export const LoginPage = (props: LoginPageProps) => {
 
     if (loading) return <Loader overlay />
     return (
-        <Card>
-            <h1 className={'m-5'}>Webpage name</h1>
+        <Card className={'w-50 center-block'}>
             <div className={'d-flexbox px-3 py-4'}>
                 <h2 className={'text-center'}>Login</h2>
-                <hr className={'mx-4 mt-3 mb-1'} />
+                <hr className={'mx-4 my-4'} />
                 <div className={'d-flex flex-column align-items-center mb-3'}>
                     <span className={'fw-semibold text-danger mx-auto mb-2'}>{err?.cause}</span>
                     <Input
