@@ -85,7 +85,7 @@ export const Input = (props: InputProps) => {
         >
             <div>
                 <input
-                    className={`custom-input rounded-2 form-element-bg col text-${
+                    className={`custom-input rounded-5 col text-${
                         props.textAlign ?? 'start'
                     } ${props.disabled ? 'cursor-disabled' : ''} 
                 ${

@@ -1,5 +1,6 @@
 import { ReactNode, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { Card } from '../components/card/Card'
 import { Input, SubtextType } from '../components/input/Input'
 import { Loader } from '../components/loader/Loader'
 import { useFetch } from '../hooks/useFetch'
@@ -74,13 +75,9 @@ export const LoginPage = (props: LoginPageProps) => {
 
     if (loading) return <Loader overlay />
     return (
-        <div className={'d-flex flex-column stretch-max align-items-center'}>
+        <Card>
             <h1 className={'m-5'}>Webpage name</h1>
-            <div
-                className={
-                    'd-flexbox px-3 py-4 border border-2 border-secondary rounded'
-                }
-            >
+            <div className={'d-flexbox px-3 py-4'}>
                 <h2 className={'text-center'}>Login</h2>
                 <hr className={'mx-4 mt-3 mb-1'} />
                 <div className={'d-flex flex-column align-items-center mb-3'}>
@@ -123,6 +120,6 @@ export const LoginPage = (props: LoginPageProps) => {
                     <Link to={ROUTE_REGISTER}>Create an account</Link>
                 </small>
             </div>
-        </div>
+        </Card>
     )
 }

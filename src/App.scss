@@ -1,15 +1,28 @@
-.form-element-bg {
-    background: #d9d9d9;
-}
+/* Color palette */
 
-.fit-content {
-    width: fit-content !important;
-}
+// Text
+$color-text-1: #ffffff;
+$color-text-2: #5b5b5b;
+
+// Accents
+$color-accent-1: #cccccc;
+$color-accent-2: #525252;
+
+// Background colors
+$color-background-1: #1e1e1e;
+
+// Status
+$color-success: #588f45;
+$color-danger: #d72a2a;
 
 @mixin flex-center {
     display: flex;
     align-items: center !important;
     justify-content: center !important;
+}
+
+.fit-content {
+    width: fit-content !important;
 }
 
 .flex-center {
@@ -27,4 +40,8 @@
 
 .cursor-disabled:hover {
     cursor: not-allowed;
+}
+
+#root {
+    background-color: $color-background-1;
 }

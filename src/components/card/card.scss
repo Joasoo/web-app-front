@@ -1,0 +1,5 @@
+@use '../../App';
+
+.custom-card {
+    background-color: App.$color-accent-2;
+}
