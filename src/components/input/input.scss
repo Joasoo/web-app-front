@@ -3,3 +3,12 @@
 .custom-input:focus {
     outline: none;
 }
+
+.custom-input {
+    background-color: App.$color-accent-1;
+    color: App.$color-text-2;
+}
+
+.custom-input::placeholder {
+    color: App.$color-text-2;
+}

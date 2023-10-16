@@ -1,0 +1,21 @@
+@mixin flex-center {
+    display: flex;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.fit-content {
+    width: fit-content !important;
+}
+
+.flex-center {
+    @include flex-center;
+}
+
+.no-wrap {
+    white-space: nowrap;
+}
+
+.cursor-disabled:hover {
+    cursor: not-allowed;
+}

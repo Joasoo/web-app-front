@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-var utc = require('dayjs/plugin/utc')
+const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
 /* Date format used on the front-end.*/

@@ -61,24 +61,22 @@ export type InputProps = {
 export const Input = (props: InputProps) => {
     return (
         <div className={`d-flex flex-column align-items-center ${props.className ?? ''}`}>
-            <div>
-                <input
-                    className={`custom-input rounded-2 form-element-bg col text-${props.textAlign ?? 'start'} ${
-                        props.disabled ? 'cursor-disabled' : ''
-                    } 
+            <input
+                className={`w-100 custom-input rounded-5 text-${props.textAlign ?? 'start'} ${
+                    props.disabled ? 'cursor-disabled' : ''
+                } 
                 ${props.subtext ? inputConfig[props.subtext?.type].borderClass : ''}`}
-                    placeholder={props.text ?? ''}
-                    value={props.value ?? ''}
-                    onChange={(e) => {
-                        props.onChange(e.target.value)
-                    }}
-                    onFocus={(e) => {
-                        if (props.onFocus) props.onFocus(e.target.value)
-                    }}
-                    type={props.type}
-                    disabled={props.disabled}
-                />
-            </div>
+                placeholder={props.text ?? ''}
+                value={props.value ?? ''}
+                onChange={(e) => {
+                    props.onChange(e.target.value)
+                }}
+                onFocus={(e) => {
+                    if (props.onFocus) props.onFocus(e.target.value)
+                }}
+                type={props.type}
+                disabled={props.disabled}
+            />
             {props.subtext ? (
                 <div className={'d-flex flex-row align-items-center justify-content-start'}>
                     <span>{inputConfig[props.subtext.type].icon}</span>
