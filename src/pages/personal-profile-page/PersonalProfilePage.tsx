@@ -69,7 +69,7 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
     }
 
     function deletePost(id: string) {
-        deleteJson(PATH_POST_DELETE + `/${foreignProfileId}`)
+        deleteJson(PATH_POST_DELETE + `/${id}`)
             .then(() => {
                 refreshPosts()
             })
