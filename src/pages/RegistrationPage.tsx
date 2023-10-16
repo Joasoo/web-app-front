@@ -8,15 +8,8 @@ import { Loader } from '../components/loader/Loader'
 import { useFetch } from '../hooks/useFetch'
 import { RegistrationModel } from '../model/registration.model'
 import { StatusCodeModel } from '../model/status-code.model'
-import {
-    PATH_AUTH_REGISTER,
-    PATH_PROFILE_RELATIONSHIP_STATUS,
-} from '../util/RequestConstants'
-import {
-    ROUTE_LOGIN,
-    ROUTE_PRIVACY_POLICY,
-    ROUTE_TOS,
-} from '../util/RouteConstants'
+import { PATH_AUTH_REGISTER, PATH_PROFILE_RELATIONSHIP_STATUS } from '../util/RequestConstants'
+import { ROUTE_LOGIN, ROUTE_PRIVACY_POLICY, ROUTE_TOS } from '../util/RouteConstants'
 import { toISOString } from '../util/StringUtil'
 
 type RegistrationPageProps = {
@@ -148,11 +141,7 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
     const required = <b className={'text-danger me-1'}>*</b>
     return (
         <div>
-            <div
-                className={
-                    'flex-center flex-column w-50 mx-auto mt-5 p-3 border border-2 border-secondary rounded'
-                }
-            >
+            <div className={'flex-center flex-column w-50 mx-auto mt-5 p-3 border border-2 border-secondary rounded'}>
                 {loading ? (
                     <Loader />
                 ) : (
@@ -166,8 +155,7 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
                                     <Input
                                         value={firstName}
                                         onChange={(v) => {
-                                            if (firstNameSub)
-                                                setFirstNameSub(undefined)
+                                            if (firstNameSub) setFirstNameSub(undefined)
                                             setFirstName(v)
                                         }}
                                         subtext={firstNameSub}
@@ -178,8 +166,7 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
                                     <Input
                                         value={lastName}
                                         onChange={(v) => {
-                                            if (lastNameSub)
-                                                setLastNameSub(undefined)
+                                            if (lastNameSub) setLastNameSub(undefined)
                                             setLastName(v)
                                         }}
                                         subtext={lastNameSub}
@@ -233,8 +220,7 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
                                         type={'password'}
                                         value={repeatPassword}
                                         onChange={(v) => {
-                                            if (confPwdSub)
-                                                setConfPwdSub(undefined)
+                                            if (confPwdSub) setConfPwdSub(undefined)
                                             setRepeatPassword(v)
                                         }}
                                         subtext={confPwdSub}
@@ -260,27 +246,18 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
                                 </FormRow>
                                 <FormRow className={formClasses}>
                                     <span>Workplace:</span>
-                                    <Input
-                                        value={workplace}
-                                        onChange={setWorkplace}
-                                    />
+                                    <Input value={workplace} onChange={setWorkplace} />
                                 </FormRow>
                             </div>
 
                             <div className={'row my-4'}>
                                 <FormRow className={formClasses}>
                                     <span>Residence:</span>
-                                    <Input
-                                        value={residence}
-                                        onChange={setResidence}
-                                    />
+                                    <Input value={residence} onChange={setResidence} />
                                 </FormRow>
                                 <FormRow className={formClasses}>
                                     <span>Hometown:</span>
-                                    <Input
-                                        value={hometown}
-                                        onChange={(v) => setHometown(v)}
-                                    />
+                                    <Input value={hometown} onChange={(v) => setHometown(v)} />
                                 </FormRow>
                             </div>
 
@@ -289,49 +266,33 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
                                 <Checkbox
                                     value={termsCheck}
                                     onClick={() => {
-                                        if (showTermsErr)
-                                            setShowTermsErr(!showTermsErr)
+                                        if (showTermsErr) setShowTermsErr(!showTermsErr)
                                         setTermsCheck(!termsCheck)
                                     }}
                                 />
                                 &nbsp;
                                 <label>
                                     I have read and agreed to the&nbsp;
-                                    <Link to={ROUTE_TOS}>
-                                        Terms of Service
-                                    </Link>{' '}
-                                    and&nbsp;
-                                    <Link to={ROUTE_PRIVACY_POLICY}>
-                                        Privacy Policy
-                                    </Link>
-                                    .
+                                    <Link to={ROUTE_TOS}>Terms of Service</Link> and&nbsp;
+                                    <Link to={ROUTE_PRIVACY_POLICY}>Privacy Policy</Link>.
                                 </label>
                             </div>
 
                             {showTermsErr && (
-                                <div
-                                    className={
-                                        'text-center text-danger fw-semibold'
-                                    }
-                                >
-                                    You must agree to our Terms of Service and
-                                    Privacy Policy.
+                                <div className={'text-center text-danger fw-semibold'}>
+                                    You must agree to our Terms of Service and Privacy Policy.
                                 </div>
                             )}
 
                             <div>
                                 <input
-                                    className={
-                                        'py-1 px-3 mt-3 mb-2 me-4 btn btn-primary'
-                                    }
+                                    className={'py-1 px-3 mt-3 mb-2 me-4 btn btn-primary'}
                                     type={'button'}
                                     value={'Back'}
                                     onClick={() => navigate(ROUTE_LOGIN)}
                                 />
                                 <input
-                                    className={
-                                        'py-1 px-3 mt-3 mb-2 btn btn-primary'
-                                    }
+                                    className={'py-1 px-3 mt-3 mb-2 btn btn-primary'}
                                     type={'button'}
                                     value={'Create account'}
                                     onClick={handleRegistration}

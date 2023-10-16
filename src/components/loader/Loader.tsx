@@ -11,12 +11,7 @@ export type LoaderProps = {
 
 export const Loader = (props: LoaderProps) => {
     return (
-        <div
-            className={
-                (props.overlay ? 'overlay ' : 'no-overlay ') +
-                (props.className ?? '')
-            }
-        >
+        <div className={(props.overlay ? 'overlay ' : 'no-overlay ') + (props.className ?? '')}>
             <img
                 src={LoaderIcon}
                 className={props.overlay ? 'img-overlay' : ''}

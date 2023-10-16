@@ -81,9 +81,7 @@ export const LoginPage = (props: LoginPageProps) => {
                 <h2 className={'text-center'}>Login</h2>
                 <hr className={'mx-4 mt-3 mb-1'} />
                 <div className={'d-flex flex-column align-items-center mb-3'}>
-                    <span className={'fw-semibold text-danger mx-auto mb-2'}>
-                        {err?.cause}
-                    </span>
+                    <span className={'fw-semibold text-danger mx-auto mb-2'}>{err?.cause}</span>
                     <Input
                         className={'mb-3'}
                         type={'email'}
@@ -108,16 +106,10 @@ export const LoginPage = (props: LoginPageProps) => {
                         type={'password'}
                         subtext={passwordSubtext}
                     />
-                    <input
-                        className={'px-4 btn btn-primary'}
-                        type={'button'}
-                        value={'Log in'}
-                        onClick={handleLogin}
-                    />
+                    <input className={'px-4 btn btn-primary'} type={'button'} value={'Log in'} onClick={handleLogin} />
                 </div>
                 <small className={'d-block text-center'}>
-                    Don't have an account yet?{' '}
-                    <Link to={ROUTE_REGISTER}>Create an account</Link>
+                    Don't have an account yet? <Link to={ROUTE_REGISTER}>Create an account</Link>
                 </small>
             </div>
         </Card>

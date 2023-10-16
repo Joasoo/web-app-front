@@ -7,9 +7,5 @@ export type CardProps = {
 }
 
 export const Card = (props: CardProps) => {
-    return (
-        <div className={'custom-card p-3 rounded-4 ' + (props.className ?? '')}>
-            {props.children ?? ''}
-        </div>
-    )
+    return <div className={'custom-card p-3 rounded-4 ' + (props.className ?? '')}>{props.children ?? ''}</div>
 }
