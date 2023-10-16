@@ -75,14 +75,14 @@ export const LoginPage = (props: LoginPageProps) => {
 
     if (loading) return <Loader overlay />
     return (
-        <Card className={'w-50 center-block'}>
+        <Card className={'w-40 center-block'}>
             <div className={'d-flexbox px-3 py-4'}>
                 <h2 className={'text-center'}>Login</h2>
                 <hr className={'mx-4 my-4'} />
                 <div className={'d-flex flex-column align-items-center mb-3'}>
                     <span className={'fw-semibold text-danger mx-auto mb-2'}>{err?.cause}</span>
                     <Input
-                        className={'mb-3'}
+                        className={'mb-3 w-50'}
                         type={'email'}
                         onChange={(value) => {
                             setEmail(value)
@@ -94,7 +94,7 @@ export const LoginPage = (props: LoginPageProps) => {
                         subtext={emailSubtext}
                     />
                     <Input
-                        className={'mb-4'}
+                        className={'mb-4 w-50'}
                         value={password}
                         onChange={(value) => {
                             setPassword(value)

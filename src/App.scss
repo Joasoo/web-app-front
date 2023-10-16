@@ -15,8 +15,27 @@ $color-background-1: #1e1e1e;
 $color-success: #588f45;
 $color-danger: #d72a2a;
 
-#root {
+// idk this is broken
+body,
+#root,
+html {
     background-color: $color-background-1;
     min-height: 100vh;
     color: $color-text-1;
+}
+
+.color-text-1 {
+    color: $color-text-1;
+}
+
+.color-text-2 {
+    color: $color-text-2;
+}
+
+.bg-accent-1 {
+    background-color: $color-accent-1;
+}
+
+.bg-accent-2 {
+    background-color: $color-accent-2;
 }
