@@ -38,7 +38,7 @@ export const Post = (props: PostProps) => {
                     'post my-3 border border-2 border-secondary rounded ' + (props.className ? props.className : '')
                 }
             >
-                <div className={'d-flex justify-content-between'}>
+                <div className={'d-flex justify-content-between align-items-center'}>
                     <div>
                         <small className={'text text-secondary'}>By:</small>
                         <Link to={ROUTE_PROFILE + '/' + props.author['id']} className={'text-secondary author'}>
