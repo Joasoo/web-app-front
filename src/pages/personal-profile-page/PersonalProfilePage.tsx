@@ -1,18 +1,18 @@
 import { ReactNode, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLoaderData, useNavigate } from 'react-router-dom'
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 import '../../App.scss'
-import { Card } from '../../components/card/Card'
-import { FormRow } from '../../components/FormRow'
 import { Loader } from '../../components/loader/Loader'
 import { useFetch } from '../../hooks/useFetch'
-import { AddPostModel } from '../../model/add-post.model'
+import { ProfilePageLoader } from '../../index'
 import { PostModel } from '../../model/post.model'
 import { ProfileDataModel } from '../../model/profile-data.model'
 import { StorageUtil } from '../../util/BrowerStorageUtil'
-import { PATH_POST_ADD, PATH_POST_DELETE, PATH_POST_PERSON, PATH_PROFILE } from '../../util/RequestConstants'
+import { PATH_POST_PERSON, PATH_PROFILE } from '../../util/RequestConstants'
 import { ROUTE_PROFILE_EDIT } from '../../util/RouteConstants'
 import { formatDateString } from '../../util/StringUtil'
+import { CreatePostSection } from './CreatePostSection'
+import { InformationAndBio } from './InformationAndBio'
 import './PersonalProfilePage.scss'
 import { Post } from './Post'
 
@@ -22,34 +22,31 @@ type ProfilePageProps = {
 }
 
 export const PersonalProfilePage = (props: ProfilePageProps) => {
-    const { getJson, postJson, deleteJson } = useFetch()
+    const { getJson } = useFetch()
     const navigate = useNavigate()
     const [profileData, setProfileData] = useState<ProfileDataModel>()
-    const [newPostText, setNewPostText] = useState<string>('')
     const [postList, setPostList] = useState<PostModel[]>([])
     const [loading, setLoading] = useState<boolean>(true)
-    const foreignProfileId = new URLSearchParams(window.location.search).get(
-        'id'
-    ) /*todo distinguishing between personal and friend account not implemented properly. Can't make posts from personal account.*/
-    const maxPostSize = 1000
+    const { profileId } = useLoaderData() as ProfilePageLoader
+    const isOwner = StorageUtil.get('SESSION', 'personId') === String(profileId)
+    // const foreignProfileId = new URLSearchParams(window.location.search).get('id') <- For params
 
     useEffect(() => {
-        if (foreignProfileId) {
-            /*todo logic for foreign/friends page*/
-            const getProfileData = getJson<ProfileDataModel>(PATH_PROFILE + `/${foreignProfileId}`)
-            const getPosts = getJson<PostModel[]>(PATH_POST_PERSON + `/${foreignProfileId}`)
+        if (isOwner) {
+            /*todo Logic for personal page*/
+            const token = StorageUtil.get<string>('SESSION', 'token')
+            console.log(token)
+            const getProfileData = getJson<ProfileDataModel>(PATH_PROFILE + `/${profileId}`, undefined, token)
+            const getPosts = getJson<PostModel[]>(PATH_POST_PERSON + `/${profileId}`, undefined, token)
             Promise.all([getProfileData, getPosts]).then((res) => {
                 setProfileData(res[0])
                 setPostList(res[1])
                 setLoading(false)
             })
         } else {
-            /*todo Logic for personal page*/
-            const id = StorageUtil.get<number>('SESSION', 'personId')
-            const token = StorageUtil.get<string>('SESSION', 'token')
-            console.log(token)
-            const getProfileData = getJson<ProfileDataModel>(PATH_PROFILE + `/${id}`, undefined, token)
-            const getPosts = getJson<PostModel[]>(PATH_POST_PERSON + `/${id}`, undefined, token)
+            /*todo logic for foreign/friends page*/
+            const getProfileData = getJson<ProfileDataModel>(PATH_PROFILE + `/${profileId}`)
+            const getPosts = getJson<PostModel[]>(PATH_POST_PERSON + `/${profileId}`)
             Promise.all([getProfileData, getPosts]).then((res) => {
                 setProfileData(res[0])
                 setPostList(res[1])
@@ -59,44 +56,13 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
     }, [])
 
     function refreshPosts() {
-        if (foreignProfileId) {
-            getJson<PostModel[]>(PATH_POST_PERSON + `/${foreignProfileId}`)
-                .then((res) => {
-                    setPostList(res)
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
-        }
-    }
-
-    function deletePost(id: string) {
-        deleteJson(PATH_POST_DELETE + `/${id}`)
-            .then(() => {
-                refreshPosts()
+        getJson<PostModel[]>(PATH_POST_PERSON + `/${profileId}`)
+            .then((res) => {
+                setPostList(res)
             })
             .catch((err) => {
                 console.log(err)
             })
-    }
-
-    function makePost() {
-        if (foreignProfileId && newPostText) {
-            console.log('Make a post for profile id: ' + foreignProfileId)
-            setNewPostText('')
-            let newModel = new AddPostModel(foreignProfileId, newPostText)
-            postJson(PATH_POST_ADD, newModel)
-                .then(() => {
-                    refreshPosts()
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
-        }
-    }
-
-    function getFormRow(text: ReactNode) {
-        return <FormRow className={'my-1'}>{text}</FormRow>
     }
 
     if (loading) {
@@ -112,12 +78,16 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                 </div>
 
                 <div className={'d-flex justify-content-end'}>
-                    <input
-                        className={'btn btn-primary align-self-end'}
-                        type={'button'}
-                        value={'Edit Profile'}
-                        onClick={() => navigate(ROUTE_PROFILE_EDIT + '?id=' + foreignProfileId)}
-                    />
+                    {isOwner ? (
+                        <input
+                            className={'btn btn-primary align-self-end'}
+                            type={'button'}
+                            value={'Edit Profile'}
+                            onClick={() => navigate(ROUTE_PROFILE_EDIT + '?id=' + profileId)}
+                        />
+                    ) : (
+                        ''
+                    )}
                 </div>
 
                 <div className={'d-flex justify-content-center'}>
@@ -126,56 +96,13 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                     </h2>
                 </div>
 
-                <div className={'container'}>
-                    <div className={'row my-5'}>
-                        <div className={'col-5'}>
-                            <Card className={'text-break p-4'}>
-                                <h4>Information</h4>
-                                <hr />
-                                {profileData?.residence
-                                    ? getFormRow(
-                                          <>
-                                              <b className={'me-2'}>Residence:</b> {profileData?.residence}
-                                          </>
-                                      )
-                                    : ''}
-                                {profileData?.hometown
-                                    ? getFormRow(
-                                          <>
-                                              <b className={'me-2'}>Hometown:</b> {profileData?.hometown}
-                                          </>
-                                      )
-                                    : ''}
-                                {profileData?.workplace
-                                    ? getFormRow(
-                                          <>
-                                              <b className={'me-2'}>Workplace:</b> {profileData?.workplace}
-                                          </>
-                                      )
-                                    : ''}
-                                {profileData?.dateOfBirth
-                                    ? getFormRow(
-                                          <>
-                                              <b className={'me-2'}>Birthday:</b>{' '}
-                                              {formatDateString(profileData.dateOfBirth)}
-                                          </>
-                                      )
-                                    : ''}
-                            </Card>
-                        </div>
-
-                        <div className={'col'} />
-                        {/* For empty space between Information and Bio */}
-
-                        <div className={'col-5'}>
-                            <Card className={'p-4 text-break'}>
-                                <h4>Bio</h4>
-                                <hr />
-                                {profileData?.bio ?? undefined}
-                            </Card>
-                        </div>
-                    </div>
-                </div>
+                <InformationAndBio
+                    dateOfBirth={profileData?.dateOfBirth}
+                    workplace={profileData?.workplace}
+                    residence={profileData?.residence}
+                    hometown={profileData?.hometown}
+                    bio={profileData?.bio}
+                />
 
                 <Tabs>
                     <TabList>
@@ -185,38 +112,16 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                     </TabList>
 
                     <TabPanel className={'align-items-start'}>
-                        {/*todo move the inside of the tab panels into separate components? (<PostsPanel/>)?*/}
-                        <h4>Create a new post</h4>
-                        <div className={'d-flex w-100'}>
-                            <textarea
-                                className={'new-post d-flex w-75 my-3 rounded-2 bg-secondary-subtle align-items-start'}
-                                value={newPostText}
-                                onChange={(e) =>
-                                    e.target.value.length <= maxPostSize ? setNewPostText(e.target.value) : null
-                                }
-                                placeholder={'Write your post here...'}
-                            />
-                            <div className={'align-self-center mx-3 color-text-1'}>
-                                {newPostText ? newPostText.length : 0}/{maxPostSize}
-                            </div>
-                        </div>
+                        {isOwner ? (
+                            <>
+                                <CreatePostSection profileId={profileId} onCreate={refreshPosts} />
 
-                        <div className={'d-flex'}>
-                            <input
-                                className={'w-auto btn btn-primary align-self-start'}
-                                type={'button'}
-                                value={'Create post'}
-                                onClick={makePost}
-                            />
-                            <input
-                                className={'mx-3 btn btn-secondary'}
-                                type={'button'}
-                                value={'Clear'}
-                                onClick={() => setNewPostText('')}
-                            />
-                        </div>
+                                <h4 className={'mt-5'}>Posts</h4>
+                            </>
+                        ) : (
+                            ''
+                        )}
 
-                        <h4 className={'mt-5'}>Posts</h4>
                         <>
                             {Array.isArray(postList)
                                 ? postList?.map((post) => {
@@ -227,7 +132,8 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                                               content={post.content}
                                               author={post.author}
                                               createdAt={formatDateString(post.createdAt)}
-                                              onClickDelete={deletePost}
+                                              isOwner={isOwner}
+                                              onClickDelete={refreshPosts}
                                           />
                                       )
                                   })

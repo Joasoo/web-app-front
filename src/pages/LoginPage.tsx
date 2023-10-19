@@ -64,7 +64,8 @@ export const LoginPage = (props: LoginPageProps) => {
                     console.log(res)
                     StorageUtil.put('SESSION', 'token', res.token)
                     StorageUtil.put('SESSION', 'personId', res.id)
-                    navigate(ROUTE_PROFILE)
+                    console.log(res.id)
+                    navigate(ROUTE_PROFILE + "/" + res.id)
                 })
                 .catch((err) => {
                     setErr(err)
