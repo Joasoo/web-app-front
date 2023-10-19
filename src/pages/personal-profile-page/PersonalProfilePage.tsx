@@ -1,19 +1,20 @@
 import { ReactNode, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLoaderData, useNavigate } from 'react-router-dom'
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 import '../../App.scss'
 import { Loader } from '../../components/loader/Loader'
 import { useFetch } from '../../hooks/useFetch'
+import { ProfilePageLoader } from '../../index'
 import { PostModel } from '../../model/post.model'
 import { ProfileDataModel } from '../../model/profile-data.model'
 import { StorageUtil } from '../../util/BrowerStorageUtil'
 import { PATH_POST_PERSON, PATH_PROFILE } from '../../util/RequestConstants'
 import { ROUTE_PROFILE_EDIT } from '../../util/RouteConstants'
 import { formatDateString } from '../../util/StringUtil'
+import { CreatePostSection } from './CreatePostSection'
+import { InformationAndBio } from './InformationAndBio'
 import './PersonalProfilePage.scss'
 import { Post } from './Post'
-import { InformationAndBio } from './InformationAndBio'
-import { CreatePostSection } from './CreatePostSection'
 
 type ProfilePageProps = {
     className?: string
@@ -26,8 +27,8 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
     const [profileData, setProfileData] = useState<ProfileDataModel>()
     const [postList, setPostList] = useState<PostModel[]>([])
     const [loading, setLoading] = useState<boolean>(true)
-    const profileId = window.location.pathname.split('/').pop()
-    const isOwner = StorageUtil.get('SESSION', 'personId') == profileId
+    const { profileId } = useLoaderData() as ProfilePageLoader
+    const isOwner = StorageUtil.get('SESSION', 'personId') === String(profileId)
     // const foreignProfileId = new URLSearchParams(window.location.search).get('id') <- For params
 
     useEffect(() => {
@@ -64,7 +65,6 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
             })
     }
 
-
     if (loading) {
         return <Loader overlay />
     }
@@ -78,14 +78,16 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                 </div>
 
                 <div className={'d-flex justify-content-end'}>
-                    {isOwner ?
+                    {isOwner ? (
                         <input
                             className={'btn btn-primary align-self-end'}
                             type={'button'}
                             value={'Edit Profile'}
                             onClick={() => navigate(ROUTE_PROFILE_EDIT + '?id=' + profileId)}
                         />
-                        : ''}
+                    ) : (
+                        ''
+                    )}
                 </div>
 
                 <div className={'d-flex justify-content-center'}>
@@ -110,33 +112,31 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                     </TabList>
 
                     <TabPanel className={'align-items-start'}>
-                        {isOwner ?
+                        {isOwner ? (
                             <>
-                                <CreatePostSection
-                                    profileId={profileId}
-                                    onCreate={refreshPosts}
-                                />
+                                <CreatePostSection profileId={profileId} onCreate={refreshPosts} />
 
                                 <h4 className={'mt-5'}>Posts</h4>
                             </>
-                            : ''
-                        }
+                        ) : (
+                            ''
+                        )}
 
                         <>
                             {Array.isArray(postList)
                                 ? postList?.map((post) => {
-                                    return (
-                                        <Post
-                                            key={post.id}
-                                            id={post.id}
-                                            content={post.content}
-                                            author={post.author}
-                                            createdAt={formatDateString(post.createdAt)}
-                                            isOwner={isOwner}
-                                            onClickDelete={refreshPosts}
-                                        />
-                                    )
-                                })
+                                      return (
+                                          <Post
+                                              key={post.id}
+                                              id={post.id}
+                                              content={post.content}
+                                              author={post.author}
+                                              createdAt={formatDateString(post.createdAt)}
+                                              isOwner={isOwner}
+                                              onClickDelete={refreshPosts}
+                                          />
+                                      )
+                                  })
                                 : ''}
                         </>
                     </TabPanel>

@@ -1,10 +1,10 @@
 import { useState } from 'react'
+import { useFetch } from '../../hooks/useFetch'
 import { AddPostModel } from '../../model/add-post.model'
 import { PATH_POST_ADD } from '../../util/RequestConstants'
-import { useFetch } from '../../hooks/useFetch'
 
 type NewPostSectionProps = {
-    profileId: string | undefined,
+    profileId: number | undefined
     onCreate?: () => void
 }
 
@@ -32,14 +32,12 @@ export const CreatePostSection = (props: NewPostSectionProps) => {
         <>
             <h4>Create a new post</h4>
             <div className={'d-flex w-100'}>
-                            <textarea
-                                className={'new-post d-flex w-75 my-3 rounded-2 bg-secondary-subtle align-items-start'}
-                                value={newPostText}
-                                onChange={(e) =>
-                                    e.target.value.length <= maxPostSize ? setNewPostText(e.target.value) : null
-                                }
-                                placeholder={'Write your post here...'}
-                            />
+                <textarea
+                    className={'new-post d-flex w-75 my-3 rounded-2 bg-secondary-subtle align-items-start'}
+                    value={newPostText}
+                    onChange={(e) => (e.target.value.length <= maxPostSize ? setNewPostText(e.target.value) : null)}
+                    placeholder={'Write your post here...'}
+                />
                 <div className={'align-self-center mx-3 color-text-1'}>
                     {newPostText ? newPostText.length : 0}/{maxPostSize}
                 </div>

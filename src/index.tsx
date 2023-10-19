@@ -10,6 +10,10 @@ import { EditPage } from './pages/edit-profile-page/EditPage'
 import { PersonalProfilePage } from './pages/personal-profile-page/PersonalProfilePage'
 import { RegistrationPage } from './pages/RegistrationPage'
 
+export type ProfilePageLoader = {
+    profileId: number
+}
+
 const router = createBrowserRouter([
     {
         element: <LoginPage />,
@@ -21,7 +25,11 @@ const router = createBrowserRouter([
     },
     {
         element: <PersonalProfilePage />,
-        path: ROUTE_PROFILE + "/:profileId",
+        path: ROUTE_PROFILE + '/:profileId',
+        loader: ({ params }): ProfilePageLoader => {
+            return { profileId: Number(params.profileId) }
+        },
+        errorElement: <LoginPage /> /*todo make 404 page/ error boundary*/,
     },
     {
         element: <EditPage />,
