@@ -11,3 +11,8 @@ export const PATH_PROFILE = '/api/profile'
 export const PATH_PROFILE_EDIT = PATH_PROFILE + '/edit'
 export const PATH_PROFILE_EDIT_SAVE = PATH_PROFILE_EDIT + '/save'
 export const PATH_PROFILE_RELATIONSHIP_STATUS = PATH_PROFILE + '/relationship-status'
+
+const PATH_FRIEND = '/api/friend'
+export const PATH_FRIEND_STATUS = PATH_FRIEND + '/status'
+export const PATH_FRIEND_ADD = PATH_FRIEND + '/add'
+export const PATH_FRIEND_REMOVE = PATH_FRIEND + '/remove'

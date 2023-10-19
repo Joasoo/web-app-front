@@ -7,13 +7,16 @@ import { useFetch } from '../../hooks/useFetch'
 import { PostModel } from '../../model/post.model'
 import { ProfileDataModel } from '../../model/profile-data.model'
 import { StorageUtil } from '../../util/BrowerStorageUtil'
-import { PATH_POST_PERSON, PATH_PROFILE } from '../../util/RequestConstants'
+import { PATH_FRIEND_STATUS, PATH_POST_PERSON, PATH_PROFILE } from '../../util/RequestConstants'
 import { ROUTE_PROFILE_EDIT } from '../../util/RouteConstants'
 import { formatDateString } from '../../util/StringUtil'
 import './PersonalProfilePage.scss'
 import { Post } from './Post'
 import { InformationAndBio } from './InformationAndBio'
 import { CreatePostSection } from './CreatePostSection'
+import { FriendshipModel } from '../../model/friendship-model'
+import { DynamicFriendButton } from './dynamic-button/DynamicFriendButton'
+
 
 type ProfilePageProps = {
     className?: string
@@ -24,15 +27,17 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
     const { getJson } = useFetch()
     const navigate = useNavigate()
     const [profileData, setProfileData] = useState<ProfileDataModel>()
+    const [friendshipStatus, setFriendshipStatus] = useState<FriendshipModel>()
     const [postList, setPostList] = useState<PostModel[]>([])
     const [loading, setLoading] = useState<boolean>(true)
+    const sessionId = StorageUtil.get<string>('SESSION', 'personId')
+    const token = StorageUtil.get<string>('SESSION', 'token')
     const profileId = window.location.pathname.split('/').pop()
-    const isOwner = StorageUtil.get<string>('SESSION', 'personId') == profileId
+    const isOwner = sessionId == profileId
     // const foreignProfileId = new URLSearchParams(window.location.search).get('id') <- For params
 
     useEffect(() => {
         if (isOwner) {
-            const token = StorageUtil.get<string>('SESSION', 'token')
             console.log(token)
             const getProfileData = getJson<ProfileDataModel>(PATH_PROFILE + `/${profileId}`, undefined, token)
             const getPosts = getJson<PostModel[]>(PATH_POST_PERSON + `/${profileId}`, undefined, token)
@@ -42,11 +47,17 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                 setLoading(false)
             })
         } else {
-            const getProfileData = getJson<ProfileDataModel>(PATH_PROFILE + `/${profileId}`)
-            const getPosts = getJson<PostModel[]>(PATH_POST_PERSON + `/${profileId}`)
-            Promise.all([getProfileData, getPosts]).then((res) => {
+            const getProfileData = getJson<ProfileDataModel>(PATH_PROFILE + `/${profileId}`, undefined, token)
+            const getPosts = getJson<PostModel[]>(PATH_POST_PERSON + `/${profileId}`, undefined, token)
+            let params = {
+                'personId': sessionId ?? '',
+                'friendId': profileId ?? '',
+            }
+            const getFriendship = getJson<FriendshipModel>(PATH_FRIEND_STATUS, params)
+            Promise.all([getProfileData, getPosts, getFriendship]).then((res) => {
                 setProfileData(res[0])
                 setPostList(res[1])
+                setFriendshipStatus(res[2])
                 setLoading(false)
             })
         }
@@ -62,6 +73,16 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
             })
     }
 
+    function refreshFriendship() {
+        let params = {
+            'personId': sessionId ?? '',
+            'friendId': profileId ?? '',
+        }
+        getJson<FriendshipModel>(PATH_FRIEND_STATUS, params)
+            .then((res) => {
+                setFriendshipStatus(res)
+            })
+    }
 
     if (loading) {
         return <Loader overlay />
@@ -83,7 +104,13 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                             value={'Edit Profile'}
                             onClick={() => navigate(ROUTE_PROFILE_EDIT)}
                         />
-                        : ''}
+                        : friendshipStatus ?
+                            <DynamicFriendButton
+                                friendshipStatus={friendshipStatus}
+                                onClick={refreshFriendship}
+                            />
+                            : ''
+                    }
                 </div>
 
                 <div className={'d-flex justify-content-center'}>
