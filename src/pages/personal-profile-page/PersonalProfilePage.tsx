@@ -27,12 +27,11 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
     const [postList, setPostList] = useState<PostModel[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const profileId = window.location.pathname.split('/').pop()
-    const isOwner = StorageUtil.get('SESSION', 'personId') == profileId
+    const isOwner = StorageUtil.get<string>('SESSION', 'personId') == profileId
     // const foreignProfileId = new URLSearchParams(window.location.search).get('id') <- For params
 
     useEffect(() => {
         if (isOwner) {
-            /*todo Logic for personal page*/
             const token = StorageUtil.get<string>('SESSION', 'token')
             console.log(token)
             const getProfileData = getJson<ProfileDataModel>(PATH_PROFILE + `/${profileId}`, undefined, token)
@@ -43,7 +42,6 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                 setLoading(false)
             })
         } else {
-            /*todo logic for foreign/friends page*/
             const getProfileData = getJson<ProfileDataModel>(PATH_PROFILE + `/${profileId}`)
             const getPosts = getJson<PostModel[]>(PATH_POST_PERSON + `/${profileId}`)
             Promise.all([getProfileData, getPosts]).then((res) => {
@@ -83,7 +81,7 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                             className={'btn btn-primary align-self-end'}
                             type={'button'}
                             value={'Edit Profile'}
-                            onClick={() => navigate(ROUTE_PROFILE_EDIT + '?id=' + profileId)}
+                            onClick={() => navigate(ROUTE_PROFILE_EDIT)}
                         />
                         : ''}
                 </div>
