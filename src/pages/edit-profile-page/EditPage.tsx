@@ -389,8 +389,8 @@ export const EditPage = (props: EditPageProps) => {
                     </div>
                     <div className={'col-2'}>
                         <input
-                            className={'btn btn-danger px-3'}
-                            value={'Cancel'}
+                            className={'btn btn-secondary px-3'}
+                            value={'Back'}
                             type={'button'}
                             onClick={() => navigate(ROUTE_PROFILE + '/' + profileId)}
                         />

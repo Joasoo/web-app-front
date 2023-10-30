@@ -1,25 +1,29 @@
 import { FriendshipModel } from '../model/friendship-model'
 import { StorageUtil } from './BrowerStorageUtil'
 
-export const REQUEST_PENDING_FROM_PERSON = 'REQUEST_PENDING_FROM_PERSON'
-export const REQUEST_PENDING_FROM_FRIEND = 'REQUEST_PENDING_FROM_FRIEND'
-export const ALREADY_FRIENDS = 'ALREADY_FRIENDS'
-export const NO_FRIEND_RELATION = 'NO_FRIEND_RELATION'
+export enum ParsedFriendship {
+    REQUEST_PENDING_FROM_PERSON = 'REQUEST_PENDING_FROM_PERSON',
+    REQUEST_PENDING_FROM_FRIEND = 'REQUEST_PENDING_FROM_FRIEND',
+    ALREADY_FRIENDS = 'ALREADY_FRIENDS',
+    NO_FRIEND_RELATION = 'NO_FRIEND_RELATION'
+}
 
-export function ParseFriendshipStatus(dto: FriendshipModel) {
+export function parseFriendshipStatus(dto: FriendshipModel) {
     const personId = StorageUtil.get('SESSION', 'personId')
 
+    if (dto.person === null && dto.friend === null) {
+        return ParsedFriendship.NO_FRIEND_RELATION
+    }
     if (dto.confirmed) {
-        return ALREADY_FRIENDS
+        return ParsedFriendship.ALREADY_FRIENDS
     }
 
     if (dto.person.id == personId) {
-        return REQUEST_PENDING_FROM_PERSON
+        return ParsedFriendship.REQUEST_PENDING_FROM_PERSON
     }
 
     if (dto.friend.id == personId) {
-        return REQUEST_PENDING_FROM_FRIEND
+        return ParsedFriendship.REQUEST_PENDING_FROM_FRIEND
     }
 
-    return NO_FRIEND_RELATION
 }

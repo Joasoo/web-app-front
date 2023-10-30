@@ -33,7 +33,7 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
     const sessionId = StorageUtil.get<string>('SESSION', 'personId')
     const token = StorageUtil.get<string>('SESSION', 'token')
     const profileId = window.location.pathname.split('/').pop()
-    const isOwner = sessionId == profileId
+    const isOwner = sessionId === profileId
     // const foreignProfileId = new URLSearchParams(window.location.search).get('id') <- For params
 
     useEffect(() => {
@@ -53,7 +53,7 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                 'personId': sessionId ?? '',
                 'friendId': profileId ?? '',
             }
-            const getFriendship = getJson<FriendshipModel>(PATH_FRIEND_STATUS, params)
+            const getFriendship = getJson<FriendshipModel>(PATH_FRIEND_STATUS, params, token)
             Promise.all([getProfileData, getPosts, getFriendship]).then((res) => {
                 setProfileData(res[0])
                 setPostList(res[1])
@@ -107,6 +107,8 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                         : friendshipStatus ?
                             <DynamicFriendButton
                                 friendshipStatus={friendshipStatus}
+                                personId={sessionId ?? ''}
+                                friendId={profileId ?? ''}
                                 onClick={refreshFriendship}
                             />
                             : ''

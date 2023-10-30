@@ -1,4 +1,4 @@
-import { PersonFullNameModel } from '../../model/post.model'
+import { PersonFullNameModel } from '../../model/person-full-name-model'
 import './Post.scss'
 import { Link } from 'react-router-dom'
 import { ROUTE_PROFILE } from '../../util/RouteConstants'

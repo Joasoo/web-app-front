@@ -1,8 +1,6 @@
-
-
 export class FriendRequestModel {
     constructor(
-        personId: string,
-        friendId: string,
+        public personId: string,
+        public friendId: string
     ) {}
 }

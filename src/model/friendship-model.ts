@@ -1,4 +1,4 @@
-import { PersonFullNameModel } from './PersonFullNameModel'
+import { PersonFullNameModel } from './person-full-name-model'
 
 export class FriendshipModel {
     constructor(
