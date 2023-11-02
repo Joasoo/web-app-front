@@ -96,6 +96,11 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                     <div className={'profile-picture rounded-circle bg bg-secondary'} />
                 </div>
 
+
+                <h2 className={"mt-2 align-self-center"}>
+                    {profileData?.firstName} {profileData?.lastName}
+                </h2>
+
                 <div className={'d-flex justify-content-end'}>
                     {isOwner ?
                         <input
@@ -113,12 +118,6 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                             />
                             : ''
                     }
-                </div>
-
-                <div className={'d-flex justify-content-center'}>
-                    <h2>
-                        {profileData?.firstName} {profileData?.lastName}
-                    </h2>
                 </div>
 
                 <InformationAndBio

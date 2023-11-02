@@ -34,7 +34,7 @@ export const DynamicFriendButton = (props: DynamicButtonProps) => {
 
             {
                 status == ParsedFriendship.REQUEST_PENDING_FROM_FRIEND ?
-                    <div className={'d-flex flex-row px-3'}>
+                    <div className={'d-flex flex-column'}>
                         <AddFriendButton
                             personId={props.personId}
                             friendId={props.friendId}
