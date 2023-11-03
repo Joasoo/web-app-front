@@ -3,14 +3,23 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './index.scss'
 import { LoginPage } from './pages/LoginPage'
 import reportWebVitals from './reportWebVitals'
-import { ROUTE_LOGIN, ROUTE_PROFILE, ROUTE_PROFILE_EDIT, ROUTE_REGISTER } from './util/RouteConstants'
+import { ROUTE_LOGIN, ROUTE_PROFILE, ROUTE_PROFILE_EDIT, ROUTE_REGISTER, ROUTE_ROOT } from './util/RouteConstants'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import { EditPage } from './pages/edit-profile-page/EditPage'
 import { PersonalProfilePage } from './pages/personal-profile-page/PersonalProfilePage'
 import { RegistrationPage } from './pages/RegistrationPage'
+import { RootPage } from './pages/RootPage'
+
+export type ProfilePageLoader = {
+    profileId: number
+}
 
 const router = createBrowserRouter([
+    {
+        element: <RootPage />,
+        path: ROUTE_ROOT,
+    },
     {
         element: <LoginPage />,
         path: ROUTE_LOGIN,
@@ -21,7 +30,13 @@ const router = createBrowserRouter([
     },
     {
         element: <PersonalProfilePage />,
-        path: ROUTE_PROFILE + "/:profileId",
+        path: ROUTE_PROFILE + '/:profileId',
+        loader: ({ params }): ProfilePageLoader => {
+            const num = Number(params.profileId)
+            if (isNaN(num)) throw new Error()
+            return { profileId: num }
+        },
+        errorElement: <LoginPage /> /*todo make 404 page/ error boundary*/,
     },
     {
         element: <EditPage />,
