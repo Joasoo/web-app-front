@@ -97,7 +97,7 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                 </div>
 
 
-                <h2 className={"mt-2 align-self-center"}>
+                <h2 className={'mt-2 align-self-center'}>
                     {profileData?.firstName} {profileData?.lastName}
                 </h2>
 
@@ -109,17 +109,17 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                             value={'Edit Profile'}
                             onClick={() => navigate(ROUTE_PROFILE_EDIT)}
                         />
-                        ) : (
-                            friendshipStatus ? (
+                    ) : (
+                        friendshipStatus ? (
                             <DynamicFriendButton
                                 friendshipStatus={friendshipStatus}
                                 personId={sessionId ?? ''}
                                 friendId={profileId ?? ''}
                                 onClick={refreshFriendship}
                             />
-                                ) : (
-                                    ''
-                            )
+                        ) : (
+                            ''
+                        )
                     )}
                 </div>
 
@@ -139,31 +139,33 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                     </TabList>
 
                     <TabPanel className={'align-items-start'}>
-                        {isOwner ? (
+                        {isOwner ?
                             <>
-                                <CreatePostSection profileId={profileId} onCreate={refreshPosts} />
+                                <CreatePostSection
+                                    profileId={profileId}
+                                    onCreate={refreshPosts}
+                                />
 
                                 <h4 className={'mt-5'}>Posts</h4>
                             </>
-                        ) : (
-                            ''
-                        )}
+                            : ''
+                        }
 
                         <>
                             {Array.isArray(postList)
                                 ? postList?.map((post) => {
-                                      return (
-                                          <Post
-                                              key={post.id}
-                                              id={post.id}
-                                              content={post.content}
-                                              author={post.author}
-                                              createdAt={formatDateString(post.createdAt)}
-                                              isOwner={isOwner}
-                                              onClickDelete={refreshPosts}
-                                          />
-                                      )
-                                  })
+                                    return (
+                                        <Post
+                                            key={post.id}
+                                            id={post.id}
+                                            content={post.content}
+                                            author={post.author}
+                                            createdAt={formatDateString(post.createdAt)}
+                                            isOwner={isOwner}
+                                            onClickDelete={refreshPosts}
+                                        />
+                                    )
+                                })
                                 : ''}
                         </>
                     </TabPanel>

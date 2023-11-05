@@ -12,7 +12,7 @@ import { RegistrationPage } from './pages/RegistrationPage'
 import { RootPage } from './pages/RootPage'
 
 export type ProfilePageLoader = {
-    profileId: number
+    profileId: string
 }
 
 const router = createBrowserRouter([
@@ -32,8 +32,8 @@ const router = createBrowserRouter([
         element: <PersonalProfilePage />,
         path: ROUTE_PROFILE + '/:profileId',
         loader: ({ params }): ProfilePageLoader => {
-            const num = Number(params.profileId)
-            if (isNaN(num)) throw new Error()
+            const num = String(params.profileId)
+            if (!num) throw new Error()
             return { profileId: num }
         },
         errorElement: <LoginPage /> /*todo make 404 page/ error boundary*/,

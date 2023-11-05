@@ -4,7 +4,7 @@ import { AddPostModel } from '../../model/add-post.model'
 import { PATH_POST_ADD } from '../../util/RequestConstants'
 
 type NewPostSectionProps = {
-    profileId: number | undefined
+    profileId: string | undefined
     onCreate?: () => void
 }
 
