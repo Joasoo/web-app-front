@@ -1,4 +1,4 @@
-import { AuthorModel } from '../../model/post.model'
+import { PersonFullNameModel } from '../../model/person-full-name-model'
 import './Post.scss'
 import { Link } from 'react-router-dom'
 import { ROUTE_PROFILE } from '../../util/RouteConstants'
@@ -8,7 +8,7 @@ import { useFetch } from '../../hooks/useFetch'
 type PostProps = {
     id: string
     content: string
-    author: AuthorModel
+    author: PersonFullNameModel
     createdAt: string
     isOwner: boolean
     onClickEdit?: (value: string) => void

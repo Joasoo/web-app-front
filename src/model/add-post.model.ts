@@ -1,6 +1,6 @@
 export class AddPostModel {
     constructor(
-        public id: number,
+        public id: string,
         public content: string
     ) {}
 }
