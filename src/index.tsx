@@ -10,6 +10,7 @@ import { EditPage } from './pages/edit-profile-page/EditPage'
 import { PersonalProfilePage } from './pages/personal-profile-page/PersonalProfilePage'
 import { RegistrationPage } from './pages/RegistrationPage'
 import { RootPage } from './pages/RootPage'
+import Layout from "./components/layout/Layout";
 
 export type ProfilePageLoader = {
     profileId: number
@@ -44,7 +45,11 @@ const router = createBrowserRouter([
     },
 ])
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(<RouterProvider router={router} />)
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+    <Layout>
+        <RouterProvider router={router} />
+    </Layout>
+)
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
