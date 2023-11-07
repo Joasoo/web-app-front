@@ -31,5 +31,5 @@ deploy:
         - echo "Running deploy script.."
         - docker pull $REPO_PATH
         - cd $SERVER_PATH
-        - docker-compose -f ./docker-compose-front.yml down
-        - docker-compose -f ./docker-compose-front.yml up -d
+        - docker-compose down
+        - docker-compose up -d
