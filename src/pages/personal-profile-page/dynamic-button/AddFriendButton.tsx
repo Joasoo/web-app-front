@@ -2,16 +2,16 @@ import { useFetch } from '../../../hooks/useFetch'
 import { FriendRequestModel } from '../../../model/friend-request-model'
 import { PATH_FRIEND_ADD } from '../../../util/RequestConstants'
 import { BaseButton } from './BaseButton'
-import { DynamicButtonSubProps } from './DynamicFriendButton'
-import { ParsedFriendship } from '../../../util/ParseFriendshipStatus'
+import { DynamicSubButtonProps } from './DynamicFriendButton'
+import { FriendshipStatus } from '../../../util/enum/FriendshipStatus'
 
 
-function getValue(friendshipStatus: string) {
+function getValue(friendshipStatus: keyof typeof FriendshipStatus | undefined) {
     switch (friendshipStatus) {
-        case ParsedFriendship.REQUEST_PENDING_FROM_FRIEND: {
+        case FriendshipStatus.FR_STATUS_R: {
             return 'Accept Friend Request'
         }
-        case ParsedFriendship.NO_FRIEND_RELATION: {
+        case undefined: {
             return 'Add Friend'
         }
         default: {
@@ -20,12 +20,12 @@ function getValue(friendshipStatus: string) {
     }
 }
 
-function getStyling(friendshipStatus: string) {
+function getStyling(friendshipStatus: keyof typeof FriendshipStatus | undefined) {
     switch (friendshipStatus) {
-        case ParsedFriendship.REQUEST_PENDING_FROM_FRIEND: {
+        case FriendshipStatus.FR_STATUS_R: {
             return 'accept-request'
         }
-        case ParsedFriendship.NO_FRIEND_RELATION: {
+        case undefined: {
             return 'add-friend'
         }
         default: {
@@ -34,7 +34,7 @@ function getStyling(friendshipStatus: string) {
     }
 }
 
-export const AddFriendButton = (props: DynamicButtonSubProps) => {
+export const AddFriendButton = (props: DynamicSubButtonProps) => {
     const { postJson } = useFetch()
 
     function addFriend() {
@@ -48,8 +48,8 @@ export const AddFriendButton = (props: DynamicButtonSubProps) => {
     }
 
     return <BaseButton
-        className={getStyling(props.parsedStatus) + " btn-secondary"}
-        value={getValue(props.parsedStatus)}
+        className={getStyling(props.friendshipStatusCode) + " btn-secondary"}
+        value={getValue(props.friendshipStatusCode)}
         onClick={addFriend}
     />
 }

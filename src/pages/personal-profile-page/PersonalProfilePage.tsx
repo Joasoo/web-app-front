@@ -5,7 +5,6 @@ import '../../App.scss'
 import { Loader } from '../../components/loader/Loader'
 import { useFetch } from '../../hooks/useFetch'
 import { ProfilePageLoader } from '../../index'
-import { FriendshipModel } from '../../model/friendship-model'
 import { PostModel } from '../../model/post.model'
 import { ProfileDataModel } from '../../model/profile-data.model'
 import { StorageUtil } from '../../util/BrowerStorageUtil'
@@ -16,8 +15,9 @@ import { FriendsTab } from '../profile-page-tabs/friends-tab/FriendsTab'
 import { CreatePostSection } from './CreatePostSection'
 import { DynamicFriendButton } from './dynamic-button/DynamicFriendButton'
 import { InformationAndBio } from './InformationAndBio'
-import './PersonalProfilePage.scss'
+import './personal-profile-page.scss'
 import { Post } from './Post'
+import { FriendListModel } from '../../model/friend-list.model'
 
 type ProfilePageProps = {
     className?: string
@@ -28,7 +28,7 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
     const { getJson } = useFetch()
     const navigate = useNavigate()
     const [profileData, setProfileData] = useState<ProfileDataModel>()
-    const [friendshipStatus, setFriendshipStatus] = useState<FriendshipModel>()
+    const [friendship, setFriendship] = useState<FriendListModel>()
     const [postList, setPostList] = useState<PostModel[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const { profileId } = useLoaderData() as ProfilePageLoader
@@ -54,11 +54,11 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                 personId: sessionId ?? '',
                 friendId: profileId ?? '',
             }
-            const getFriendship = getJson<FriendshipModel>(PATH_FRIEND_STATUS, params, token)
+            const getFriendship = getJson<FriendListModel>(PATH_FRIEND_STATUS, params, token)
             Promise.all([getProfileData, getPosts, getFriendship]).then((res) => {
                 setProfileData(res[0])
                 setPostList(res[1])
-                setFriendshipStatus(res[2])
+                setFriendship(res[2])
                 setLoading(false)
             })
         }
@@ -79,8 +79,8 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
             personId: sessionId ?? '',
             friendId: profileId ?? '',
         }
-        getJson<FriendshipModel>(PATH_FRIEND_STATUS, params).then((res) => {
-            setFriendshipStatus(res)
+        getJson<FriendListModel>(PATH_FRIEND_STATUS, params).then((res) => {
+            setFriendship(res)
         })
     }
 
@@ -108,13 +108,15 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                             value={'Edit Profile'}
                             onClick={() => navigate(ROUTE_PROFILE_EDIT)}
                         />
-                    ) : friendshipStatus ? (
-                        <DynamicFriendButton
-                            friendshipStatus={friendshipStatus}
-                            personId={sessionId ?? ''}
-                            friendId={profileId ?? ''}
-                            onClick={refreshFriendship}
-                        />
+                    ) : friendship ? (
+                        <div className={"d-flex flex-column flex-lg-row gap-2"}>
+                            <DynamicFriendButton
+                                statusCode={friendship.status}
+                                personId={sessionId ?? ''}
+                                friendId={profileId ?? ''}
+                                onClick={refreshFriendship}
+                            />
+                        </div>
                     ) : (
                         ''
                     )}
@@ -149,18 +151,18 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                         <>
                             {Array.isArray(postList)
                                 ? postList?.map((post) => {
-                                      return (
-                                          <Post
-                                              key={post.id}
-                                              id={post.id}
-                                              content={post.content}
-                                              author={post.author}
-                                              createdAt={formatDateString(post.createdAt)}
-                                              isOwner={isOwner}
-                                              onClickDelete={refreshPosts}
-                                          />
-                                      )
-                                  })
+                                    return (
+                                        <Post
+                                            key={post.id}
+                                            id={post.id}
+                                            content={post.content}
+                                            author={post.author}
+                                            createdAt={formatDateString(post.createdAt)}
+                                            isOwner={isOwner}
+                                            onClickDelete={refreshPosts}
+                                        />
+                                    )
+                                })
                                 : ''}
                         </>
                     </TabPanel>
