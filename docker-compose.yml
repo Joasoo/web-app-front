@@ -1,0 +1,7 @@
+version: "3"
+services:
+  front:
+    container_name: "web-front"
+    image: "front"
+    ports:
+      - "8080:8080"
