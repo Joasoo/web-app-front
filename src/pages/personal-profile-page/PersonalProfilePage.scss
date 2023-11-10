@@ -56,16 +56,6 @@
 
         &:focus {
             outline: none;
-
-            &:after {
-                content: '';
-                position: absolute;
-                height: 5px;
-                left: -4px;
-                right: -4px;
-                bottom: -5px;
-                background: #fff;
-            }
         }
     }
 
