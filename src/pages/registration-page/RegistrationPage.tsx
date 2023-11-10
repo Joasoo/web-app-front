@@ -141,7 +141,7 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
     const required = <b className={'text-danger me-1'}>*</b>
     return (
         <div>
-            <div className={'flex-center flex-column w-50 mx-auto mt-5 p-3 border border-2 border-secondary rounded'}>
+            <div className={'flex-center flex-column w-60 mx-auto mt-5 p-3 border border-2 border-secondary rounded'}>
                 {loading ? (
                     <Loader />
                 ) : (
