@@ -1,16 +1,16 @@
 import { ReactNode, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Checkbox } from '../components/checkbox/Checkbox'
-import { DropdownSelect } from '../components/dropdown/DropdownSelect'
-import { FormRow } from '../components/FormRow'
-import { Input, SubtextType } from '../components/input/Input'
-import { Loader } from '../components/loader/Loader'
-import { useFetch } from '../hooks/useFetch'
-import { RegistrationModel } from '../model/registration.model'
-import { StatusCodeModel } from '../model/status-code.model'
-import { PATH_AUTH_REGISTER, PATH_PROFILE_RELATIONSHIP_STATUS } from '../util/RequestConstants'
-import { ROUTE_LOGIN, ROUTE_PRIVACY_POLICY, ROUTE_TOS } from '../util/RouteConstants'
-import { toISOString } from '../util/StringUtil'
+import { Checkbox } from '../../components/checkbox/Checkbox'
+import { DropdownSelect } from '../../components/dropdown/DropdownSelect'
+import { FormRow } from '../../components/FormRow'
+import { Input, SubtextType } from '../../components/input/Input'
+import { Loader } from '../../components/loader/Loader'
+import { useFetch } from '../../hooks/useFetch'
+import { RegistrationModel } from '../../model/registration.model'
+import { StatusCodeModel } from '../../model/status-code.model'
+import { PATH_AUTH_REGISTER, PATH_PROFILE_RELATIONSHIP_STATUS } from '../../util/RequestConstants'
+import { ROUTE_LOGIN, ROUTE_PRIVACY_POLICY, ROUTE_TOS } from '../../util/RouteConstants'
+import { toISOString } from '../../util/StringUtil'
 
 type RegistrationPageProps = {
     className?: string
@@ -141,7 +141,7 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
     const required = <b className={'text-danger me-1'}>*</b>
     return (
         <div>
-            <div className={'flex-center flex-column w-50 mx-auto mt-5 p-3 border border-2 border-secondary rounded'}>
+            <div className={'flex-center flex-column w-60 mx-auto mt-5 p-3 border border-2 border-secondary rounded'}>
                 {loading ? (
                     <Loader />
                 ) : (
@@ -203,7 +203,7 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
 
                             <div className={'row my-4'}>
                                 <FormRow className={formClasses}>
-                                    <span>Password: {required}</span>
+                                    <div>Password: {required}</div>
                                     <Input
                                         type={'password'}
                                         value={password}
@@ -232,8 +232,9 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
 
                             <div className={'row my-4'}>
                                 <FormRow className={formClasses}>
-                                    <label>Relationship status:</label>
+                                    <label className={'col-4'}>Relationship status:</label>
                                     <DropdownSelect
+                                        className={'col-6'}
                                         withEmptyOption
                                         options={relOptions ?? []}
                                         value={relationship}
