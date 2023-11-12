@@ -8,7 +8,7 @@ import { ROUTE_LOGIN, ROUTE_PROFILE, ROUTE_PROFILE_EDIT, ROUTE_REGISTER, ROUTE_R
 import 'bootstrap/dist/css/bootstrap.css'
 import { EditPage } from './pages/edit-profile-page/EditPage'
 import { PersonalProfilePage } from './pages/personal-profile-page/PersonalProfilePage'
-import { RegistrationPage } from './pages/RegistrationPage'
+import { RegistrationPage } from './pages/registration-page/RegistrationPage'
 import { RootPage } from './pages/RootPage'
 
 export type ProfilePageLoader = {
