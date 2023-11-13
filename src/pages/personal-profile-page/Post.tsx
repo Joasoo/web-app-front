@@ -1,5 +1,5 @@
 import { PersonFullNameModel } from '../../model/person-full-name-model'
-import './Post.scss'
+import './post.scss'
 import { Link } from 'react-router-dom'
 import { ROUTE_PROFILE } from '../../util/RouteConstants'
 import { PATH_POST_DELETE } from '../../util/RequestConstants'
