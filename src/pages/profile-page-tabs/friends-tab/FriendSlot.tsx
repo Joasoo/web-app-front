@@ -8,6 +8,7 @@ import './friend-slot.scss'
 export type FriendSlotProps = {
     data: FriendListModel
     isOwner: boolean
+    onClick: () => void
 }
 
 export const FriendSlot = ({ data, ...props }: FriendSlotProps) => {
@@ -16,7 +17,7 @@ export const FriendSlot = ({ data, ...props }: FriendSlotProps) => {
 
     return (
         <div className={'friend-slot p-3 rounded-4 d-flex flex-row align-items-center'}>
-            {/*todo Placeholder for profile pic*/}
+            {/*todo Replace placeholder for profile pic*/}
             <div
                 style={{ width: '3.5em', height: '3.5em', backgroundColor: 'lightslategray', borderRadius: '100%' }}
                 className={'me-5'}
@@ -35,7 +36,7 @@ export const FriendSlot = ({ data, ...props }: FriendSlotProps) => {
                         statusCode={data.status}
                         personId={profileId}
                         friendId={data.id}
-                        onClick={() => {}}
+                        onClick={props.onClick}
                     />
                 ) : (
                     ''
