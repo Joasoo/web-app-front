@@ -126,6 +126,7 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                     residence={profileData?.residence}
                     hometown={profileData?.hometown}
                     bio={profileData?.bio}
+                    relationshipStatus={profileData?.relationshipStatus}
                 />
 
                 <Tabs>

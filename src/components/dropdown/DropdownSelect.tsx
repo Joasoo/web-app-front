@@ -1,3 +1,5 @@
+import './dropdown.scss'
+
 export type DropdownProps<T = any> = {
     options: T[]
     value: T
@@ -11,25 +13,26 @@ export type DropdownProps<T = any> = {
 const emptyOptionValue = 'EMPTY'
 export const DropdownSelect = (props: DropdownProps) => {
     return (
-        <select
-            className={'form-element-bg rounded-2 ' + (props.className ?? '')}
-            onChange={(e) => {
-                const index = e.target.options[e.target.selectedIndex].value
-                if (index === emptyOptionValue) {
-                    props.setValue(null)
-                    return
-                }
-                props.setValue(props.options[Number(index)])
-            }}
-        >
-            {props.withEmptyOption ? <option value={emptyOptionValue} /> : ''}
-            {props.options.map((option, index) => {
-                return (
-                    <option key={index} value={index}>
-                        {props.formatLabel?.(option) ?? option}
-                    </option>
-                )
-            })}
-        </select>
+        <div className={'custom-dropdown rounded-5 ' + (props.className ?? '')}>
+            <select
+                onChange={(e) => {
+                    const index = e.target.options[e.target.selectedIndex].value
+                    if (index === emptyOptionValue) {
+                        props.setValue(null)
+                        return
+                    }
+                    props.setValue(props.options[Number(index)])
+                }}
+            >
+                {props.withEmptyOption ? <option value={emptyOptionValue} /> : ''}
+                {props.options.map((option, index) => {
+                    return (
+                        <option className={'dropdown-item'} key={index} value={index}>
+                            {props.formatLabel?.(option) ?? option}
+                        </option>
+                    )
+                })}
+            </select>
+        </div>
     )
 }
