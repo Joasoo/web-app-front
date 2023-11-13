@@ -1,12 +1,13 @@
 import { ReactNode, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Loader } from '../../components/loader/Loader'
 import { useFetch } from '../../hooks/useFetch'
 import { EditDataModel } from '../../model/edit-data.model'
-import { PATH_PROFILE_EDIT, PATH_PROFILE_EDIT_SAVE } from '../../util/RequestConstants'
-import './edit-page.scss'
 import { StorageUtil } from '../../util/BrowerStorageUtil'
-import { useNavigate } from 'react-router-dom'
+import { PATH_PROFILE_EDIT, PATH_PROFILE_EDIT_SAVE } from '../../util/RequestConstants'
 import { ROUTE_PROFILE } from '../../util/RouteConstants'
+import './edit-page.scss'
+import { EditPageRow } from './EditPageRow'
 
 type EditPageProps = {
     className?: string
@@ -66,7 +67,7 @@ export const EditPage = (props: EditPageProps) => {
                 hometown,
                 workplace,
                 relationshipStatus,
-                profileBio,
+                profileBio
             )
             postJson(PATH_PROFILE_EDIT_SAVE, newEditDataModel)
                 .then(() => {
@@ -114,8 +115,7 @@ export const EditPage = (props: EditPageProps) => {
                             className={'btn btn-primary mx-auto w-50'}
                             type={'button'}
                             value={'Edit Profile Bio'}
-                            onClick={() => {
-                            }}
+                            onClick={() => {}}
                         />
                     </div>
                     <div className={'col d-flex flex-column'}></div>
@@ -133,99 +133,24 @@ export const EditPage = (props: EditPageProps) => {
                     <div className={'col-2'}></div>
                     <hr />
                 </div>
-                <div className={'row'}>
-                    <div className={'col-2'}>
-                        <p className={'text-start fw-bold'}>First Name:</p>
-                    </div>
-                    <div className={'col-5'}>
-                        <input
-                            type={'text'}
-                            className={'w-100 rounded text-center'}
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                        />
-                    </div>
-                    <div className={'col-2 w-25'}>
-                        <select
-                            className={'list-box form-select-sm w-75 text-center rounded border-2 border-secondary'}
-                        >
-                            <option selected>Select</option>
-                            <option value='1'>Private</option>
-                            <option value='2'>Friends</option>
-                            <option value='3'>Public</option>
-                        </select>
-                    </div>
-                    <div className={'col-2'}>
-                        <input
-                            className={'reset-btn btn btn-secondary'}
-                            type={'button'}
-                            value={'Reset'}
-                            onClick={() => setFirstName(editData?.firstName ?? '')}
-                        />
-                    </div>
-                </div>
-                <div className={'row'}>
-                    <div className={'col-2'}>
-                        <p className={'text-start fw-bold'}>Last Name:</p>
-                    </div>
-                    <div className={'col-5'}>
-                        <input
-                            type={'text'}
-                            className={'w-100 rounded text-center'}
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                        />
-                    </div>
-                    <div className={'col-2 w-25'}>
-                        <select
-                            className={'list-box form-select-sm w-75 text-center rounded border-2 border-secondary'}
-                        >
-                            <option selected>Select</option>
-                            <option value='1'>Private</option>
-                            <option value='2'>Friends</option>
-                            <option value='3'>Public</option>
-                        </select>
-                    </div>
-                    <div className={'col-2'}>
-                        <input
-                            className={'reset-btn btn btn-secondary'}
-                            value={'Reset'}
-                            type={'button'}
-                            onClick={() => setLastName(editData?.lastName ?? '')}
-                        />
-                    </div>
-                </div>
-                <div className={'row'}>
-                    <div className={'col-2'}>
-                        <p className={'text-start fw-bold'}>Date Of Birth:</p>
-                    </div>
-                    <div className={'col-5'}>
-                        <input
-                            type={'text'}
-                            className={'w-100 rounded text-center'}
-                            value={dateOfBirth}
-                            onChange={(e) => setDateOfBirth(e.target.value)}
-                        />
-                    </div>
-                    <div className={'col-2 w-25'}>
-                        <select
-                            className={'list-box form-select-sm w-75 text-center rounded border-2 border-secondary'}
-                        >
-                            <option selected>Select</option>
-                            <option value='1'>Private</option>
-                            <option value='2'>Friends</option>
-                            <option value='3'>Public</option>
-                        </select>
-                    </div>
-                    <div className={'col-2'}>
-                        <input
-                            className={'reset-btn btn btn-secondary'}
-                            value={'Reset'}
-                            type={'button'}
-                            onClick={() => setDateOfBirth(editData?.dateOfBirth ?? '')}
-                        />
-                    </div>
-                </div>
+                <EditPageRow
+                    label={'First Name:'}
+                    value={firstName}
+                    setValue={setFirstName}
+                    defaultValue={editData?.firstName}
+                />
+                <EditPageRow
+                    label={'Last Name:'}
+                    value={lastName}
+                    setValue={setLastName}
+                    defaultValue={editData?.lastName}
+                />
+                <EditPageRow
+                    label={'Date of Birth:'}
+                    value={dateOfBirth}
+                    setValue={setDateOfBirth}
+                    defaultValue={editData?.dateOfBirth}
+                />
                 <div className={'row'}>
                     <div className={'col-2'}>
                         <p className={'text-start fw-bold'}>E-Mail:</p>
@@ -238,16 +163,7 @@ export const EditPage = (props: EditPageProps) => {
                             onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
-                    <div className={'col-2 w-25'}>
-                        <select
-                            className={'list-box form-select-sm w-75 text-center rounded border-2 border-secondary'}
-                        >
-                            <option selected>Select</option>
-                            <option value='1'>Private</option>
-                            <option value='2'>Friends</option>
-                            <option value='3'>Public</option>
-                        </select>
-                    </div>
+
                     <div className={'col-2'}>
                         <input
                             className={'reset-btn btn btn-secondary'}
@@ -269,16 +185,7 @@ export const EditPage = (props: EditPageProps) => {
                             onChange={(e) => setResidence(e.target.value)}
                         />
                     </div>
-                    <div className={'col-2 w-25'}>
-                        <select
-                            className={'list-box form-select-sm w-75 text-center rounded border-2 border-secondary'}
-                        >
-                            <option selected>Select</option>
-                            <option value='1'>Private</option>
-                            <option value='2'>Friends</option>
-                            <option value='3'>Public</option>
-                        </select>
-                    </div>
+
                     <div className={'col-2'}>
                         <input
                             className={'reset-btn btn btn-secondary'}
@@ -300,16 +207,7 @@ export const EditPage = (props: EditPageProps) => {
                             onChange={(e) => setHometown(e.target.value)}
                         />
                     </div>
-                    <div className={'col-2 w-25'}>
-                        <select
-                            className={'list-box form-select-sm w-75 text-center rounded border-2 border-secondary'}
-                        >
-                            <option selected>Select</option>
-                            <option value='1'>Private</option>
-                            <option value='2'>Friends</option>
-                            <option value='3'>Public</option>
-                        </select>
-                    </div>
+
                     <div className={'col-2'}>
                         <input
                             className={'reset-btn btn btn-secondary'}
@@ -331,16 +229,7 @@ export const EditPage = (props: EditPageProps) => {
                             onChange={(e) => setWorkplace(e.target.value)}
                         />
                     </div>
-                    <div className={'col-2 w-25'}>
-                        <select
-                            className={'list-box form-select-sm w-75 text-center rounded border-2 border-secondary'}
-                        >
-                            <option selected>Select</option>
-                            <option value='1'>Private</option>
-                            <option value='2'>Friends</option>
-                            <option value='3'>Public</option>
-                        </select>
-                    </div>
+
                     <div className={'col-2'}>
                         <input
                             className={'reset-btn btn btn-secondary'}
@@ -357,16 +246,7 @@ export const EditPage = (props: EditPageProps) => {
                     <div className={'col-5'}>
                         <input type={'text'} className={'w-100 rounded text-center'} value={''} />
                     </div>
-                    <div className={'col-2 w-25'}>
-                        <select
-                            className={'list-box form-select-sm w-75 text-center rounded border-2 border-secondary'}
-                        >
-                            <option selected>Select</option>
-                            <option value='1'>Private</option>
-                            <option value='2'>Friends</option>
-                            <option value='3'>Public</option>
-                        </select>
-                    </div>
+
                     <div className={'col-2'}>
                         <input
                             className={'reset-btn btn btn-secondary'}
