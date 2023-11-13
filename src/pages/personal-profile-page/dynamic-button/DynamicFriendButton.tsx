@@ -1,64 +1,67 @@
-import { FriendshipModel } from '../../../model/friendship-model'
-import { ParsedFriendship, parseFriendshipStatus } from '../../../util/ParseFriendshipStatus'
+import { StatusCodeModel } from '../../../model/status-code.model'
+import { FriendshipStatus } from '../../../util/enum/FriendshipStatus'
 import { AddFriendButton } from './AddFriendButton'
 import { RemoveFriendButton } from './RemoveFriendButton'
 
 export type DynamicButtonProps = {
-    friendshipStatus: FriendshipModel,
-    personId: string,
-    friendId: string,
+    statusCode: StatusCodeModel | undefined
+    personId: number
+    friendId: number
     onClick: () => void
 }
 
-export type DynamicButtonSubProps = {
-    parsedStatus: string,
-    personId: string,
-    friendId: string,
+export type DynamicSubButtonProps = {
+    friendshipStatusCode: keyof typeof FriendshipStatus | undefined
+    personId: number
+    friendId: number
     onClick: () => void
 }
 
 export const DynamicFriendButton = (props: DynamicButtonProps) => {
-    const status = parseFriendshipStatus(props.friendshipStatus)
+    const status = props.statusCode ? props.statusCode.code : undefined
 
     return (
         <>
-            {
-                status == ParsedFriendship.ALREADY_FRIENDS || status == ParsedFriendship.REQUEST_PENDING_FROM_PERSON ?
-                    <RemoveFriendButton
-                        personId={props.personId}
-                        friendId={props.friendId}
-                        parsedStatus={status}
-                        onClick={props.onClick}
-                    /> : ''
-            }
+            {status === FriendshipStatus.FR_STATUS_A || status === FriendshipStatus.FR_STATUS_S ? (
+                <RemoveFriendButton
+                    personId={props.personId}
+                    friendId={props.friendId}
+                    friendshipStatusCode={status}
+                    onClick={props.onClick}
+                />
+            ) : (
+                ''
+            )}
 
-            {
-                status == ParsedFriendship.REQUEST_PENDING_FROM_FRIEND ?
-                    <div className={'d-flex flex-column'}>
-                        <AddFriendButton
-                            personId={props.personId}
-                            friendId={props.friendId}
-                            parsedStatus={status}
-                            onClick={props.onClick}
-                        />
-                        <RemoveFriendButton
-                            personId={props.personId}
-                            friendId={props.friendId}
-                            parsedStatus={status}
-                            onClick={props.onClick}
-                        />
-                    </div> : ''
-            }
-
-            {
-                status == ParsedFriendship.NO_FRIEND_RELATION ?
+            {status === FriendshipStatus.FR_STATUS_R ? (
+                <>
                     <AddFriendButton
                         personId={props.personId}
                         friendId={props.friendId}
-                        parsedStatus={status}
+                        friendshipStatusCode={status}
                         onClick={props.onClick}
-                    /> : ''
-            }
+                    />
+                    <RemoveFriendButton
+                        personId={props.personId}
+                        friendId={props.friendId}
+                        friendshipStatusCode={status}
+                        onClick={props.onClick}
+                    />
+                </>
+            ) : (
+                ''
+            )}
+
+            {status === undefined ? (
+                <AddFriendButton
+                    personId={props.personId}
+                    friendId={props.friendId}
+                    friendshipStatusCode={status}
+                    onClick={props.onClick}
+                />
+            ) : (
+                ''
+            )}
         </>
     )
 }

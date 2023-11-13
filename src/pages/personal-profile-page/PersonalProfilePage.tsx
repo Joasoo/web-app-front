@@ -5,17 +5,18 @@ import '../../App.scss'
 import { Loader } from '../../components/loader/Loader'
 import { useFetch } from '../../hooks/useFetch'
 import { ProfilePageLoader } from '../../index'
-import { FriendshipModel } from '../../model/friendship-model'
+import { FriendListModel } from '../../model/friend-list.model'
 import { PostModel } from '../../model/post.model'
 import { ProfileDataModel } from '../../model/profile-data.model'
 import { StorageUtil } from '../../util/BrowerStorageUtil'
 import { PATH_FRIEND_STATUS, PATH_POST_PERSON, PATH_PROFILE } from '../../util/RequestConstants'
 import { ROUTE_PROFILE_EDIT } from '../../util/RouteConstants'
 import { formatDateString } from '../../util/StringUtil'
+import { FriendsTab } from '../profile-page-tabs/friends-tab/FriendsTab'
 import { CreatePostSection } from './CreatePostSection'
 import { DynamicFriendButton } from './dynamic-button/DynamicFriendButton'
 import { InformationAndBio } from './InformationAndBio'
-import './PersonalProfilePage.scss'
+import './personal-profile-page.scss'
 import { Post } from './Post'
 
 type ProfilePageProps = {
@@ -27,14 +28,17 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
     const { getJson } = useFetch()
     const navigate = useNavigate()
     const [profileData, setProfileData] = useState<ProfileDataModel>()
-    const [friendshipStatus, setFriendshipStatus] = useState<FriendshipModel>()
+    const [friendship, setFriendship] = useState<FriendListModel>()
     const [postList, setPostList] = useState<PostModel[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const { profileId } = useLoaderData() as ProfilePageLoader
-    const sessionId = StorageUtil.get<string>('SESSION', 'personId')
+    const sessionId = StorageUtil.get<number>('SESSION', 'personId') as number
     const token = StorageUtil.get<string>('SESSION', 'token')
-    const isOwner = sessionId === profileId
-    // const foreignProfileId = new URLSearchParams(window.location.search).get('id') <- For params
+    if (sessionId === null || sessionId === undefined) {
+        /*todo navigate to login page, display proper error.*/
+        throw new Error()
+    }
+    const isOwner = Number(sessionId) === Number(profileId)
 
     useEffect(() => {
         if (isOwner) {
@@ -53,15 +57,15 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                 personId: sessionId ?? '',
                 friendId: profileId ?? '',
             }
-            const getFriendship = getJson<FriendshipModel>(PATH_FRIEND_STATUS, params, token)
+            const getFriendship = getJson<FriendListModel>(PATH_FRIEND_STATUS, params, token)
             Promise.all([getProfileData, getPosts, getFriendship]).then((res) => {
                 setProfileData(res[0])
                 setPostList(res[1])
-                setFriendshipStatus(res[2])
+                setFriendship(res[2])
                 setLoading(false)
             })
         }
-    }, [])
+    }, [profileId])
 
     function refreshPosts() {
         getJson<PostModel[]>(PATH_POST_PERSON + `/${profileId}`)
@@ -78,8 +82,8 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
             personId: sessionId ?? '',
             friendId: profileId ?? '',
         }
-        getJson<FriendshipModel>(PATH_FRIEND_STATUS, params).then((res) => {
-            setFriendshipStatus(res)
+        getJson<FriendListModel>(PATH_FRIEND_STATUS, params).then((res) => {
+            setFriendship(res)
         })
     }
 
@@ -107,15 +111,15 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                             value={'Edit Profile'}
                             onClick={() => navigate(ROUTE_PROFILE_EDIT)}
                         />
-                    ) : friendshipStatus ? (
-                        <DynamicFriendButton
-                            friendshipStatus={friendshipStatus}
-                            personId={sessionId ?? ''}
-                            friendId={profileId ?? ''}
-                            onClick={refreshFriendship}
-                        />
                     ) : (
-                        ''
+                        <div className={'d-flex flex-column flex-lg-row gap-2'}>
+                            <DynamicFriendButton
+                                statusCode={friendship?.status}
+                                personId={sessionId}
+                                friendId={profileId}
+                                onClick={refreshFriendship}
+                            />
+                        </div>
                     )}
                 </div>
 
@@ -165,7 +169,9 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                         </>
                     </TabPanel>
 
-                    <TabPanel>(!) Friends not implemented</TabPanel>
+                    <TabPanel>
+                        <FriendsTab isOwner={isOwner} />
+                    </TabPanel>
 
                     <TabPanel>(!) Photos not implemented</TabPanel>
                 </Tabs>

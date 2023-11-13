@@ -1,4 +1,4 @@
-import './Button.scss'
+import './button.scss'
 
 type BaseButtonProps = {
     className: string,
@@ -10,7 +10,7 @@ type BaseButtonProps = {
 export const BaseButton = (props: BaseButtonProps) => {
     return (
         <input
-            className={'mx-2 p-2 btn ' + props.className}
+            className={'p-2 btn ' + props.className}
             value={props.value}
             type={"button"}
             onClick={props.onClick}

@@ -1,17 +1,16 @@
 import { useFetch } from '../../../hooks/useFetch'
 import { FriendRequestModel } from '../../../model/friend-request-model'
+import { FriendshipStatus } from '../../../util/enum/FriendshipStatus'
 import { PATH_FRIEND_ADD } from '../../../util/RequestConstants'
 import { BaseButton } from './BaseButton'
-import { DynamicButtonSubProps } from './DynamicFriendButton'
-import { ParsedFriendship } from '../../../util/ParseFriendshipStatus'
+import { DynamicSubButtonProps } from './DynamicFriendButton'
 
-
-function getValue(friendshipStatus: string) {
+function getValue(friendshipStatus: keyof typeof FriendshipStatus | undefined) {
     switch (friendshipStatus) {
-        case ParsedFriendship.REQUEST_PENDING_FROM_FRIEND: {
+        case FriendshipStatus.FR_STATUS_R: {
             return 'Accept Friend Request'
         }
-        case ParsedFriendship.NO_FRIEND_RELATION: {
+        case undefined: {
             return 'Add Friend'
         }
         default: {
@@ -20,12 +19,12 @@ function getValue(friendshipStatus: string) {
     }
 }
 
-function getStyling(friendshipStatus: string) {
+function getStyling(friendshipStatus: keyof typeof FriendshipStatus | undefined) {
     switch (friendshipStatus) {
-        case ParsedFriendship.REQUEST_PENDING_FROM_FRIEND: {
+        case FriendshipStatus.FR_STATUS_R: {
             return 'accept-request'
         }
-        case ParsedFriendship.NO_FRIEND_RELATION: {
+        case undefined: {
             return 'add-friend'
         }
         default: {
@@ -34,22 +33,23 @@ function getStyling(friendshipStatus: string) {
     }
 }
 
-export const AddFriendButton = (props: DynamicButtonSubProps) => {
+export const AddFriendButton = (props: DynamicSubButtonProps) => {
     const { postJson } = useFetch()
 
     function addFriend() {
-        const friendRequest = new FriendRequestModel(props.personId, props.friendId)
-        console.log("Person id: " + props.personId)
-        console.log("Friend id: " + props.friendId)
-        postJson(PATH_FRIEND_ADD, friendRequest)
-            .then(() => {
-                props.onClick()
-            })
+        const friendRequest = new FriendRequestModel(String(props.personId), String(props.friendId))
+        console.log('Person id: ' + props.personId)
+        console.log('Friend id: ' + props.friendId)
+        postJson(PATH_FRIEND_ADD, friendRequest).then(() => {
+            props.onClick()
+        })
     }
 
-    return <BaseButton
-        className={getStyling(props.parsedStatus) + " btn-secondary"}
-        value={getValue(props.parsedStatus)}
-        onClick={addFriend}
-    />
+    return (
+        <BaseButton
+            className={getStyling(props.friendshipStatusCode) + ' btn-secondary'}
+            value={getValue(props.friendshipStatusCode)}
+            onClick={addFriend}
+        />
+    )
 }

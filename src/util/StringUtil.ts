@@ -27,3 +27,7 @@ export function formatStatusCodeString(value?: StatusCodeModel, withCode?: boole
         return value.value
     }
 }
+
+export function isActualNumber(value: any): boolean {
+    return /^\d+$/.test(value)
+}

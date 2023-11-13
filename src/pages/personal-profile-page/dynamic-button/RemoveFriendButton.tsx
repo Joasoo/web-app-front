@@ -1,31 +1,19 @@
 import { useFetch } from '../../../hooks/useFetch'
 import { PATH_FRIEND_REMOVE } from '../../../util/RequestConstants'
 import { BaseButton } from './BaseButton'
-import { DynamicButtonSubProps } from './DynamicFriendButton'
-import './Button.scss'
-import { ParsedFriendship } from '../../../util/ParseFriendshipStatus'
+import { DynamicSubButtonProps } from './DynamicFriendButton'
+import { FriendshipStatus } from '../../../util/enum/FriendshipStatus'
 
-const textValues = {
-    ALREADY_FRIENDS: 'Remove Friend',
-    REQUEST_PENDING_FROM_PERSON: 'Cancel Friend Request',
-    REQUEST_PENDING_FROM_FRIEND: 'Decline Friend Request',
-}
 
-const buttonStyling = {
-    ALREADY_FRIENDS: 'remove-friend',
-    REQUEST_PENDING_FROM_PERSON: 'cancel-request',
-    REQUEST_PENDING_FROM_FRIEND: 'decline-request',
-}
-
-function getValue(friendshipStatus: string) {
+function getValue(friendshipStatus: keyof typeof FriendshipStatus | undefined) {
     switch (friendshipStatus) {
-        case ParsedFriendship.ALREADY_FRIENDS: {
+        case FriendshipStatus.FR_STATUS_A: {
             return 'Remove Friend'
         }
-        case ParsedFriendship.REQUEST_PENDING_FROM_PERSON: {
+        case FriendshipStatus.FR_STATUS_S: {
             return 'Cancel Friend Request'
         }
-        case ParsedFriendship.REQUEST_PENDING_FROM_FRIEND: {
+        case FriendshipStatus.FR_STATUS_R: {
             return 'Decline Friend Request'
         }
         default: {
@@ -34,15 +22,15 @@ function getValue(friendshipStatus: string) {
     }
 }
 
-function getStyling(friendshipStatus: string) {
+function getStyling(friendshipStatus: keyof typeof FriendshipStatus | undefined) {
     switch (friendshipStatus) {
-        case ParsedFriendship.ALREADY_FRIENDS: {
+        case FriendshipStatus.FR_STATUS_A: {
             return 'remove-friend'
         }
-        case ParsedFriendship.REQUEST_PENDING_FROM_PERSON: {
+        case FriendshipStatus.FR_STATUS_S: {
             return 'cancel-request'
         }
-        case ParsedFriendship.REQUEST_PENDING_FROM_FRIEND: {
+        case FriendshipStatus.FR_STATUS_R: {
             return 'decline-request'
         }
         default: {
@@ -51,7 +39,7 @@ function getStyling(friendshipStatus: string) {
     }
 }
 
-export const RemoveFriendButton = (props: DynamicButtonSubProps) => {
+export const RemoveFriendButton = (props: DynamicSubButtonProps) => {
     const { deleteJson } = useFetch()
 
     function removeFriend() {
@@ -66,8 +54,8 @@ export const RemoveFriendButton = (props: DynamicButtonSubProps) => {
     }
 
     return <BaseButton
-        className={getStyling(props.parsedStatus) + " btn-danger"}
-        value={getValue(props.parsedStatus)}
+        className={getStyling(props.friendshipStatusCode) + ' btn-danger'}
+        value={getValue(props.friendshipStatusCode)}
         onClick={removeFriend}
     />
 }

@@ -1,0 +1,11 @@
+@use 'src/App';
+
+.friend-slot {
+    background-color: App.$color-accent-2;
+}
+
+.friend-name:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    opacity: 90%;
+}
