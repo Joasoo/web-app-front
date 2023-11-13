@@ -1,10 +1,9 @@
 import { useFetch } from '../../../hooks/useFetch'
 import { FriendRequestModel } from '../../../model/friend-request-model'
+import { FriendshipStatus } from '../../../util/enum/FriendshipStatus'
 import { PATH_FRIEND_ADD } from '../../../util/RequestConstants'
 import { BaseButton } from './BaseButton'
 import { DynamicSubButtonProps } from './DynamicFriendButton'
-import { FriendshipStatus } from '../../../util/enum/FriendshipStatus'
-
 
 function getValue(friendshipStatus: keyof typeof FriendshipStatus | undefined) {
     switch (friendshipStatus) {
@@ -38,18 +37,19 @@ export const AddFriendButton = (props: DynamicSubButtonProps) => {
     const { postJson } = useFetch()
 
     function addFriend() {
-        const friendRequest = new FriendRequestModel(props.personId, props.friendId)
-        console.log("Person id: " + props.personId)
-        console.log("Friend id: " + props.friendId)
-        postJson(PATH_FRIEND_ADD, friendRequest)
-            .then(() => {
-                props.onClick()
-            })
+        const friendRequest = new FriendRequestModel(String(props.personId), String(props.friendId))
+        console.log('Person id: ' + props.personId)
+        console.log('Friend id: ' + props.friendId)
+        postJson(PATH_FRIEND_ADD, friendRequest).then(() => {
+            props.onClick()
+        })
     }
 
-    return <BaseButton
-        className={getStyling(props.friendshipStatusCode) + " btn-secondary"}
-        value={getValue(props.friendshipStatusCode)}
-        onClick={addFriend}
-    />
+    return (
+        <BaseButton
+            className={getStyling(props.friendshipStatusCode) + ' btn-secondary'}
+            value={getValue(props.friendshipStatusCode)}
+            onClick={addFriend}
+        />
+    )
 }

@@ -5,15 +5,18 @@ import '../../App.scss'
 import { Loader } from '../../components/loader/Loader'
 import { useFetch } from '../../hooks/useFetch'
 import { ProfilePageLoader } from '../../index'
+import { FriendListModel } from '../../model/friend-list.model'
 import { PostModel } from '../../model/post.model'
 import { ProfileDataModel } from '../../model/profile-data.model'
 import { StorageUtil } from '../../util/BrowerStorageUtil'
 import { PATH_FRIEND_STATUS, PATH_POST_PERSON, PATH_PROFILE } from '../../util/RequestConstants'
 import { ROUTE_PROFILE_EDIT } from '../../util/RouteConstants'
+import { formatDateString } from '../../util/StringUtil'
 import { FriendsTab } from '../profile-page-tabs/friends-tab/FriendsTab'
 import { DynamicFriendButton } from './dynamic-button/DynamicFriendButton'
 import { InformationAndBio } from './InformationAndBio'
 import './personal-profile-page.scss'
+import { Post } from './Post'
 import { FriendListModel } from '../../model/friend-list.model'
 import { PostsTab } from '../profile-page-tabs/posts-tab/PostsTab'
 
@@ -29,10 +32,13 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
     const [friendship, setFriendship] = useState<FriendListModel>()
     const [loading, setLoading] = useState<boolean>(true)
     const { profileId } = useLoaderData() as ProfilePageLoader
-    const sessionId = StorageUtil.get<string>('SESSION', 'personId')
+    const sessionId = StorageUtil.get<number>('SESSION', 'personId') as number
     const token = StorageUtil.get<string>('SESSION', 'token')
-    const isOwner = sessionId === profileId
-    // const foreignProfileId = new URLSearchParams(window.location.search).get('id') <- For params
+    if (sessionId === null || sessionId === undefined) {
+        /*todo navigate to login page, display proper error.*/
+        throw new Error()
+    }
+    const isOwner = Number(sessionId) === Number(profileId)
 
     useEffect(() => {
         if (isOwner) {
@@ -92,17 +98,15 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                             value={'Edit Profile'}
                             onClick={() => navigate(ROUTE_PROFILE_EDIT)}
                         />
-                    ) : friendship ? (
-                        <div className={"d-flex flex-column flex-lg-row gap-2"}>
+                    ) : (
+                        <div className={'d-flex flex-column flex-lg-row gap-2'}>
                             <DynamicFriendButton
-                                statusCode={friendship.status}
-                                personId={sessionId ?? ''}
-                                friendId={profileId ?? ''}
+                                statusCode={friendship?.status}
+                                personId={sessionId}
+                                friendId={profileId}
                                 onClick={refreshFriendship}
                             />
                         </div>
-                    ) : (
-                        ''
                     )}
                 </div>
 
