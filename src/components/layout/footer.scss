@@ -1,7 +1,11 @@
-.footer {
-  position: absolute;
-  bottom: 0px;
-  left: 0;
+.footer-flex-parent {
+  display: flex;
+}
+
+.footer-flex-item {
+  flex-direction: row;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
   width: 100%;
   text-align: center;
   color: white;

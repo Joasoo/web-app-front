@@ -1,7 +1,11 @@
-.header {
-  position: absolute;
-  top: 0;
-  left: 0;
+.header-flex-parent {
+  display: flex;
+}
+
+.header-flex-item {
+  flex-direction: row;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
   width: 100%;
   text-align: center;
   color: white;
