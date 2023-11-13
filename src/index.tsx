@@ -10,9 +10,10 @@ import { EditPage } from './pages/edit-profile-page/EditPage'
 import { PersonalProfilePage } from './pages/personal-profile-page/PersonalProfilePage'
 import { RegistrationPage } from './pages/registration-page/RegistrationPage'
 import { RootPage } from './pages/RootPage'
+import { isActualNumber } from './util/StringUtil'
 
 export type ProfilePageLoader = {
-    profileId: string
+    profileId: number
 }
 
 const router = createBrowserRouter([
@@ -32,9 +33,11 @@ const router = createBrowserRouter([
         element: <PersonalProfilePage />,
         path: ROUTE_PROFILE + '/:profileId',
         loader: ({ params }): ProfilePageLoader => {
-            const num = String(params.profileId)
-            if (!num) throw new Error()
-            return { profileId: num }
+            if (params.profileId && isActualNumber(params.profileId)) {
+                return { profileId: Number.parseInt(params.profileId) }
+            } else {
+                throw new Error()
+            }
         },
         errorElement: <LoginPage /> /*todo make 404 page/ error boundary*/,
     },

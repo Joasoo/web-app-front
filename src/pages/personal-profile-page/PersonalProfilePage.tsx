@@ -5,6 +5,7 @@ import '../../App.scss'
 import { Loader } from '../../components/loader/Loader'
 import { useFetch } from '../../hooks/useFetch'
 import { ProfilePageLoader } from '../../index'
+import { FriendListModel } from '../../model/friend-list.model'
 import { PostModel } from '../../model/post.model'
 import { ProfileDataModel } from '../../model/profile-data.model'
 import { StorageUtil } from '../../util/BrowerStorageUtil'
@@ -17,7 +18,6 @@ import { DynamicFriendButton } from './dynamic-button/DynamicFriendButton'
 import { InformationAndBio } from './InformationAndBio'
 import './personal-profile-page.scss'
 import { Post } from './Post'
-import { FriendListModel } from '../../model/friend-list.model'
 
 type ProfilePageProps = {
     className?: string
@@ -32,10 +32,13 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
     const [postList, setPostList] = useState<PostModel[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const { profileId } = useLoaderData() as ProfilePageLoader
-    const sessionId = StorageUtil.get<string>('SESSION', 'personId')
+    const sessionId = StorageUtil.get<number>('SESSION', 'personId') as number
     const token = StorageUtil.get<string>('SESSION', 'token')
-    const isOwner = sessionId === profileId
-    // const foreignProfileId = new URLSearchParams(window.location.search).get('id') <- For params
+    if (sessionId === null || sessionId === undefined) {
+        /*todo navigate to login page, display proper error.*/
+        throw new Error()
+    }
+    const isOwner = Number(sessionId) === Number(profileId)
 
     useEffect(() => {
         if (isOwner) {
@@ -108,17 +111,15 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                             value={'Edit Profile'}
                             onClick={() => navigate(ROUTE_PROFILE_EDIT)}
                         />
-                    ) : friendship ? (
-                        <div className={"d-flex flex-column flex-lg-row gap-2"}>
+                    ) : (
+                        <div className={'d-flex flex-column flex-lg-row gap-2'}>
                             <DynamicFriendButton
-                                statusCode={friendship.status}
-                                personId={sessionId ?? ''}
-                                friendId={profileId ?? ''}
+                                statusCode={friendship?.status}
+                                personId={sessionId}
+                                friendId={profileId}
                                 onClick={refreshFriendship}
                             />
                         </div>
-                    ) : (
-                        ''
                     )}
                 </div>
 
@@ -152,18 +153,18 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                         <>
                             {Array.isArray(postList)
                                 ? postList?.map((post) => {
-                                    return (
-                                        <Post
-                                            key={post.id}
-                                            id={post.id}
-                                            content={post.content}
-                                            author={post.author}
-                                            createdAt={formatDateString(post.createdAt)}
-                                            isOwner={isOwner}
-                                            onClickDelete={refreshPosts}
-                                        />
-                                    )
-                                })
+                                      return (
+                                          <Post
+                                              key={post.id}
+                                              id={post.id}
+                                              content={post.content}
+                                              author={post.author}
+                                              createdAt={formatDateString(post.createdAt)}
+                                              isOwner={isOwner}
+                                              onClickDelete={refreshPosts}
+                                          />
+                                      )
+                                  })
                                 : ''}
                         </>
                     </TabPanel>

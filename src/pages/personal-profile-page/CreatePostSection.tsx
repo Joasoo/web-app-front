@@ -4,7 +4,7 @@ import { AddPostModel } from '../../model/add-post.model'
 import { PATH_POST_ADD } from '../../util/RequestConstants'
 
 type NewPostSectionProps = {
-    profileId: string | undefined
+    profileId: number | undefined
     onCreate?: () => void
 }
 
@@ -17,7 +17,7 @@ export const CreatePostSection = (props: NewPostSectionProps) => {
         if (newPostText && props.profileId) {
             console.log('Make a post for profile id: ' + props.profileId)
             setNewPostText('')
-            let newModel = new AddPostModel(props.profileId, newPostText)
+            let newModel = new AddPostModel(String(props.profileId), newPostText)
             postJson(PATH_POST_ADD, newModel)
                 .then(() => {
                     props.onCreate?.()

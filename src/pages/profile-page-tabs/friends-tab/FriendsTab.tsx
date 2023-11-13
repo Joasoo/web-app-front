@@ -38,7 +38,7 @@ export const FriendsTab = (props: FriendsTabProps) => {
     return (
         <div className={'w-100 mb-5 px-5 ' + (props.className ?? '')}>
             {friends.map((friend) => {
-                return <FriendSlot key={friend.id} data={friend} />
+                return <FriendSlot key={friend.id} data={friend} isOwner={props.isOwner} />
             })}
         </div>
     )
