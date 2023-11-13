@@ -5,20 +5,17 @@ import '../../App.scss'
 import { Loader } from '../../components/loader/Loader'
 import { useFetch } from '../../hooks/useFetch'
 import { ProfilePageLoader } from '../../index'
-import { FriendshipModel } from '../../model/friendship-model'
 import { PostModel } from '../../model/post.model'
 import { ProfileDataModel } from '../../model/profile-data.model'
 import { StorageUtil } from '../../util/BrowerStorageUtil'
 import { PATH_FRIEND_STATUS, PATH_POST_PERSON, PATH_PROFILE } from '../../util/RequestConstants'
 import { ROUTE_PROFILE_EDIT } from '../../util/RouteConstants'
-import { formatDateString } from '../../util/StringUtil'
 import { FriendsTab } from '../profile-page-tabs/friends-tab/FriendsTab'
-import { CreatePostSection } from './CreatePostSection'
 import { DynamicFriendButton } from './dynamic-button/DynamicFriendButton'
 import { InformationAndBio } from './InformationAndBio'
 import './personal-profile-page.scss'
-import { Post } from './Post'
 import { FriendListModel } from '../../model/friend-list.model'
+import { PostsTab } from '../profile-page-tabs/posts-tab/PostsTab'
 
 type ProfilePageProps = {
     className?: string
@@ -30,7 +27,6 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
     const navigate = useNavigate()
     const [profileData, setProfileData] = useState<ProfileDataModel>()
     const [friendship, setFriendship] = useState<FriendListModel>()
-    const [postList, setPostList] = useState<PostModel[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const { profileId } = useLoaderData() as ProfilePageLoader
     const sessionId = StorageUtil.get<string>('SESSION', 'personId')
@@ -45,43 +41,30 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
             const getPosts = getJson<PostModel[]>(PATH_POST_PERSON + `/${profileId}`, undefined, token)
             Promise.all([getProfileData, getPosts]).then((res) => {
                 setProfileData(res[0])
-                setPostList(res[1])
                 setLoading(false)
             })
         } else {
             const getProfileData = getJson<ProfileDataModel>(PATH_PROFILE + `/${profileId}`, undefined, token)
-            const getPosts = getJson<PostModel[]>(PATH_POST_PERSON + `/${profileId}`, undefined, token)
             let params = {
                 personId: sessionId ?? '',
                 friendId: profileId ?? '',
             }
             const getFriendship = getJson<FriendListModel>(PATH_FRIEND_STATUS, params, token)
-            Promise.all([getProfileData, getPosts, getFriendship]).then((res) => {
+            Promise.all([getProfileData, getFriendship]).then((res) => {
                 setProfileData(res[0])
-                setPostList(res[1])
-                setFriendship(res[2])
+                setFriendship(res[1])
                 setLoading(false)
             })
         }
     }, [profileId])
-
-    function refreshPosts() {
-        getJson<PostModel[]>(PATH_POST_PERSON + `/${profileId}`)
-            .then((res) => {
-                setPostList(res)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    }
 
     function refreshFriendship() {
         let params = {
             personId: sessionId ?? '',
             friendId: profileId ?? '',
         }
-        getJson<FriendshipModel>(PATH_FRIEND_STATUS, params).then((res) => {
-            setFriendshipStatus(res)
+        getJson<FriendListModel>(PATH_FRIEND_STATUS, params).then((res) => {
+            setFriendship(res)
         })
     }
 
@@ -139,34 +122,8 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                         <Tab>Photos</Tab>
                     </TabList>
 
-                    <TabPanel className={'align-items-start'}>
-                        {isOwner ? (
-                            <>
-                                <CreatePostSection profileId={profileId} onCreate={refreshPosts} />
-
-                                <h4 className={'mt-5'}>Posts</h4>
-                            </>
-                        ) : (
-                            ''
-                        )}
-
-                        <>
-                            {Array.isArray(postList)
-                                ? postList?.map((post) => {
-                                      return (
-                                          <Post
-                                              key={post.id}
-                                              id={post.id}
-                                              content={post.content}
-                                              author={post.author}
-                                              createdAt={formatDateString(post.createdAt)}
-                                              isOwner={isOwner}
-                                              onClickDelete={refreshPosts}
-                                          />
-                                      )
-                                  })
-                                : ''}
-                        </>
+                    <TabPanel>
+                        <PostsTab isOwner={isOwner} className={"align-items-start w-100"} />
                     </TabPanel>
 
                     <TabPanel>
