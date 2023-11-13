@@ -5,18 +5,15 @@ import '../../App.scss'
 import { Loader } from '../../components/loader/Loader'
 import { useFetch } from '../../hooks/useFetch'
 import { ProfilePageLoader } from '../../index'
-import { FriendListModel } from '../../model/friend-list.model'
 import { PostModel } from '../../model/post.model'
 import { ProfileDataModel } from '../../model/profile-data.model'
 import { StorageUtil } from '../../util/BrowerStorageUtil'
 import { PATH_FRIEND_STATUS, PATH_POST_PERSON, PATH_PROFILE } from '../../util/RequestConstants'
 import { ROUTE_PROFILE_EDIT } from '../../util/RouteConstants'
-import { formatDateString } from '../../util/StringUtil'
 import { FriendsTab } from '../profile-page-tabs/friends-tab/FriendsTab'
 import { DynamicFriendButton } from './dynamic-button/DynamicFriendButton'
 import { InformationAndBio } from './InformationAndBio'
 import './personal-profile-page.scss'
-import { Post } from './Post'
 import { FriendListModel } from '../../model/friend-list.model'
 import { PostsTab } from '../profile-page-tabs/posts-tab/PostsTab'
 
@@ -25,7 +22,7 @@ type ProfilePageProps = {
     children?: ReactNode
 }
 
-export const PersonalProfilePage = (props: ProfilePageProps) => {
+export const ProfilePage = (props: ProfilePageProps) => {
     const { getJson } = useFetch()
     const navigate = useNavigate()
     const [profileData, setProfileData] = useState<ProfileDataModel>()
@@ -40,22 +37,28 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
     }
     const isOwner = Number(sessionId) === Number(profileId)
 
+    function requestFriendship() {
+        let params = {
+            personId: sessionId ?? '',
+            friendId: profileId ?? '',
+        }
+        return getJson<FriendListModel>(PATH_FRIEND_STATUS, params, token)
+    }
+
+    function requestProfileData() {
+        return getJson<ProfileDataModel>(PATH_PROFILE + `/${profileId}`, undefined, token)
+    }
+
     useEffect(() => {
         if (isOwner) {
             console.log(token)
-            const getProfileData = getJson<ProfileDataModel>(PATH_PROFILE + `/${profileId}`, undefined, token)
-            const getPosts = getJson<PostModel[]>(PATH_POST_PERSON + `/${profileId}`, undefined, token)
-            Promise.all([getProfileData, getPosts]).then((res) => {
-                setProfileData(res[0])
+            requestProfileData().then((res) => {
+                setProfileData(res)
                 setLoading(false)
             })
         } else {
-            const getProfileData = getJson<ProfileDataModel>(PATH_PROFILE + `/${profileId}`, undefined, token)
-            let params = {
-                personId: sessionId ?? '',
-                friendId: profileId ?? '',
-            }
-            const getFriendship = getJson<FriendListModel>(PATH_FRIEND_STATUS, params, token)
+            const getProfileData = requestProfileData()
+            const getFriendship = requestFriendship()
             Promise.all([getProfileData, getFriendship]).then((res) => {
                 setProfileData(res[0])
                 setFriendship(res[1])
@@ -65,11 +68,7 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
     }, [profileId])
 
     function refreshFriendship() {
-        let params = {
-            personId: sessionId ?? '',
-            friendId: profileId ?? '',
-        }
-        getJson<FriendListModel>(PATH_FRIEND_STATUS, params).then((res) => {
+        requestFriendship().then((res) => {
             setFriendship(res)
         })
     }
@@ -127,7 +126,7 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                     </TabList>
 
                     <TabPanel>
-                        <PostsTab isOwner={isOwner} className={"align-items-start w-100"} />
+                        <PostsTab isOwner={isOwner} className={'align-items-start w-100'} />
                     </TabPanel>
 
                     <TabPanel>

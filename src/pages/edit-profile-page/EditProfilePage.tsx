@@ -13,7 +13,7 @@ type EditPageProps = {
     children?: ReactNode
 }
 
-export const EditPage = (props: EditPageProps) => {
+export const EditProfilePage = (props: EditPageProps) => {
     const { getJson, postJson } = useFetch()
 
     const [firstName, setFirstName] = useState<string>('')
