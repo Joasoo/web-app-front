@@ -1,10 +1,9 @@
-import { HTMLInputTypeAttribute, ReactElement } from 'react'
+import { ReactElement, useState } from 'react'
 import '../../App.scss'
 import { Loader } from '../loader/Loader'
 import './input.scss'
 
-const subtextSize = '0.9em'
-
+const subtextSize = '0.8em'
 type ConfigType = {
     [key in SubtextType['type']]: {
         icon?: ReactElement
@@ -47,34 +46,73 @@ export type SubtextType = {
     type: 'danger' | 'warning' | 'success' | 'loading' | 'info'
 }
 
+type InputCompatibleType = 'text' | 'email' | 'password' | 'date' | 'integer' | 'float'
 export type InputProps = {
     value: string | undefined
     onChange: (value: string) => void
     onFocus?: (value: string) => void
     text?: string
     textAlign?: 'start' | 'center' | 'end'
-    type?: HTMLInputTypeAttribute
+    // Defaults to 'text'
+    type?: InputCompatibleType
     disabled?: boolean
     subtext?: SubtextType
     className?: string
 }
+
 export const Input = (props: InputProps) => {
+    const [errCode, setErrCode] = useState<SubtextType | undefined>()
+
+    const inputType = props.type ?? 'text'
+    const inputTextAlign = 'text-' + (props.textAlign ?? 'start')
+    const inputDisabled = props.disabled ? 'cursor-disabled' : ''
+    const inputClassName = `w-100 custom-input rounded-5 ${inputTextAlign} ${inputDisabled}
+                ${props.subtext ? inputConfig[props.subtext?.type].borderClass : 'border-0'}`
+
+    function validate(value: any, type: InputCompatibleType) {
+        switch (type) {
+            case 'integer': {
+                const regex = /^(?:\d+\s?)+$|^(?!.)/
+                return RegExp(regex).exec(value as string)
+            }
+
+            case 'float': {
+                const regex = /^(?:\d+\s?)+(?:(?<!\s)[,.]?|)(?:(?<=[,.])\d+|)$|^(?!.)/
+                return RegExp(regex).exec(value as string)
+            }
+
+            case 'email': {
+                const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
+                if (!RegExp(regex).exec(value as string)) {
+                    setErrCode({
+                        value: 'Not a valid e-mail',
+                        type: 'warning',
+                    })
+                } else {
+                    setErrCode(undefined)
+                }
+                return true
+            }
+
+            default: {
+                return true
+            }
+        }
+    }
+
     return (
         <div className={`d-flex flex-column align-items-center ${props.className ?? ''}`}>
             <input
-                className={`w-100 custom-input rounded-5 text-${props.textAlign ?? 'start'} ${
-                    props.disabled ? 'cursor-disabled' : ''
-                } 
-                ${props.subtext ? inputConfig[props.subtext?.type].borderClass : ''}`}
+                className={inputClassName}
                 placeholder={props.text ?? ''}
                 value={props.value ?? ''}
                 onChange={(e) => {
-                    props.onChange(e.target.value)
+                    if (validate(e.target.value, inputType)) props.onChange(e.target.value)
                 }}
                 onFocus={(e) => {
                     if (props.onFocus) props.onFocus(e.target.value)
                 }}
-                type={props.type}
+                type={inputType}
                 disabled={props.disabled}
             />
             {props.subtext ? (
@@ -85,6 +123,19 @@ export const Input = (props: InputProps) => {
                         style={{ fontSize: subtextSize }}
                     >
                         {props.subtext?.value}
+                    </span>
+                </div>
+            ) : (
+                ''
+            )}
+            {!props.subtext && errCode ? (
+                <div className={'d-flex flex-row align-items-center justify-content-start'}>
+                    <span>{inputConfig[errCode.type].icon}</span>
+                    <span
+                        className={`${inputConfig[errCode.type].subtextClass ?? ''} fw-semibold custom-subtext`}
+                        style={{ fontSize: subtextSize }}
+                    >
+                        {errCode?.value}
                     </span>
                 </div>
             ) : (

@@ -5,6 +5,7 @@ import '../../App.scss'
 import { Loader } from '../../components/loader/Loader'
 import { useFetch } from '../../hooks/useFetch'
 import { ProfilePageLoader } from '../../index'
+import { FriendshipModel } from '../../model/friendship-model'
 import { PostModel } from '../../model/post.model'
 import { ProfileDataModel } from '../../model/profile-data.model'
 import { StorageUtil } from '../../util/BrowerStorageUtil'
@@ -79,8 +80,8 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
             personId: sessionId ?? '',
             friendId: profileId ?? '',
         }
-        getJson<FriendListModel>(PATH_FRIEND_STATUS, params).then((res) => {
-            setFriendship(res)
+        getJson<FriendshipModel>(PATH_FRIEND_STATUS, params).then((res) => {
+            setFriendshipStatus(res)
         })
     }
 
@@ -128,6 +129,7 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                     residence={profileData?.residence}
                     hometown={profileData?.hometown}
                     bio={profileData?.bio}
+                    relationshipStatus={profileData?.relationshipStatus}
                 />
 
                 <Tabs>
@@ -151,18 +153,18 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
                         <>
                             {Array.isArray(postList)
                                 ? postList?.map((post) => {
-                                    return (
-                                        <Post
-                                            key={post.id}
-                                            id={post.id}
-                                            content={post.content}
-                                            author={post.author}
-                                            createdAt={formatDateString(post.createdAt)}
-                                            isOwner={isOwner}
-                                            onClickDelete={refreshPosts}
-                                        />
-                                    )
-                                })
+                                      return (
+                                          <Post
+                                              key={post.id}
+                                              id={post.id}
+                                              content={post.content}
+                                              author={post.author}
+                                              createdAt={formatDateString(post.createdAt)}
+                                              isOwner={isOwner}
+                                              onClickDelete={refreshPosts}
+                                          />
+                                      )
+                                  })
                                 : ''}
                         </>
                     </TabPanel>
