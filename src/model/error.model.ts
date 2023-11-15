@@ -1,6 +1,7 @@
 export class ErrorModel {
     constructor(
-        public path: string,
-        public cause: string
+        public cause: string,
+        public path?: string,
+        public timestamp?: string
     ) {}
 }

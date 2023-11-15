@@ -16,7 +16,14 @@ export const ErrorOverlay = (props: ErrorOverlayProps) => {
         <>
             <div className={'err-overlay d-flex flex-column align-items-center justify-content-center mt-2 gap-2'}>
                 {errors.map((err, index) => {
-                    return <ErrorComponent onClose={() => removeError(index)} key={index} label={err.cause ?? 'N/A'} />
+                    return (
+                        <ErrorComponent
+                            onClose={() => removeError(index)}
+                            key={index}
+                            label={err.cause ?? 'N/A'}
+                            timestamp={err.timestamp ?? ''}
+                        />
+                    )
                 })}
             </div>
             <ErrorContext.Provider value={handleError}>{props.children}</ErrorContext.Provider>

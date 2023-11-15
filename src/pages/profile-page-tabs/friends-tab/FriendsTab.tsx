@@ -37,7 +37,6 @@ export const FriendsTab = (props: FriendsTabProps) => {
 
     useEffect(() => {
         requestFriendsList()
-        handleError({ cause: 'Incompetence', path: '////' })
     }, [profileId])
 
     if (loading) return <Loader />

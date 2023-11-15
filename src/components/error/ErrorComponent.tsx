@@ -3,6 +3,7 @@ import './error-overlay.scss'
 
 export type ErrorComponentProps = {
     label?: string
+    timestamp?: string
     onClose?: () => void
 }
 
