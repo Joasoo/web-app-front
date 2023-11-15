@@ -62,6 +62,7 @@ export const EditPage = () => {
     }
 
     function saveChanges() {
+        setLoading(true)
         if (profileId) {
             let newEditDataModel = new EditDataModel(
                 profileId,
@@ -77,9 +78,11 @@ export const EditPage = () => {
             )
             postJson(PATH_PROFILE_EDIT_SAVE, newEditDataModel)
                 .then(() => {
-                    getOriginalData()
+                    navigate(ROUTE_PROFILE + `/${profileId}`)
                 })
                 .catch((err) => {
+                    getOriginalData()
+                    setLoading(false)
                     console.log(err)
                 })
         }
@@ -94,8 +97,8 @@ export const EditPage = () => {
         <div className={'edit-box flex-column mx-auto border border-2 border-secondary rounded-3'}>
             {/*suur konteiner*/}
             {/*ülemine konteiner fotode ja bio jaoks*/}
-            <div className={'container w-75'}>
-                <div className={'row my-3'}>
+            <div className={'container w-75 align-items-center'}>
+                <div className={'row row-cols-1 row-cols-md-2 my-3'}>
                     <div className={'col d-flex flex-column'}>
                         <div className={'picture-box mx-auto rounded-circle bg bg-secondary-subtle'} />
                         <InputButton type={'info'} className={buttonClassLarge} label={'Edit Profile Photo'} />
@@ -105,15 +108,14 @@ export const EditPage = () => {
                         <InputButton type={'info'} className={buttonClassLarge} label={'Edit Profile Banner'} />
                     </div>
                 </div>
-                <div className={'row my-3'}>
-                    <div className={'col d-flex flex-column'}>
+                <div className={'row my-3 mx-auto'}>
+                    <div className={'col-12 col-md-6 d-flex flex-column'}>
                         <div className={'text-box'}>{editData?.profileBio ? <p>{editData?.profileBio}</p> : ''}</div>
                         <InputButton type={'info'} className={buttonClassLarge} label={'Edit Profile Bio'} />
                     </div>
-                    <div className={'col d-flex flex-column'}></div>
                 </div>
             </div>
-            <div className={'w-75 w-md-100 mx-auto'}>
+            <div className={'w-90 w-md-100 mx-auto'}>
                 <hr />
                 <EditPageRow
                     label={'First Name:'}

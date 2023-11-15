@@ -1,9 +1,10 @@
-import { PersonFullNameModel } from '../../model/person-full-name-model'
-import './post.scss'
 import { Link } from 'react-router-dom'
-import { ROUTE_PROFILE } from '../../util/RouteConstants'
-import { PATH_POST_DELETE } from '../../util/RequestConstants'
+import { InputButton } from '../../components/button/InputButton'
 import { useFetch } from '../../hooks/useFetch'
+import { PersonFullNameModel } from '../../model/person-full-name-model'
+import { PATH_POST_DELETE } from '../../util/RequestConstants'
+import { ROUTE_PROFILE } from '../../util/RouteConstants'
+import './post.scss'
 
 type PostProps = {
     id: string
@@ -53,18 +54,13 @@ export const Post = (props: PostProps) => {
                 </pre>
             </div>
 
-            <div className={'d-flex flex-column justify-content-center'}>
-                {props.onClickEdit ? (
-                    <input className={'mx-3 my-1 btn btn-primary'} type={'button'} value={'Edit'} />
-                ) : (
-                    ''
-                )}
-
+            <div className={'d-flex flex-column gap-3 justify-content-center'}>
+                {props.onClickEdit ? <InputButton className={'mx-2'} type={'info'} label={'Edit'} /> : ''}
                 {props.isOwner ? (
-                    <input
-                        className={'mx-3 my-1 btn btn-danger'}
-                        type={'button'}
-                        value={'Delete'}
+                    <InputButton
+                        className={'mx-2'}
+                        type={'danger'}
+                        label={'Delete'}
                         onClick={() => deletePost(props.id)}
                     />
                 ) : (

@@ -2,6 +2,7 @@ import { ReactNode, useEffect, useState } from 'react'
 import { useLoaderData, useNavigate } from 'react-router-dom'
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 import '../../App.scss'
+import { InputButton } from '../../components/button/InputButton'
 import { Loader } from '../../components/loader/Loader'
 import { useFetch } from '../../hooks/useFetch'
 import { ProfilePageLoader } from '../../index'
@@ -104,10 +105,9 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
 
                 <div className={'d-flex justify-content-end'}>
                     {isOwner ? (
-                        <input
-                            className={'btn btn-primary align-self-end'}
-                            type={'button'}
-                            value={'Edit Profile'}
+                        <InputButton
+                            type={'info'}
+                            label={'Edit Profile'}
                             onClick={() => navigate(ROUTE_PROFILE_EDIT)}
                         />
                     ) : (

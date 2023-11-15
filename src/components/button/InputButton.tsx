@@ -13,7 +13,7 @@ export const InputButton = (props: InputButtonProps) => {
 
     return (
         <input
-            className={`border-0 p-2 rounded-2 color-text-1 button-${type} ` + (props.className ?? '')}
+            className={`border-0 p-2 px-3 rounded-2 color-text-1 button-${type} ` + (props.className ?? '')}
             onClick={props.onClick}
             type={'button'}
             value={props.label}

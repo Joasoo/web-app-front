@@ -34,7 +34,7 @@ export const EditPageRow = (props: EditPageRowProps) => {
             )}
             <div className={'col-md-2 d-flex justify-content-end'}>
                 <InputButton
-                    className={'px-3'}
+                    className={'px-3 py-1'}
                     label={'Reset'}
                     onClick={() => props.setValue(props.defaultValue ?? '')}
                 />
