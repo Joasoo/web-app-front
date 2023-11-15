@@ -1,5 +1,6 @@
-import { ReactNode, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { InputButton } from '../../components/button/InputButton'
 import { Loader } from '../../components/loader/Loader'
 import { useFetch } from '../../hooks/useFetch'
 import { EditDataModel } from '../../model/edit-data.model'
@@ -14,12 +15,7 @@ import { ROUTE_PROFILE } from '../../util/RouteConstants'
 import './edit-page.scss'
 import { EditPageRow } from './EditPageRow'
 
-type EditPageProps = {
-    className?: string
-    children?: ReactNode
-}
-
-export const EditPage = (props: EditPageProps) => {
+export const EditPage = () => {
     const { getJson, postJson } = useFetch()
 
     const [firstName, setFirstName] = useState<string>('')
@@ -54,7 +50,6 @@ export const EditPage = (props: EditPageProps) => {
                 setResidence(res[1].residence)
                 setHometown(res[1].hometown)
                 setWorkplace(res[1].workplace)
-                console.log(res[1].relationshipStatus)
                 setRelationshipStatus(res[1].relationshipStatus)
                 setDateOfBirth(res[1].dateOfBirth)
                 setProfileBio(res[1].profileBio)
@@ -62,7 +57,7 @@ export const EditPage = (props: EditPageProps) => {
                 setLoading(false)
             })
         } else {
-            throw new Error('ERR: profileId is missing.')
+            throw new Error('profileId is missing.')
         }
     }
 
@@ -94,40 +89,26 @@ export const EditPage = (props: EditPageProps) => {
         return <Loader overlay />
     }
 
+    const buttonClassLarge = 'mx-auto px-4'
     return (
         <div className={'edit-box flex-column mx-auto border border-2 border-secondary rounded-3'}>
-            {' '}
             {/*suur konteiner*/}
             {/*ülemine konteiner fotode ja bio jaoks*/}
             <div className={'container w-75'}>
                 <div className={'row my-3'}>
                     <div className={'col d-flex flex-column'}>
                         <div className={'picture-box mx-auto rounded-circle bg bg-secondary-subtle'} />
-                        <input
-                            className={'btn btn-primary mx-auto w-50'}
-                            type={'button'}
-                            value={'Edit Profile Photo'}
-                        />
+                        <InputButton type={'info'} className={buttonClassLarge} label={'Edit Profile Photo'} />
                     </div>
-
                     <div className={'col d-flex flex-column'}>
                         <div className={'bg-picture-box bg bg-secondary-subtle rounded-3'} />
-                        <input
-                            className={'btn btn-primary mx-auto w-50'}
-                            type={'button'}
-                            value={'Edit Profile Banner'}
-                        />
+                        <InputButton type={'info'} className={buttonClassLarge} label={'Edit Profile Banner'} />
                     </div>
                 </div>
                 <div className={'row my-3'}>
                     <div className={'col d-flex flex-column'}>
                         <div className={'text-box'}>{editData?.profileBio ? <p>{editData?.profileBio}</p> : ''}</div>
-                        <input
-                            className={'btn btn-primary mx-auto w-50'}
-                            type={'button'}
-                            value={'Edit Profile Bio'}
-                            onClick={() => {}}
-                        />
+                        <InputButton type={'info'} className={buttonClassLarge} label={'Edit Profile Bio'} />
                     </div>
                     <div className={'col d-flex flex-column'}></div>
                 </div>

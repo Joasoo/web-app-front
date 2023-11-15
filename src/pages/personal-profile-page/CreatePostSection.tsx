@@ -15,7 +15,6 @@ export const CreatePostSection = (props: NewPostSectionProps) => {
 
     function makePost() {
         if (newPostText && props.profileId) {
-            console.log('Make a post for profile id: ' + props.profileId)
             setNewPostText('')
             let newModel = new AddPostModel(String(props.profileId), newPostText)
             postJson(PATH_POST_ADD, newModel)

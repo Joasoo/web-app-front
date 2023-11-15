@@ -1,4 +1,5 @@
 import { ReactNode } from 'react'
+import { InputButton } from '../../components/button/InputButton'
 import { DropdownSelect } from '../../components/dropdown/DropdownSelect'
 import { FormRow } from '../../components/FormRow'
 import { Input } from '../../components/input/Input'
@@ -32,10 +33,9 @@ export const EditPageRow = (props: EditPageRowProps) => {
                 ''
             )}
             <div className={'col-md-2 d-flex justify-content-end'}>
-                <input
-                    className={'reset-btn btn bg-accent-2 color-text-1'}
-                    type={'button'}
-                    value={'Reset'}
+                <InputButton
+                    className={'px-3'}
+                    label={'Reset'}
                     onClick={() => props.setValue(props.defaultValue ?? '')}
                 />
             </div>

@@ -24,14 +24,10 @@
     cursor: pointer;
 }
 
-.w-30 {
-    width: 30%;
-}
-
-.w-40 {
-    width: 40%;
-}
-
-.w-60 {
-    width: 60%;
+/* Generates width classes from w-5 to w-100 in 5 percent increments. {e.g. w-5, w-10, w-15 etc.} */
+@for $i from 1 through 20 {
+    $v: $i * 5;
+    .w-#{$v} {
+        width: #{$v} + '%';
+    }
 }
