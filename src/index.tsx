@@ -6,8 +6,8 @@ import reportWebVitals from './reportWebVitals'
 import { ROUTE_LOGIN, ROUTE_PROFILE, ROUTE_PROFILE_EDIT, ROUTE_REGISTER, ROUTE_ROOT } from './util/RouteConstants'
 
 import 'bootstrap/dist/css/bootstrap.css'
-import { EditPage } from './pages/edit-profile-page/EditPage'
-import { PersonalProfilePage } from './pages/personal-profile-page/PersonalProfilePage'
+import { EditProfilePage } from './pages/edit-profile-page/EditPage'
+import { ProfilePage } from './pages/profile-page/PersonalProfilePage'
 import { RegistrationPage } from './pages/registration-page/RegistrationPage'
 import { RootPage } from './pages/RootPage'
 import { isActualNumber } from './util/StringUtil'
@@ -30,7 +30,7 @@ const router = createBrowserRouter([
         path: ROUTE_REGISTER,
     },
     {
-        element: <PersonalProfilePage />,
+        element: <ProfilePage />,
         path: ROUTE_PROFILE + '/:profileId',
         loader: ({ params }): ProfilePageLoader => {
             if (params.profileId && isActualNumber(params.profileId)) {
@@ -42,7 +42,7 @@ const router = createBrowserRouter([
         errorElement: <LoginPage /> /*todo make 404 page/ error boundary*/,
     },
     {
-        element: <EditPage />,
+        element: <EditProfilePage />,
         path: ROUTE_PROFILE_EDIT,
     },
 ])

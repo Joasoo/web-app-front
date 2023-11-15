@@ -2,7 +2,7 @@ import { useLoaderData, useNavigate } from 'react-router-dom'
 import { ProfilePageLoader } from '../../../index'
 import { FriendListModel } from '../../../model/friend-list.model'
 import { ROUTE_PROFILE } from '../../../util/RouteConstants'
-import { DynamicFriendButton } from '../../personal-profile-page/dynamic-button/DynamicFriendButton'
+import { DynamicFriendButton } from '../../profile-page/dynamic-button/DynamicFriendButton'
 import './friend-slot.scss'
 
 export type FriendSlotProps = {
