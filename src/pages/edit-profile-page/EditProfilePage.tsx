@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { InputButton } from '../../components/button/InputButton'
 import { Loader } from '../../components/loader/Loader'
+import { useErrorHandler } from '../../hooks/useErrorHandler'
 import { useFetch } from '../../hooks/useFetch'
 import { EditDataModel } from '../../model/edit-data.model'
 import { StatusCodeModel } from '../../model/status-code.model'
@@ -17,6 +18,7 @@ import { EditPageRow } from './EditPageRow'
 
 export const EditProfilePage = () => {
     const { getJson, postJson } = useFetch()
+    const { handleError } = useErrorHandler()
 
     const [firstName, setFirstName] = useState<string>('')
     const [lastName, setLastName] = useState<string>('')
@@ -83,7 +85,7 @@ export const EditProfilePage = () => {
                 .catch((err) => {
                     getOriginalData()
                     setLoading(false)
-                    console.log(err)
+                    handleError(err)
                 })
         }
     }

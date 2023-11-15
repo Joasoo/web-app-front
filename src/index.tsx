@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals'
 import { ROUTE_LOGIN, ROUTE_PROFILE, ROUTE_PROFILE_EDIT, ROUTE_REGISTER, ROUTE_ROOT } from './util/RouteConstants'
 
 import 'bootstrap/dist/css/bootstrap.css'
+import { ErrorOverlay } from './components/error/ErrorOverlay'
 import { EditProfilePage } from './pages/edit-profile-page/EditProfilePage'
 import { ProfilePage } from './pages/profile-page/ProfilePage'
 import { RegistrationPage } from './pages/registration-page/RegistrationPage'
@@ -47,8 +48,11 @@ const router = createBrowserRouter([
     },
 ])
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(<RouterProvider router={router} />)
-
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+    <ErrorOverlay>
+        <RouterProvider router={router} />
+    </ErrorOverlay>
+)
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
