@@ -12,10 +12,10 @@ import {
     PATH_PROFILE_RELATIONSHIP_STATUS,
 } from '../../util/RequestConstants'
 import { ROUTE_PROFILE } from '../../util/RouteConstants'
-import './edit-page.scss'
+import './edit-profile-page.scss'
 import { EditPageRow } from './EditPageRow'
 
-export const EditPage = () => {
+export const EditProfilePage = () => {
     const { getJson, postJson } = useFetch()
 
     const [firstName, setFirstName] = useState<string>('')

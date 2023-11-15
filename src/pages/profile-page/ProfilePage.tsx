@@ -15,7 +15,7 @@ import { FriendsTab } from '../profile-page-tabs/friends-tab/FriendsTab'
 import { PostsTab } from '../profile-page-tabs/posts-tab/PostsTab'
 import { DynamicFriendButton } from './dynamic-button/DynamicFriendButton'
 import { InformationAndBio } from './InformationAndBio'
-import './personal-profile-page.scss'
+import './profile-page.scss'
 
 type ProfilePageProps = {
     className?: string
