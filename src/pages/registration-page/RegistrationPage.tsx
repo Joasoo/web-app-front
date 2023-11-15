@@ -5,6 +5,7 @@ import { DropdownSelect } from '../../components/dropdown/DropdownSelect'
 import { FormRow } from '../../components/FormRow'
 import { Input, SubtextType } from '../../components/input/Input'
 import { Loader } from '../../components/loader/Loader'
+import { useErrorHandler } from '../../hooks/useErrorHandler'
 import { useFetch } from '../../hooks/useFetch'
 import { RegistrationModel } from '../../model/registration.model'
 import { StatusCodeModel } from '../../model/status-code.model'
@@ -31,6 +32,7 @@ const errorSubtext: { [key: string]: SubtextType } = {
 export const RegistrationPage = (props: RegistrationPageProps) => {
     const navigate = useNavigate()
     const { postJson, getJson } = useFetch()
+    const { handleError } = useErrorHandler()
     const [loading, setLoading] = useState<boolean>(false)
 
     const [firstName, setFirstName] = useState('')
@@ -62,7 +64,7 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
                 setLoading(false)
             })
             .catch((err) => {
-                console.log(err)
+                handleError(err)
                 setLoading(false)
             })
     }, [])
@@ -115,7 +117,7 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
                     navigate(ROUTE_LOGIN)
                 })
                 .catch((err) => {
-                    console.log(err)
+                    handleError(err)
                 })
         }
         setLoading(false)

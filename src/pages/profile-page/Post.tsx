@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { InputButton } from '../../components/button/InputButton'
+import { useErrorHandler } from '../../hooks/useErrorHandler'
 import { useFetch } from '../../hooks/useFetch'
 import { PersonFullNameModel } from '../../model/person-full-name-model'
 import { PATH_POST_DELETE } from '../../util/RequestConstants'
@@ -19,6 +20,7 @@ type PostProps = {
 
 export const Post = (props: PostProps) => {
     const { deleteJson } = useFetch()
+    const { handleError } = useErrorHandler()
 
     function deletePost(id: string) {
         if (props.isOwner) {
@@ -27,7 +29,7 @@ export const Post = (props: PostProps) => {
                     props.onClickDelete?.()
                 })
                 .catch((err) => {
-                    console.log(err)
+                    handleError(err)
                 })
         }
     }

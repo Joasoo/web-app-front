@@ -25,6 +25,14 @@ html {
     color: $color-text-1;
 }
 
+#err {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: fit-content;
+    transform: translate(-50%, 0);
+}
+
 .color-text-1 {
     color: $color-text-1;
 }

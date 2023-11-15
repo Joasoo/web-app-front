@@ -127,11 +127,9 @@ export const ProfilePage = (props: ProfilePageProps) => {
                     <TabPanel>
                         <PostsTab isOwner={isOwner} className={'align-items-start w-100'} />
                     </TabPanel>
-
                     <TabPanel>
                         <FriendsTab isOwner={isOwner} />
                     </TabPanel>
-
                     <TabPanel>(!) Photos not implemented</TabPanel>
                 </Tabs>
             </div>

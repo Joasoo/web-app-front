@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { InputButton } from '../../components/button/InputButton'
+import { useErrorHandler } from '../../hooks/useErrorHandler'
 import { useFetch } from '../../hooks/useFetch'
 import { AddPostModel } from '../../model/add-post.model'
 import { PATH_POST_ADD } from '../../util/RequestConstants'
@@ -11,6 +12,7 @@ type NewPostSectionProps = {
 
 export const CreatePostSection = (props: NewPostSectionProps) => {
     const [newPostText, setNewPostText] = useState<string>('')
+    const { handleError } = useErrorHandler()
     const { postJson } = useFetch()
     const maxPostSize = 1000
 
@@ -23,7 +25,7 @@ export const CreatePostSection = (props: NewPostSectionProps) => {
                     props.onCreate?.()
                 })
                 .catch((err) => {
-                    console.log(err)
+                    handleError(err)
                 })
         }
     }

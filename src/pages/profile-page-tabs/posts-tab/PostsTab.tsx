@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useLoaderData } from 'react-router-dom'
 import { Loader } from '../../../components/loader/Loader'
+import { useErrorHandler } from '../../../hooks/useErrorHandler'
 import { useFetch } from '../../../hooks/useFetch'
 import { ProfilePageLoader } from '../../../index'
 import { PostModel } from '../../../model/post.model'
@@ -18,9 +19,10 @@ export type PostsTabProps = {
 export const PostsTab = (props: PostsTabProps) => {
     const [postList, setPostList] = useState<PostModel[]>([])
     const [loading, setLoading] = useState<boolean>(false)
-    const { getJson, postJson } = useFetch()
+    const { getJson } = useFetch()
     const { profileId } = useLoaderData() as ProfilePageLoader
     const token = StorageUtil.get<string>('SESSION', 'token')
+    const { handleError } = useErrorHandler()
 
     useEffect(() => {
         setLoading(true)
@@ -36,7 +38,7 @@ export const PostsTab = (props: PostsTabProps) => {
                 setPostList(res)
             })
             .catch((err) => {
-                console.log(err)
+                handleError(err)
             })
     }
 

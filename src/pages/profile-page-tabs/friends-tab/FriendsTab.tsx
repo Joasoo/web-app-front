@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useLoaderData } from 'react-router-dom'
 import { Loader } from '../../../components/loader/Loader'
+import { useErrorHandler } from '../../../hooks/useErrorHandler'
 import { useFetch } from '../../../hooks/useFetch'
 import { ProfilePageLoader } from '../../../index'
 import { FriendListModel } from '../../../model/friend-list.model'
@@ -19,6 +20,7 @@ export const FriendsTab = (props: FriendsTabProps) => {
     const [friends, setFriends] = useState<FriendListModel[]>([])
     const [loading, setLoading] = useState<boolean>(false)
     const token = StorageUtil.get<string>('SESSION', 'token')
+    const { handleError } = useErrorHandler()
 
     function requestFriendsList() {
         setLoading(true)
@@ -28,13 +30,14 @@ export const FriendsTab = (props: FriendsTabProps) => {
                 setLoading(false)
             })
             .catch((err) => {
-                console.log(err)
+                handleError(err)
                 setLoading(false)
             })
     }
 
     useEffect(() => {
         requestFriendsList()
+        handleError({ cause: 'Incompetence', path: '////' })
     }, [profileId])
 
     if (loading) return <Loader />
