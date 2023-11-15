@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react'
-import { PostModel } from '../../../model/post.model'
-import { useFetch } from '../../../hooks/useFetch'
 import { useLoaderData } from 'react-router-dom'
+import { Loader } from '../../../components/loader/Loader'
+import { useFetch } from '../../../hooks/useFetch'
 import { ProfilePageLoader } from '../../../index'
-import { PATH_POST_PERSON } from '../../../util/RequestConstants'
+import { PostModel } from '../../../model/post.model'
 import { StorageUtil } from '../../../util/BrowerStorageUtil'
+import { PATH_POST_PERSON } from '../../../util/RequestConstants'
+import { formatDateString } from '../../../util/StringUtil'
 import { CreatePostSection } from '../../profile-page/CreatePostSection'
 import { Post } from '../../profile-page/Post'
-import { formatDateString } from '../../../util/StringUtil'
-import { Loader } from '../../../components/loader/Loader'
 
 export type PostsTabProps = {
-    className?: string,
+    className?: string
     isOwner: boolean
 }
 
@@ -24,11 +24,10 @@ export const PostsTab = (props: PostsTabProps) => {
 
     useEffect(() => {
         setLoading(true)
-        getJson<PostModel[]>(PATH_POST_PERSON + `/${profileId}`, undefined, token)
-            .then((res) => {
-                setPostList(res)
-                setLoading(false)
-            })
+        getJson<PostModel[]>(PATH_POST_PERSON + `/${profileId}`, undefined, token).then((res) => {
+            setPostList(res)
+            setLoading(false)
+        })
     }, [])
 
     function refreshPosts() {
@@ -60,18 +59,18 @@ export const PostsTab = (props: PostsTabProps) => {
             <>
                 {Array.isArray(postList)
                     ? postList?.map((post) => {
-                        return (
-                            <Post
-                                key={post.id}
-                                id={post.id}
-                                content={post.content}
-                                author={post.author}
-                                createdAt={formatDateString(post.createdAt)}
-                                isOwner={props.isOwner}
-                                onClickDelete={refreshPosts}
-                            />
-                        )
-                    })
+                          return (
+                              <Post
+                                  key={post.id}
+                                  id={post.id}
+                                  content={post.content}
+                                  author={post.author}
+                                  createdAt={formatDateString(post.createdAt)}
+                                  isOwner={props.isOwner}
+                                  onClickDelete={refreshPosts}
+                              />
+                          )
+                      })
                     : ''}
             </>
         </div>

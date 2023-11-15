@@ -14,6 +14,7 @@ $color-background-1: #1e1e1e;
 // Status
 $color-success: #588f45;
 $color-danger: #d72a2a;
+$color-info: #1400c8;
 
 // idk this is broken
 body,
@@ -38,4 +39,16 @@ html {
 
 .bg-accent-2 {
     background-color: $color-accent-2;
+}
+
+.bg-color-success {
+    background-color: $color-success;
+}
+
+.bg-color-danger {
+    background-color: $color-danger;
+}
+
+.bg-color-info {
+    background-color: $color-info;
 }

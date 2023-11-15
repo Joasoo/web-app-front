@@ -1,19 +1,13 @@
 import './button.scss'
 
 type BaseButtonProps = {
-    className: string,
-    value: string,
-    onClick: () => void,
-
+    className: string
+    value: string
+    onClick: () => void
 }
 
 export const BaseButton = (props: BaseButtonProps) => {
     return (
-        <input
-            className={'p-2 btn ' + props.className}
-            value={props.value}
-            type={"button"}
-            onClick={props.onClick}
-        />
+        <input className={'p-2 btn ' + props.className} value={props.value} type={'button'} onClick={props.onClick} />
     )
 }

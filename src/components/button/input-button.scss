@@ -1,0 +1,25 @@
+@use '../../App';
+@use 'sass:color';
+
+@mixin button-background($color) {
+    background-color: $color;
+}
+
+$buttons: (
+    danger: App.$color-danger,
+    success: App.$color-success,
+    default: App.$color-accent-2,
+    info: App.$color-info,
+);
+
+@each $button, $color in $buttons {
+    .button-#{$button} {
+        transition: 0.2s;
+        @include button-background($color);
+    }
+
+    .button-#{$button}:hover {
+        transition: 0.2s;
+        @include button-background(color.change($color: $color, $alpha: 0.8));
+    }
+}

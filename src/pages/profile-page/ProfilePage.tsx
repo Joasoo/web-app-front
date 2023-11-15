@@ -2,19 +2,20 @@ import { ReactNode, useEffect, useState } from 'react'
 import { useLoaderData, useNavigate } from 'react-router-dom'
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 import '../../App.scss'
+import { InputButton } from '../../components/button/InputButton'
 import { Loader } from '../../components/loader/Loader'
 import { useFetch } from '../../hooks/useFetch'
 import { ProfilePageLoader } from '../../index'
+import { FriendListModel } from '../../model/friend-list.model'
 import { ProfileDataModel } from '../../model/profile-data.model'
 import { StorageUtil } from '../../util/BrowerStorageUtil'
-import { PATH_FRIEND_STATUS, PATH_POST_PERSON, PATH_PROFILE } from '../../util/RequestConstants'
+import { PATH_FRIEND_STATUS, PATH_PROFILE } from '../../util/RequestConstants'
 import { ROUTE_PROFILE_EDIT } from '../../util/RouteConstants'
 import { FriendsTab } from '../profile-page-tabs/friends-tab/FriendsTab'
+import { PostsTab } from '../profile-page-tabs/posts-tab/PostsTab'
 import { DynamicFriendButton } from './dynamic-button/DynamicFriendButton'
 import { InformationAndBio } from './InformationAndBio'
-import './personal-profile-page.scss'
-import { FriendListModel } from '../../model/friend-list.model'
-import { PostsTab } from '../profile-page-tabs/posts-tab/PostsTab'
+import './profile-page.scss'
 
 type ProfilePageProps = {
     className?: string
@@ -90,10 +91,9 @@ export const ProfilePage = (props: ProfilePageProps) => {
 
                 <div className={'d-flex justify-content-end'}>
                     {isOwner ? (
-                        <input
-                            className={'btn btn-primary align-self-end'}
-                            type={'button'}
-                            value={'Edit Profile'}
+                        <InputButton
+                            type={'info'}
+                            label={'Edit Profile'}
                             onClick={() => navigate(ROUTE_PROFILE_EDIT)}
                         />
                     ) : (
