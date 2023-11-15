@@ -108,7 +108,6 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
 
     function handleRegistration() {
         setLoading(true)
-        console.log(toISOString(dateOfBirth))
         if (handleValidation()) {
             /*todo Perform request.*/
             postJson<RegistrationModel, void>(PATH_AUTH_REGISTER, getModel())
@@ -118,7 +117,6 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
                 .catch((err) => {
                     console.log(err)
                 })
-            console.log(getModel())
         }
         setLoading(false)
     }
@@ -240,7 +238,6 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
                                         value={relationship}
                                         setValue={(value) => {
                                             setRelationship(value)
-                                            console.log(value)
                                         }}
                                         formatLabel={(value) => value.value}
                                     />

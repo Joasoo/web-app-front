@@ -3,8 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import { Loader } from '../../components/loader/Loader'
 import { useFetch } from '../../hooks/useFetch'
 import { EditDataModel } from '../../model/edit-data.model'
+import { StatusCodeModel } from '../../model/status-code.model'
 import { StorageUtil } from '../../util/BrowerStorageUtil'
-import { PATH_PROFILE_EDIT, PATH_PROFILE_EDIT_SAVE } from '../../util/RequestConstants'
+import {
+    PATH_PROFILE_EDIT,
+    PATH_PROFILE_EDIT_SAVE,
+    PATH_PROFILE_RELATIONSHIP_STATUS,
+} from '../../util/RequestConstants'
 import { ROUTE_PROFILE } from '../../util/RouteConstants'
 import './edit-page.scss'
 import { EditPageRow } from './EditPageRow'
@@ -23,10 +28,11 @@ export const EditPage = (props: EditPageProps) => {
     const [residence, setResidence] = useState<string>('')
     const [hometown, setHometown] = useState<string>('')
     const [workplace, setWorkplace] = useState<string>('')
-    const [relationshipStatus, setRelationshipStatus] = useState<string>('')
+    const [relationshipStatus, setRelationshipStatus] = useState<StatusCodeModel>()
     const [dateOfBirth, setDateOfBirth] = useState<string>('')
     const [profileBio, setProfileBio] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(false)
+    const [relStatusOptions, setRelStatusOptions] = useState<StatusCodeModel[]>([])
     let [editData, setEditData] = useState<EditDataModel>()
     const navigate = useNavigate()
     const profileId = StorageUtil.get<string>('SESSION', 'personId')
@@ -38,25 +44,30 @@ export const EditPage = (props: EditPageProps) => {
     function getOriginalData() {
         setLoading(true)
         if (profileId) {
-            getJson<EditDataModel>(PATH_PROFILE_EDIT + `/${profileId}`).then((res) => {
-                setEditData(res)
-                setFirstName(res.firstName)
-                setLastName(res.lastName)
-                setEmail(res.email)
-                setResidence(res.residence)
-                setHometown(res.hometown)
-                setWorkplace(res.workplace)
-                setRelationshipStatus(res.relationShipStatus)
-                setDateOfBirth(res.dateOfBirth)
-                setProfileBio(res.profileBio)
+            const mainDataPromise = getJson<EditDataModel>(PATH_PROFILE_EDIT + `/${profileId}`)
+            const relOptionsPromise = getJson<StatusCodeModel[]>(PATH_PROFILE_RELATIONSHIP_STATUS)
+            Promise.all([relOptionsPromise, mainDataPromise]).then((res) => {
+                setEditData(res[1])
+                setFirstName(res[1].firstName)
+                setLastName(res[1].lastName)
+                setEmail(res[1].email)
+                setResidence(res[1].residence)
+                setHometown(res[1].hometown)
+                setWorkplace(res[1].workplace)
+                console.log(res[1].relationshipStatus)
+                setRelationshipStatus(res[1].relationshipStatus)
+                setDateOfBirth(res[1].dateOfBirth)
+                setProfileBio(res[1].profileBio)
+                setRelStatusOptions(res[0])
                 setLoading(false)
             })
+        } else {
+            throw new Error('ERR: profileId is missing.')
         }
     }
 
     function saveChanges() {
         if (profileId) {
-            console.log('person with id: ' + profileId + ' is editing info...')
             let newEditDataModel = new EditDataModel(
                 profileId,
                 firstName,
@@ -104,7 +115,7 @@ export const EditPage = (props: EditPageProps) => {
                         <input
                             className={'btn btn-primary mx-auto w-50'}
                             type={'button'}
-                            value={'Edit Background Photo'}
+                            value={'Edit Profile Banner'}
                         />
                     </div>
                 </div>
@@ -121,18 +132,8 @@ export const EditPage = (props: EditPageProps) => {
                     <div className={'col d-flex flex-column'}></div>
                 </div>
             </div>
-            <div className={'container w-75'}>
-                {' '}
-                {/*alumine konteiner infoväljade jaoks*/}
-                <div className={'row'}>
-                    <div className={'col-2'}></div>
-                    <div className={'col-5'}></div>
-                    <div className={'col-2'}>
-                        <p className={'text-center fw-bold'}>Privacy level</p>
-                    </div>
-                    <div className={'col-2'}></div>
-                    <hr />
-                </div>
+            <div className={'w-75 w-md-100 mx-auto'}>
+                <hr />
                 <EditPageRow
                     label={'First Name:'}
                     value={firstName}
@@ -151,131 +152,47 @@ export const EditPage = (props: EditPageProps) => {
                     setValue={setDateOfBirth}
                     defaultValue={editData?.dateOfBirth}
                 />
-                <div className={'row'}>
-                    <div className={'col-2'}>
-                        <p className={'text-start fw-bold'}>E-Mail:</p>
-                    </div>
-                    <div className={'col-5'}>
-                        <input
-                            type={'text'}
-                            className={'w-100 rounded text-center'}
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </div>
-
-                    <div className={'col-2'}>
-                        <input
-                            className={'reset-btn btn btn-secondary'}
-                            value={'Reset'}
-                            type={'button'}
-                            onClick={() => setEmail(editData?.email ?? '')}
-                        />
-                    </div>
-                </div>
-                <div className={'row'}>
-                    <div className={'col-2'}>
-                        <p className={'text-start fw-bold'}>Residence:</p>
-                    </div>
-                    <div className={'col-5'}>
-                        <input
-                            type={'text'}
-                            className={'w-100 rounded text-center'}
-                            value={residence}
-                            onChange={(e) => setResidence(e.target.value)}
-                        />
-                    </div>
-
-                    <div className={'col-2'}>
-                        <input
-                            className={'reset-btn btn btn-secondary'}
-                            value={'Reset'}
-                            type={'button'}
-                            onClick={() => setResidence(editData?.residence ?? '')}
-                        />
-                    </div>
-                </div>
-                <div className={'row'}>
-                    <div className={'col-2'}>
-                        <p className={'text-start fw-bold'}>Hometown:</p>
-                    </div>
-                    <div className={'col-5'}>
-                        <input
-                            type={'text'}
-                            className={'w-100 rounded text-center'}
-                            value={hometown}
-                            onChange={(e) => setHometown(e.target.value)}
-                        />
-                    </div>
-
-                    <div className={'col-2'}>
-                        <input
-                            className={'reset-btn btn btn-secondary'}
-                            value={'Reset'}
-                            type={'button'}
-                            onClick={() => setHometown(editData?.hometown ?? '')}
-                        />
-                    </div>
-                </div>
-                <div className={'row'}>
-                    <div className={'col-2'}>
-                        <p className={'text-start fw-bold'}>Workplace:</p>
-                    </div>
-                    <div className={'col-5'}>
-                        <input
-                            type={'text'}
-                            className={'w-100 rounded text-center'}
-                            value={workplace}
-                            onChange={(e) => setWorkplace(e.target.value)}
-                        />
-                    </div>
-
-                    <div className={'col-2'}>
-                        <input
-                            className={'reset-btn btn btn-secondary'}
-                            value={'Reset'}
-                            type={'button'}
-                            onClick={() => setWorkplace(editData?.workplace ?? '')}
-                        />
-                    </div>
-                </div>
-                <div className={'row'}>
-                    <div className={'col-2'}>
-                        <p className={'text-start fw-bold'}>Marital Status:</p>
-                    </div>
-                    <div className={'col-5'}>
-                        <input type={'text'} className={'w-100 rounded text-center'} value={''} />
-                    </div>
-
-                    <div className={'col-2'}>
-                        <input
-                            className={'reset-btn btn btn-secondary'}
-                            value={'Reset'}
-                            type={'button'}
-                            onClick={() => setRelationshipStatus('')}
-                        />
-                    </div>
-                </div>
-                <div className={'row'}>
-                    <div className={'col-2'} />
-                    <div className={'col-5'} />
-                    <div className={'col-2'}>
-                        <input
-                            className={'btn btn-success px-4'}
-                            value={'Save'}
-                            type={'button'}
-                            onClick={saveChanges}
-                        />
-                    </div>
-                    <div className={'col-2'}>
-                        <input
-                            className={'btn btn-secondary px-3'}
-                            value={'Back'}
-                            type={'button'}
-                            onClick={() => navigate(ROUTE_PROFILE + '/' + profileId)}
-                        />
-                    </div>
-                </div>
+                <EditPageRow label={'E-mail:'} value={email} setValue={setEmail} defaultValue={editData?.email} />
+                <EditPageRow
+                    label={'Residence:'}
+                    value={residence}
+                    setValue={setResidence}
+                    defaultValue={editData?.residence}
+                />
+                <EditPageRow
+                    label={'Hometown:'}
+                    value={hometown}
+                    setValue={setHometown}
+                    defaultValue={editData?.hometown}
+                />
+                <EditPageRow
+                    label={'Workplace:'}
+                    value={workplace}
+                    setValue={setWorkplace}
+                    defaultValue={editData?.workplace}
+                />
+                <EditPageRow
+                    label={'Relationship status:'}
+                    type={'dropdown'}
+                    options={relStatusOptions}
+                    value={relationshipStatus}
+                    setValue={setRelationshipStatus}
+                    defaultValue={editData?.relationshipStatus}
+                />
+            </div>
+            <div className={'d-flex flex-row gap-3 justify-content-end w-75 m-3'}>
+                <input
+                    className={'btn bg-color-success color-text-1 px-4'}
+                    value={'Save'}
+                    type={'button'}
+                    onClick={saveChanges}
+                />
+                <input
+                    className={'btn bg-accent-2 color-text-1 px-3'}
+                    value={'Back'}
+                    type={'button'}
+                    onClick={() => navigate(ROUTE_PROFILE + '/' + profileId)}
+                />
             </div>
         </div>
     )

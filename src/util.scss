@@ -20,6 +20,10 @@
     cursor: not-allowed;
 }
 
+.cursor-pointer:hover {
+    cursor: pointer;
+}
+
 .w-30 {
     width: 30%;
 }

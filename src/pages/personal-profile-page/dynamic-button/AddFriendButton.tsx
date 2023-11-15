@@ -38,8 +38,6 @@ export const AddFriendButton = (props: DynamicSubButtonProps) => {
 
     function addFriend() {
         const friendRequest = new FriendRequestModel(String(props.personId), String(props.friendId))
-        console.log('Person id: ' + props.personId)
-        console.log('Friend id: ' + props.friendId)
         postJson(PATH_FRIEND_ADD, friendRequest).then(() => {
             props.onClick()
         })

@@ -42,7 +42,6 @@ export const PersonalProfilePage = (props: ProfilePageProps) => {
 
     useEffect(() => {
         if (isOwner) {
-            console.log(token)
             const getProfileData = getJson<ProfileDataModel>(PATH_PROFILE + `/${profileId}`, undefined, token)
             const getPosts = getJson<PostModel[]>(PATH_POST_PERSON + `/${profileId}`, undefined, token)
             Promise.all([getProfileData, getPosts]).then((res) => {

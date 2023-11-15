@@ -1,3 +1,5 @@
+import { StatusCodeModel } from './status-code.model'
+
 export class EditDataModel {
     constructor(
         public id: string,
@@ -8,7 +10,7 @@ export class EditDataModel {
         public residence: string,
         public hometown: string,
         public workplace: string,
-        public relationShipStatus: string,
+        public relationshipStatus: StatusCodeModel | undefined,
         public profileBio: string
     ) {}
 }
