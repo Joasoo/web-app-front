@@ -51,7 +51,6 @@ export const ProfilePage = (props: ProfilePageProps) => {
 
     useEffect(() => {
         if (isOwner) {
-            console.log(token)
             requestProfileData().then((res) => {
                 setProfileData(res)
                 setLoading(false)

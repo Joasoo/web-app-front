@@ -1,4 +1,5 @@
 import { useFetch } from '../../../hooks/useFetch'
+import { StorageUtil } from '../../../util/BrowerStorageUtil'
 import { FriendshipStatus } from '../../../util/enum/FriendshipStatus'
 import { PATH_FRIEND_REMOVE } from '../../../util/RequestConstants'
 import { BaseButton } from './BaseButton'
@@ -40,13 +41,14 @@ function getStyling(friendshipStatus: keyof typeof FriendshipStatus | undefined)
 
 export const RemoveFriendButton = (props: DynamicSubButtonProps) => {
     const { deleteJson } = useFetch()
+    const token = StorageUtil.get<string>('SESSION', 'token')
 
     function removeFriend() {
         let params = {
             personId: props.personId,
             friendId: props.friendId,
         }
-        deleteJson(PATH_FRIEND_REMOVE, params).then(() => {
+        deleteJson(PATH_FRIEND_REMOVE, params, token).then(() => {
             props.onClick()
         })
     }

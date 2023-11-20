@@ -3,6 +3,7 @@ import { InputButton } from '../../components/button/InputButton'
 import { useErrorHandler } from '../../hooks/useErrorHandler'
 import { useFetch } from '../../hooks/useFetch'
 import { AddPostModel } from '../../model/add-post.model'
+import { StorageUtil } from '../../util/BrowerStorageUtil'
 import { PATH_POST_ADD } from '../../util/RequestConstants'
 
 type NewPostSectionProps = {
@@ -15,12 +16,13 @@ export const CreatePostSection = (props: NewPostSectionProps) => {
     const { handleError } = useErrorHandler()
     const { postJson } = useFetch()
     const maxPostSize = 1000
+    const token = StorageUtil.get<string>('SESSION', 'token')
 
     function makePost() {
         if (newPostText && props.profileId) {
             setNewPostText('')
             let newModel = new AddPostModel(String(props.profileId), newPostText)
-            postJson(PATH_POST_ADD, newModel)
+            postJson(PATH_POST_ADD, newModel, token)
                 .then(() => {
                     props.onCreate?.()
                 })

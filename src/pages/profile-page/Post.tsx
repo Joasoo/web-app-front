@@ -3,6 +3,7 @@ import { InputButton } from '../../components/button/InputButton'
 import { useErrorHandler } from '../../hooks/useErrorHandler'
 import { useFetch } from '../../hooks/useFetch'
 import { PersonFullNameModel } from '../../model/person-full-name-model'
+import { StorageUtil } from '../../util/BrowerStorageUtil'
 import { PATH_POST_DELETE } from '../../util/RequestConstants'
 import { ROUTE_PROFILE } from '../../util/RouteConstants'
 import './post.scss'
@@ -21,10 +22,11 @@ type PostProps = {
 export const Post = (props: PostProps) => {
     const { deleteJson } = useFetch()
     const { handleError } = useErrorHandler()
+    const token = StorageUtil.get<string>('SESSION', 'token')
 
     function deletePost(id: string) {
         if (props.isOwner) {
-            deleteJson(PATH_POST_DELETE + `/${id}`)
+            deleteJson(PATH_POST_DELETE + `/${id}`, undefined, token)
                 .then(() => {
                     props.onClickDelete?.()
                 })
