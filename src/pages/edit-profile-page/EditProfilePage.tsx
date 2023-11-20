@@ -34,6 +34,7 @@ export const EditProfilePage = () => {
     let [editData, setEditData] = useState<EditDataModel>()
     const navigate = useNavigate()
     const profileId = StorageUtil.get<string>('SESSION', 'personId')
+    const token = StorageUtil.get<string>('SESSION', 'token')
 
     useEffect(() => {
         getOriginalData()
@@ -42,8 +43,8 @@ export const EditProfilePage = () => {
     function getOriginalData() {
         setLoading(true)
         if (profileId) {
-            const mainDataPromise = getJson<EditDataModel>(PATH_PROFILE_EDIT + `/${profileId}`)
-            const relOptionsPromise = getJson<StatusCodeModel[]>(PATH_PROFILE_RELATIONSHIP_STATUS)
+            const mainDataPromise = getJson<EditDataModel>(PATH_PROFILE_EDIT + `/${profileId}`, undefined, token)
+            const relOptionsPromise = getJson<StatusCodeModel[]>(PATH_PROFILE_RELATIONSHIP_STATUS, undefined, token)
             Promise.all([relOptionsPromise, mainDataPromise]).then((res) => {
                 setEditData(res[1])
                 setFirstName(res[1].firstName)
