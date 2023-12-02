@@ -4,6 +4,7 @@ import { FriendshipStatus } from '../../../util/enum/FriendshipStatus'
 import { PATH_FRIEND_ADD } from '../../../util/RequestConstants'
 import { BaseButton } from './BaseButton'
 import { DynamicSubButtonProps } from './DynamicFriendButton'
+import { StorageUtil } from '../../../util/BrowerStorageUtil'
 
 function getValue(friendshipStatus: keyof typeof FriendshipStatus | undefined) {
     switch (friendshipStatus) {
@@ -35,10 +36,11 @@ function getStyling(friendshipStatus: keyof typeof FriendshipStatus | undefined)
 
 export const AddFriendButton = (props: DynamicSubButtonProps) => {
     const { postJson } = useFetch()
+    const token = StorageUtil.get<string>('SESSION', 'token')
 
     function addFriend() {
         const friendRequest = new FriendRequestModel(String(props.personId), String(props.friendId))
-        postJson(PATH_FRIEND_ADD, friendRequest).then(() => {
+        postJson(PATH_FRIEND_ADD, friendRequest, token).then(() => {
             props.onClick()
         })
     }
