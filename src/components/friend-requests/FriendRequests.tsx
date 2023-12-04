@@ -17,17 +17,21 @@ const _default = {
 
 export const FriendRequests = (props: FriendRequestsProps) => {
     const [pendingRequests, setPendingRequests] = useState<FriendListModel[]>([])
-    const [open, setOpen] = useState<boolean>(true)
+    const [open, setOpen] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
     const pendingCountString = pendingRequests.length > 9 ? '9+' : pendingRequests.length
     const token = StorageUtil.get<string>('SESSION', 'token')
     const personId = StorageUtil.get<number>('SESSION', 'personId')
     const { getJson } = useFetch()
     const { handleError } = useErrorHandler()
+    const [timer, setTimer] = useState<any>(() => {
+        return setInterval(() => getReceivedRequests(true), 10_000)
+    })
 
-    useEffect(() => {
-        if (!open) return
-        setLoading(true)
+    const getReceivedRequests = (noLoad?: boolean) => {
+        if (!noLoad) {
+            setLoading(true)
+        }
         console.log(token)
         getJson<FriendListModel[]>(PATH_FRIEND_REQUESTS_RECEIVED + `/${personId}`, undefined, token)
             .then((res) => {
@@ -38,7 +42,15 @@ export const FriendRequests = (props: FriendRequestsProps) => {
                 handleError(err)
                 setLoading(false)
             })
-    }, [open])
+    }
+
+    useEffect(() => {
+        getReceivedRequests()
+
+        return () => {
+            clearInterval(timer)
+        }
+    }, [])
 
     return (
         <div className={'position-relative'}>
@@ -48,7 +60,7 @@ export const FriendRequests = (props: FriendRequestsProps) => {
                 onClick={() => setOpen(!open)}
             />
             {pendingRequests.length > 0 ? <div className={'pending-counter'}>{pendingCountString}</div> : ''}
-            {open && <RequestsPopUp loading={loading} />}
+            {open && <RequestsPopUp loading={loading} requests={pendingRequests} onClick={getReceivedRequests} />}
         </div>
     )
 }

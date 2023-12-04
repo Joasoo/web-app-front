@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { FullNameModel } from '../model/full-name.model'
 import { StatusCodeModel } from '../model/status-code.model'
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
@@ -30,4 +31,9 @@ export function formatStatusCodeString(value?: StatusCodeModel, withCode?: boole
 
 export function isActualNumber(value: any): boolean {
     return /^\d+$/.test(value)
+}
+
+export function formatFullName(model: FullNameModel | undefined): string {
+    if (!model) return ''
+    return `${model?.firstName ?? '-'} ${model?.lastName ?? '-'}`
 }

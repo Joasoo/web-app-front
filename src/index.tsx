@@ -53,7 +53,7 @@ const router = createBrowserRouter([
     },
     {
         element: (
-            <Layout withFooter>
+            <Layout withFooter withHeader>
                 <ProfilePage />
             </Layout>
         ),
@@ -68,7 +68,7 @@ const router = createBrowserRouter([
     },
     {
         element: (
-            <Layout withFooter withHeader>
+            <Layout withFooter>
                 <EditProfilePage />
             </Layout>
         ),
