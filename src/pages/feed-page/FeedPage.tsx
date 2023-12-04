@@ -15,7 +15,7 @@ export const FeedPage = () => {
     const [postList, setPostList] = useState<PostModel[]>([])
     const [loading, setLoading] = useState<boolean>(false)
     const [pageNumber, setPageNumber] = useState(0)
-    const [more, setMore] = useState(false)
+    const [more, setMore] = useState(true)
     const sessionId = StorageUtil.get<number>('SESSION', 'personId') as number
     const token = StorageUtil.get<string>('SESSION', 'token')
     const limit = 10
