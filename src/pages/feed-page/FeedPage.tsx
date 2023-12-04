@@ -7,17 +7,18 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { PATH_POST_FEED } from '../../util/RequestConstants'
 import { Post } from '../profile-page/Post'
 import { formatDateString } from '../../util/StringUtil'
+import './feed-page.scss'
 
 
 export const FeedPage = () => {
+    const { getJson } = useFetch()
     const [postList, setPostList] = useState<PostModel[]>([])
     const [loading, setLoading] = useState<boolean>(false)
-    const { getJson } = useFetch()
+    const [pageNumber, setPageNumber] = useState(0)
+    const [more, setMore] = useState(false)
     const sessionId = StorageUtil.get<number>('SESSION', 'personId') as number
     const token = StorageUtil.get<string>('SESSION', 'token')
     const limit = 10
-    let page: number = 0
-    let more: boolean = true
 
     useEffect(() => {
         setLoading(true)
@@ -26,20 +27,14 @@ export const FeedPage = () => {
     }, [])
 
     function getNextPosts() {
-        if (more) {
-            var initialLength = postList.length
-            getJson<PostModel[]>(PATH_POST_FEED + `/${sessionId}`, { page, limit }, token)
-                .then((res) => {
-                    // TODO: wtf is going on here
-                    console.log('Has more: ' + more)
-                    more = initialLength < postList.length
-                    console.log('New Has more: ' + more)
-                    console.log('Page: ' + page)
-                    page++
-                    console.log('New page: ' + page)
-                    setPostList(postList.concat(res))
-                })
-        }
+        const initialLength = postList.length
+        getJson<PostModel[]>(PATH_POST_FEED + `/${sessionId}`, { pageNumber, limit }, token)
+            .then((res) => {
+                var updatedPosts = postList.concat(res)
+                setPostList(updatedPosts)
+                setMore(initialLength < updatedPosts.length)
+                setPageNumber(pageNumber + 1)
+            })
     }
 
     if (loading) {
@@ -47,9 +42,9 @@ export const FeedPage = () => {
     }
 
     return (
-        <div className={'d-flex flex-column align-items-center mt-4 mx-5 px-2'}>
-            <h2>Feed</h2>
-
+        <div className={'outer-box'}>
+            <h2 className={"align-self-center"}>Feed</h2>
+            <hr/>
             <InfiniteScroll
                 next={getNextPosts}
                 hasMore={more}
@@ -57,7 +52,7 @@ export const FeedPage = () => {
                 dataLength={postList.length}
                 endMessage={
                     <p style={{ textAlign: 'center' }}>
-                        <b>There are no more posts!</b>
+                        <b>There are no more posts</b>
                     </p>
                 }
             >
