@@ -20,5 +20,6 @@ export const PATH_FRIEND_ADD = PATH_FRIEND
 export const PATH_FRIEND_REMOVE = PATH_FRIEND
 export const PATH_FRIEND_ALL = PATH_FRIEND + '/all'
 
+export const PATH_QUOTE = '/api/quote'
 export const PATH_FRIEND_REQUESTS = PATH_FRIEND + '/requests'
 export const PATH_FRIEND_REQUESTS_RECEIVED = PATH_FRIEND_REQUESTS + '/received'

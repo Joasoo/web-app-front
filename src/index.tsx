@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './index.scss'
-import { LoginPage } from './pages/LoginPage'
+import { LoginPage } from './pages/login-page/LoginPage'
 import reportWebVitals from './reportWebVitals'
 import {
     ROUTE_FEED,
