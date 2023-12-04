@@ -79,7 +79,7 @@ export const EditProfilePage = () => {
                 relationshipStatus,
                 profileBio
             )
-            postJson(PATH_PROFILE_EDIT_SAVE, newEditDataModel)
+            postJson(PATH_PROFILE_EDIT_SAVE, newEditDataModel, token)
                 .then(() => {
                     navigate(ROUTE_PROFILE + `/${profileId}`)
                 })
@@ -166,18 +166,12 @@ export const EditProfilePage = () => {
                     defaultValue={editData?.relationshipStatus}
                 />
             </div>
-            <div className={'d-flex flex-row gap-3 justify-content-end w-75 m-3'}>
-                <input
-                    className={'btn bg-color-success color-text-1 px-4'}
-                    value={'Save'}
-                    type={'button'}
-                    onClick={saveChanges}
-                />
-                <input
-                    className={'btn bg-accent-2 color-text-1 px-3'}
-                    value={'Back'}
-                    type={'button'}
+            <div className={'d-flex flex-row gap-3 justify-content-end m-3'}>
+                <InputButton label={'Save'} onClick={saveChanges} type={'success'} className={'px-4'} />
+                <InputButton
+                    label={'Back'}
                     onClick={() => navigate(ROUTE_PROFILE + '/' + profileId)}
+                    className={'px-4'}
                 />
             </div>
         </div>

@@ -3,12 +3,20 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './index.scss'
 import { LoginPage } from './pages/LoginPage'
 import reportWebVitals from './reportWebVitals'
-import { ROUTE_LOGIN, ROUTE_PROFILE, ROUTE_PROFILE_EDIT, ROUTE_REGISTER, ROUTE_ROOT } from './util/RouteConstants'
+import {
+    ROUTE_FEED,
+    ROUTE_LOGIN,
+    ROUTE_PROFILE,
+    ROUTE_PROFILE_EDIT,
+    ROUTE_REGISTER,
+    ROUTE_ROOT,
+} from './util/RouteConstants'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import { ErrorOverlay } from './components/error/ErrorOverlay'
 import Layout from './components/layout/Layout'
 import { EditProfilePage } from './pages/edit-profile-page/EditProfilePage'
+import { FeedPage } from './pages/feed-page/FeedPage'
 import { ProfilePage } from './pages/profile-page/ProfilePage'
 import { RegistrationPage } from './pages/registration-page/RegistrationPage'
 import { RootPage } from './pages/RootPage'
@@ -65,6 +73,10 @@ const router = createBrowserRouter([
             </Layout>
         ),
         path: ROUTE_PROFILE_EDIT,
+    },
+    {
+        element: <FeedPage />,
+        path: ROUTE_FEED,
     },
 ])
 
