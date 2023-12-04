@@ -6,10 +6,11 @@ import { Loader } from '../components/loader/Loader'
 import { useErrorHandler } from '../hooks/useErrorHandler'
 import { useFetch } from '../hooks/useFetch'
 import { ErrorModel } from '../model/error.model'
+import { FullNameModel } from '../model/full-name.model'
 import { LoginModel } from '../model/login.model'
 import { TokenModel } from '../model/token.model'
 import { StorageUtil } from '../util/BrowerStorageUtil'
-import { PATH_AUTH_LOGIN } from '../util/RequestConstants'
+import { PATH_AUTH_LOGIN, PATH_PROFILE_NAME } from '../util/RequestConstants'
 import { ROUTE_PROFILE, ROUTE_REGISTER } from '../util/RouteConstants'
 
 type LoginPageProps = {
@@ -37,7 +38,7 @@ export const LoginPage = (props: LoginPageProps) => {
     const [password, setPassword] = useState<string>()
     const [emailSubtext, setEmailSubtext] = useState<SubtextType>()
     const [passwordSubtext, setPasswordSubtext] = useState<SubtextType>()
-    const { postJson } = useFetch()
+    const { postJson, getJson } = useFetch()
     const { handleError } = useErrorHandler()
 
     function handleValidation(): boolean {
@@ -63,12 +64,20 @@ export const LoginPage = (props: LoginPageProps) => {
                 password: password as string,
             })
                 .then((res) => {
-                    StorageUtil.put('SESSION', 'token', res.token)
-                    StorageUtil.put('SESSION', 'personId', res.id)
-                    navigate(ROUTE_PROFILE + '/' + res.id)
+                    const personId = res.id
+                    const token = res.token
+                    StorageUtil.put('SESSION', 'token', token)
+                    StorageUtil.put('SESSION', 'personId', personId)
+
+                    getJson<FullNameModel>(PATH_PROFILE_NAME + `/${personId}`, undefined, token)
+                        .then((res) => {
+                            const fullName = `${res?.firstName} ${res?.lastName}`
+                            StorageUtil.put<string>('SESSION', 'personName', fullName)
+                            navigate(ROUTE_PROFILE + '/' + personId)
+                        })
+                        .catch((err) => handleError(err))
                 })
                 .catch((err) => {
-                    // setErr(err)
                     handleError(err)
                 })
         }
