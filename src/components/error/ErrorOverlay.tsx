@@ -8,6 +8,7 @@ export type ErrorOverlayProps = {
     children?: ReactNode
 }
 
+const GENERIC_RESPONSE = 'An error has occurred.'
 export const ErrorContext = createContext<(err: ErrorModel) => void>(() => {})
 export const ErrorOverlay = (props: ErrorOverlayProps) => {
     const { errors, removeError, handleError } = useErrorManager()
@@ -20,7 +21,7 @@ export const ErrorOverlay = (props: ErrorOverlayProps) => {
                         <ErrorComponent
                             onClose={() => removeError(index)}
                             key={index}
-                            label={err.cause ?? 'N/A'}
+                            label={err.cause ?? GENERIC_RESPONSE}
                             timestamp={err.timestamp ?? ''}
                         />
                     )

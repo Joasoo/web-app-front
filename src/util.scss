@@ -24,6 +24,10 @@
     cursor: pointer;
 }
 
+.w-1 {
+    width: 1%;
+}
+
 /* Generates width classes from w-5 to w-100 in 5 percent increments. {e.g. w-5, w-10, w-15 etc.} */
 @for $i from 1 through 20 {
     $v: $i * 5;

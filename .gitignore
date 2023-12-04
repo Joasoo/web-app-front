@@ -24,3 +24,6 @@ yarn-error.log*
 /.idea/
 
 docker-compose.yml
+
+# Proxy configuration
+/src/setupProxy.js

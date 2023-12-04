@@ -4,22 +4,22 @@ stages:
 
 variables:
     # gitlab-runner's root directory.
-    SERVER_PATH: "/opt/server"
-    REPO_PATH: "dranlor/web-project:front"
+    SERVER_PATH: '/opt/server'
+    REPO_PATH: 'dranlor/web-project:front'
 
 build:
     stage: build
     only:
-        refs:  # Milliste branchida peal runida
+        refs: # Milliste branchida peal runida
             - develop
-    tags:  # Mis tagi kasutad gitlab runneris (?) | -tag imine docker pushiga (?)
+    tags: # Mis tagi kasutad gitlab runneris (?) | -tag imine docker pushiga (?)
         - main
     script:
         - echo "Running build script.."
         - chmod -R g+x $SERVER_PATH
         - docker build -t $REPO_PATH .
         - docker push $REPO_PATH
-    
+
 deploy:
     stage: deploy
     only:

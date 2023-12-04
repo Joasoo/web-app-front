@@ -7,11 +7,11 @@ import { useErrorHandler } from '../../hooks/useErrorHandler'
 import { useFetch } from '../../hooks/useFetch'
 import { ErrorModel } from '../../model/error.model'
 import { LoginModel } from '../../model/login.model'
+import { QuoteModel } from '../../model/quote.model'
 import { TokenModel } from '../../model/token.model'
 import { StorageUtil } from '../../util/BrowerStorageUtil'
 import { PATH_AUTH_LOGIN, PATH_QUOTE } from '../../util/RequestConstants'
 import { ROUTE_PROFILE, ROUTE_REGISTER } from '../../util/RouteConstants'
-import { QuoteModel } from '../../model/quote.model'
 import './login-page.scss'
 
 type LoginPageProps = {
@@ -125,20 +125,25 @@ export const LoginPage = (props: LoginPageProps) => {
                             type={'password'}
                             subtext={passwordSubtext}
                         />
-                        <input className={'px-4 btn btn-primary'} type={'button'} value={'Log in'}
-                               onClick={handleLogin} />
+                        <input
+                            className={'px-4 btn btn-primary'}
+                            type={'button'}
+                            value={'Log in'}
+                            onClick={handleLogin}
+                        />
                     </div>
                     <small className={'d-block text-center'}>
                         Don't have an account yet? <Link to={ROUTE_REGISTER}>Create an account</Link>
                     </small>
                 </div>
             </Card>
-            { quote ?
+            {quote ? (
                 <p className={'quote'}>
                     &ldquo;{quote.q}&rdquo; &mdash; {quote.a}
                 </p>
-                : ''
-            }
+            ) : (
+                ''
+            )}
         </>
     )
 }

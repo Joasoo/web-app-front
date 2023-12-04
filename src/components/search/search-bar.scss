@@ -1,0 +1,10 @@
+@use '../../App';
+
+.search-input {
+    width: 30em;
+}
+
+.separator {
+    border-left: 1px solid App.$color-accent-1;
+    padding-left: 0.5em;
+}

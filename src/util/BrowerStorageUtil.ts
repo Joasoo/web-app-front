@@ -78,6 +78,20 @@ export class StorageUtil {
         }
     }
 
+    /** Clear the given session storage. */
+    static clear(storage: StorageType) {
+        switch (storage) {
+            case 'SESSION': {
+                sessionStorage.clear()
+                return
+            }
+            case 'LOCAL': {
+                localStorage.clear()
+                return
+            }
+        }
+    }
+
     private static serializeObject<T>(obj: StorageInsertion<T>): string {
         if (!obj) return ''
         if (typeof obj === 'object') return JSON.stringify(obj)

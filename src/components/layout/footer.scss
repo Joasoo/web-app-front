@@ -1,0 +1,13 @@
+@use '../../App';
+
+.custom-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 8fr 8fr 9fr 8fr;
+    align-items: center;
+    padding: 1.5em;
+    height: App.$footer-size;
+}

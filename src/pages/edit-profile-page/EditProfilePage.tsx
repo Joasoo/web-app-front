@@ -167,12 +167,7 @@ export const EditProfilePage = () => {
                 />
             </div>
             <div className={'d-flex flex-row gap-3 justify-content-end m-3'}>
-                <InputButton
-                    label={'Save'}
-                    onClick={saveChanges}
-                    type={'success'}
-                    className={'px-4'}
-                />
+                <InputButton label={'Save'} onClick={saveChanges} type={'success'} className={'px-4'} />
                 <InputButton
                     label={'Back'}
                     onClick={() => navigate(ROUTE_PROFILE + '/' + profileId)}

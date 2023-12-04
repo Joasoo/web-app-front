@@ -1,14 +1,13 @@
-import { useFetch } from '../../hooks/useFetch'
 import { useEffect, useState } from 'react'
+import InfiniteScroll from 'react-infinite-scroll-component'
+import { Loader } from '../../components/loader/Loader'
+import { useFetch } from '../../hooks/useFetch'
 import { PostModel } from '../../model/post.model'
 import { StorageUtil } from '../../util/BrowerStorageUtil'
-import { Loader } from '../../components/loader/Loader'
-import InfiniteScroll from 'react-infinite-scroll-component'
 import { PATH_POST_FEED } from '../../util/RequestConstants'
-import { Post } from '../profile-page/Post'
 import { formatDateString } from '../../util/StringUtil'
+import { Post } from '../profile-page/Post'
 import './feed-page.scss'
-
 
 export const FeedPage = () => {
     const { getJson } = useFetch()
@@ -28,13 +27,12 @@ export const FeedPage = () => {
 
     function getNextPosts() {
         const initialLength = postList.length
-        getJson<PostModel[]>(PATH_POST_FEED + `/${sessionId}`, { pageNumber, limit }, token)
-            .then((res) => {
-                var updatedPosts = postList.concat(res)
-                setPostList(updatedPosts)
-                setMore(initialLength < updatedPosts.length)
-                setPageNumber(pageNumber + 1)
-            })
+        getJson<PostModel[]>(PATH_POST_FEED + `/${sessionId}`, { pageNumber, limit }, token).then((res) => {
+            var updatedPosts = postList.concat(res)
+            setPostList(updatedPosts)
+            setMore(initialLength < updatedPosts.length)
+            setPageNumber(pageNumber + 1)
+        })
     }
 
     if (loading) {
@@ -43,8 +41,8 @@ export const FeedPage = () => {
 
     return (
         <div className={'outer-box'}>
-            <h2 className={"align-self-center"}>Feed</h2>
-            <hr/>
+            <h2 className={'align-self-center'}>Feed</h2>
+            <hr />
             <InfiniteScroll
                 next={getNextPosts}
                 hasMore={more}
@@ -59,17 +57,17 @@ export const FeedPage = () => {
                 <>
                     {Array.isArray(postList)
                         ? postList?.map((post) => {
-                            return (
-                                <Post
-                                    key={post.id}
-                                    id={post.id}
-                                    content={post.content}
-                                    author={post.author}
-                                    createdAt={formatDateString(post.createdAt)}
-                                    isOwner={false}
-                                />
-                            )
-                        })
+                              return (
+                                  <Post
+                                      key={post.id}
+                                      id={post.id}
+                                      content={post.content}
+                                      author={post.author}
+                                      createdAt={formatDateString(post.createdAt)}
+                                      isOwner={false}
+                                  />
+                              )
+                          })
                         : ''}
                 </>
             </InfiniteScroll>

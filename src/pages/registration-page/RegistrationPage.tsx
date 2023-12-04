@@ -111,7 +111,6 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
     function handleRegistration() {
         setLoading(true)
         if (handleValidation()) {
-            /*todo Perform request.*/
             postJson<RegistrationModel, void>(PATH_AUTH_REGISTER, getModel())
                 .then((res) => {
                     navigate(ROUTE_LOGIN)
@@ -140,8 +139,8 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
     const formClasses = 'col justify-content-between'
     const required = <b className={'text-danger me-1'}>*</b>
     return (
-        <div>
-            <div className={'flex-center flex-column w-60 mx-auto mt-5 p-3 border border-2 border-secondary rounded'}>
+        <div className={'pt-5'}>
+            <div className={'flex-center h-100 flex-column w-60 mx-auto p-3 border border-2 border-secondary rounded'}>
                 {loading ? (
                     <Loader />
                 ) : (

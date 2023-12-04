@@ -37,11 +37,12 @@ export function useFetch() {
             }).then((res) => {
                 res.json()
                     .then((json) => {
-                        res.ok ? resolve(json as TResponse) : reject(json as ErrorModel)
+                        return res.ok ? resolve(json as TResponse) : reject(json as ErrorModel)
                     })
                     .catch((err) => {
-                        /*todo Handle JSON parsing error?*/
                         console.log(err)
+                        return res.ok ? resolve(res as TResponse) : reject(err as ErrorModel)
+                        /*todo Handle JSON parsing error?*/
                     })
             })
         })

@@ -14,12 +14,13 @@ import {
 
 import 'bootstrap/dist/css/bootstrap.css'
 import { ErrorOverlay } from './components/error/ErrorOverlay'
+import Layout from './components/layout/Layout'
 import { EditProfilePage } from './pages/edit-profile-page/EditProfilePage'
+import { FeedPage } from './pages/feed-page/FeedPage'
 import { ProfilePage } from './pages/profile-page/ProfilePage'
 import { RegistrationPage } from './pages/registration-page/RegistrationPage'
 import { RootPage } from './pages/RootPage'
 import { isActualNumber } from './util/StringUtil'
-import { FeedPage } from './pages/feed-page/FeedPage'
 
 export type ProfilePageLoader = {
     profileId: number
@@ -27,19 +28,35 @@ export type ProfilePageLoader = {
 
 const router = createBrowserRouter([
     {
-        element: <RootPage />,
+        element: (
+            <Layout>
+                <RootPage />
+            </Layout>
+        ),
         path: ROUTE_ROOT,
     },
     {
-        element: <LoginPage />,
+        element: (
+            <Layout>
+                <LoginPage />
+            </Layout>
+        ),
         path: ROUTE_LOGIN,
     },
     {
-        element: <RegistrationPage />,
+        element: (
+            <Layout withFooter>
+                <RegistrationPage />
+            </Layout>
+        ),
         path: ROUTE_REGISTER,
     },
     {
-        element: <ProfilePage />,
+        element: (
+            <Layout withFooter withHeader>
+                <ProfilePage />
+            </Layout>
+        ),
         path: ROUTE_PROFILE + '/:profileId',
         loader: ({ params }): ProfilePageLoader => {
             if (params.profileId && isActualNumber(params.profileId)) {
@@ -48,15 +65,18 @@ const router = createBrowserRouter([
                 throw new Error()
             }
         },
-        errorElement: <LoginPage /> /*todo make 404 page/ error boundary*/,
     },
     {
-        element: <EditProfilePage />,
+        element: (
+            <Layout withFooter>
+                <EditProfilePage />
+            </Layout>
+        ),
         path: ROUTE_PROFILE_EDIT,
     },
     {
-      element: <FeedPage />,
-      path: ROUTE_FEED,
+        element: <FeedPage />,
+        path: ROUTE_FEED,
     },
 ])
 
@@ -65,6 +85,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <RouterProvider router={router} />
     </ErrorOverlay>
 )
+
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals

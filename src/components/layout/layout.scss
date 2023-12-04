@@ -1,0 +1,5 @@
+@use '../../App';
+
+.layout-footer {
+    padding-bottom: App.$footer-size;
+}

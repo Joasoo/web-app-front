@@ -1,10 +1,10 @@
 import { useFetch } from '../../../hooks/useFetch'
 import { FriendRequestModel } from '../../../model/friend-request-model'
+import { StorageUtil } from '../../../util/BrowerStorageUtil'
 import { FriendshipStatus } from '../../../util/enum/FriendshipStatus'
 import { PATH_FRIEND_ADD } from '../../../util/RequestConstants'
 import { BaseButton } from './BaseButton'
 import { DynamicSubButtonProps } from './DynamicFriendButton'
-import { StorageUtil } from '../../../util/BrowerStorageUtil'
 
 function getValue(friendshipStatus: keyof typeof FriendshipStatus | undefined) {
     switch (friendshipStatus) {
