@@ -16,13 +16,20 @@ $color-success: #588f45;
 $color-danger: #d72a2a;
 $color-info: #1400c8;
 
-// idk this is broken
+// Footer and header sizes must be constant.
+$footer-size: 6em;
+$header-size: 4.5em;
+
+// These should be added just in case the screen size starts flipping-out.
 body,
 #root,
 html {
     background-color: $color-background-1;
     min-height: 100vh;
     color: $color-text-1;
+    position: relative;
+    top: 0;
+    left: 0;
 }
 
 #err {

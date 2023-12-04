@@ -20,19 +20,35 @@ export type ProfilePageLoader = {
 
 const router = createBrowserRouter([
     {
-        element: <RootPage />,
+        element: (
+            <Layout>
+                <RootPage />
+            </Layout>
+        ),
         path: ROUTE_ROOT,
     },
     {
-        element: <LoginPage />,
+        element: (
+            <Layout>
+                <LoginPage />
+            </Layout>
+        ),
         path: ROUTE_LOGIN,
     },
     {
-        element: <RegistrationPage />,
+        element: (
+            <Layout withFooter>
+                <RegistrationPage />
+            </Layout>
+        ),
         path: ROUTE_REGISTER,
     },
     {
-        element: <ProfilePage />,
+        element: (
+            <Layout withFooter>
+                <ProfilePage />
+            </Layout>
+        ),
         path: ROUTE_PROFILE + '/:profileId',
         loader: ({ params }): ProfilePageLoader => {
             if (params.profileId && isActualNumber(params.profileId)) {
@@ -41,19 +57,20 @@ const router = createBrowserRouter([
                 throw new Error()
             }
         },
-        errorElement: <LoginPage /> /*todo make 404 page/ error boundary*/,
     },
     {
-        element: <EditProfilePage />,
+        element: (
+            <Layout withFooter withHeader>
+                <EditProfilePage />
+            </Layout>
+        ),
         path: ROUTE_PROFILE_EDIT,
     },
 ])
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <ErrorOverlay>
-        <Layout>
-            <RouterProvider router={router} />
-        </Layout>
+        <RouterProvider router={router} />
     </ErrorOverlay>
 )
 
