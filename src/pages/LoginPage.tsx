@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Card } from '../components/card/Card'
 import { Input, SubtextType } from '../components/input/Input'
 import { Loader } from '../components/loader/Loader'
+import { useErrorHandler } from '../hooks/useErrorHandler'
 import { useFetch } from '../hooks/useFetch'
 import { ErrorModel } from '../model/error.model'
 import { LoginModel } from '../model/login.model'
@@ -37,6 +38,7 @@ export const LoginPage = (props: LoginPageProps) => {
     const [emailSubtext, setEmailSubtext] = useState<SubtextType>()
     const [passwordSubtext, setPasswordSubtext] = useState<SubtextType>()
     const { postJson } = useFetch()
+    const { handleError } = useErrorHandler()
 
     function handleValidation(): boolean {
         let validated = true
@@ -61,14 +63,13 @@ export const LoginPage = (props: LoginPageProps) => {
                 password: password as string,
             })
                 .then((res) => {
-                    console.log(res)
                     StorageUtil.put('SESSION', 'token', res.token)
                     StorageUtil.put('SESSION', 'personId', res.id)
-                    console.log(res.id)
-                    navigate(ROUTE_PROFILE + "/" + res.id)
+                    navigate(ROUTE_PROFILE + '/' + res.id)
                 })
                 .catch((err) => {
-                    setErr(err)
+                    // setErr(err)
+                    handleError(err)
                 })
         }
         setLoading(false)

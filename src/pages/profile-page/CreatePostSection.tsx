@@ -1,6 +1,9 @@
 import { useState } from 'react'
+import { InputButton } from '../../components/button/InputButton'
+import { useErrorHandler } from '../../hooks/useErrorHandler'
 import { useFetch } from '../../hooks/useFetch'
 import { AddPostModel } from '../../model/add-post.model'
+import { StorageUtil } from '../../util/BrowerStorageUtil'
 import { PATH_POST_ADD } from '../../util/RequestConstants'
 
 type NewPostSectionProps = {
@@ -10,20 +13,21 @@ type NewPostSectionProps = {
 
 export const CreatePostSection = (props: NewPostSectionProps) => {
     const [newPostText, setNewPostText] = useState<string>('')
+    const { handleError } = useErrorHandler()
     const { postJson } = useFetch()
     const maxPostSize = 1000
+    const token = StorageUtil.get<string>('SESSION', 'token')
 
     function makePost() {
         if (newPostText && props.profileId) {
-            console.log('Make a post for profile id: ' + props.profileId)
             setNewPostText('')
-            let newModel = new AddPostModel(props.profileId, newPostText)
-            postJson(PATH_POST_ADD, newModel)
+            let newModel = new AddPostModel(String(props.profileId), newPostText)
+            postJson(PATH_POST_ADD, newModel, token)
                 .then(() => {
                     props.onCreate?.()
                 })
                 .catch((err) => {
-                    console.log(err)
+                    handleError(err)
                 })
         }
     }
@@ -43,19 +47,9 @@ export const CreatePostSection = (props: NewPostSectionProps) => {
                 </div>
             </div>
 
-            <div className={'d-flex'}>
-                <input
-                    className={'w-auto btn btn-primary align-self-start'}
-                    type={'button'}
-                    value={'Create post'}
-                    onClick={makePost}
-                />
-                <input
-                    className={'mx-3 btn btn-secondary'}
-                    type={'button'}
-                    value={'Clear'}
-                    onClick={() => setNewPostText('')}
-                />
+            <div className={'d-flex gap-3'}>
+                <InputButton type={'info'} label={'Create post'} onClick={makePost} />
+                <InputButton label={'Clear'} onClick={() => setNewPostText('')} />
             </div>
         </>
     )

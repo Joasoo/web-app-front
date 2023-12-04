@@ -1,14 +1,17 @@
-import { AuthorModel } from '../../model/post.model'
-import './Post.scss'
 import { Link } from 'react-router-dom'
-import { ROUTE_PROFILE } from '../../util/RouteConstants'
-import { PATH_POST_DELETE } from '../../util/RequestConstants'
+import { InputButton } from '../../components/button/InputButton'
+import { useErrorHandler } from '../../hooks/useErrorHandler'
 import { useFetch } from '../../hooks/useFetch'
+import { PersonFullNameModel } from '../../model/person-full-name-model'
+import { StorageUtil } from '../../util/BrowerStorageUtil'
+import { PATH_POST_DELETE } from '../../util/RequestConstants'
+import { ROUTE_PROFILE } from '../../util/RouteConstants'
+import './post.scss'
 
 type PostProps = {
     id: string
     content: string
-    author: AuthorModel
+    author: PersonFullNameModel
     createdAt: string
     isOwner: boolean
     onClickEdit?: (value: string) => void
@@ -18,15 +21,17 @@ type PostProps = {
 
 export const Post = (props: PostProps) => {
     const { deleteJson } = useFetch()
+    const { handleError } = useErrorHandler()
+    const token = StorageUtil.get<string>('SESSION', 'token')
 
     function deletePost(id: string) {
         if (props.isOwner) {
-            deleteJson(PATH_POST_DELETE + `/${id}`)
+            deleteJson(PATH_POST_DELETE + `/${id}`, undefined, token)
                 .then(() => {
                     props.onClickDelete?.()
                 })
                 .catch((err) => {
-                    console.log(err)
+                    handleError(err)
                 })
         }
     }
@@ -53,18 +58,13 @@ export const Post = (props: PostProps) => {
                 </pre>
             </div>
 
-            <div className={'d-flex flex-column justify-content-center'}>
-                {props.onClickEdit ? (
-                    <input className={'mx-3 my-1 btn btn-primary'} type={'button'} value={'Edit'} />
-                ) : (
-                    ''
-                )}
-
+            <div className={'d-flex flex-column gap-3 justify-content-center'}>
+                {props.onClickEdit ? <InputButton className={'mx-2'} type={'info'} label={'Edit'} /> : ''}
                 {props.isOwner ? (
-                    <input
-                        className={'mx-3 my-1 btn btn-danger'}
-                        type={'button'}
-                        value={'Delete'}
+                    <InputButton
+                        className={'mx-2'}
+                        type={'danger'}
+                        label={'Delete'}
                         onClick={() => deletePost(props.id)}
                     />
                 ) : (

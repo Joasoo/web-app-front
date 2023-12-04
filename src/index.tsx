@@ -6,11 +6,13 @@ import reportWebVitals from './reportWebVitals'
 import { ROUTE_LOGIN, ROUTE_PROFILE, ROUTE_PROFILE_EDIT, ROUTE_REGISTER, ROUTE_ROOT } from './util/RouteConstants'
 
 import 'bootstrap/dist/css/bootstrap.css'
-import { EditPage } from './pages/edit-profile-page/EditPage'
-import { PersonalProfilePage } from './pages/personal-profile-page/PersonalProfilePage'
-import { RegistrationPage } from './pages/RegistrationPage'
+import { ErrorOverlay } from './components/error/ErrorOverlay'
+import Layout from './components/layout/Layout'
+import { EditProfilePage } from './pages/edit-profile-page/EditProfilePage'
+import { ProfilePage } from './pages/profile-page/ProfilePage'
+import { RegistrationPage } from './pages/registration-page/RegistrationPage'
 import { RootPage } from './pages/RootPage'
-import Layout from "./components/layout/Layout";
+import { isActualNumber } from './util/StringUtil'
 
 export type ProfilePageLoader = {
     profileId: number
@@ -30,25 +32,29 @@ const router = createBrowserRouter([
         path: ROUTE_REGISTER,
     },
     {
-        element: <PersonalProfilePage />,
+        element: <ProfilePage />,
         path: ROUTE_PROFILE + '/:profileId',
         loader: ({ params }): ProfilePageLoader => {
-            const num = Number(params.profileId)
-            if (isNaN(num)) throw new Error()
-            return { profileId: num }
+            if (params.profileId && isActualNumber(params.profileId)) {
+                return { profileId: Number.parseInt(params.profileId) }
+            } else {
+                throw new Error()
+            }
         },
         errorElement: <LoginPage /> /*todo make 404 page/ error boundary*/,
     },
     {
-        element: <EditPage />,
+        element: <EditProfilePage />,
         path: ROUTE_PROFILE_EDIT,
     },
 ])
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-    <Layout>
-        <RouterProvider router={router} />
-    </Layout>
+    <ErrorOverlay>
+        <Layout>
+            <RouterProvider router={router} />
+        </Layout>
+    </ErrorOverlay>
 )
 
 // If you want to start measuring performance in your app, pass a function

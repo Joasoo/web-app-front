@@ -1,16 +1,17 @@
 import { ReactNode, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Checkbox } from '../components/checkbox/Checkbox'
-import { DropdownSelect } from '../components/dropdown/DropdownSelect'
-import { FormRow } from '../components/FormRow'
-import { Input, SubtextType } from '../components/input/Input'
-import { Loader } from '../components/loader/Loader'
-import { useFetch } from '../hooks/useFetch'
-import { RegistrationModel } from '../model/registration.model'
-import { StatusCodeModel } from '../model/status-code.model'
-import { PATH_AUTH_REGISTER, PATH_PROFILE_RELATIONSHIP_STATUS } from '../util/RequestConstants'
-import { ROUTE_LOGIN, ROUTE_PRIVACY_POLICY, ROUTE_TOS } from '../util/RouteConstants'
-import { toISOString } from '../util/StringUtil'
+import { Checkbox } from '../../components/checkbox/Checkbox'
+import { DropdownSelect } from '../../components/dropdown/DropdownSelect'
+import { FormRow } from '../../components/FormRow'
+import { Input, SubtextType } from '../../components/input/Input'
+import { Loader } from '../../components/loader/Loader'
+import { useErrorHandler } from '../../hooks/useErrorHandler'
+import { useFetch } from '../../hooks/useFetch'
+import { RegistrationModel } from '../../model/registration.model'
+import { StatusCodeModel } from '../../model/status-code.model'
+import { PATH_AUTH_REGISTER, PATH_PROFILE_RELATIONSHIP_STATUS } from '../../util/RequestConstants'
+import { ROUTE_LOGIN, ROUTE_PRIVACY_POLICY, ROUTE_TOS } from '../../util/RouteConstants'
+import { toISOString } from '../../util/StringUtil'
 
 type RegistrationPageProps = {
     className?: string
@@ -31,6 +32,7 @@ const errorSubtext: { [key: string]: SubtextType } = {
 export const RegistrationPage = (props: RegistrationPageProps) => {
     const navigate = useNavigate()
     const { postJson, getJson } = useFetch()
+    const { handleError } = useErrorHandler()
     const [loading, setLoading] = useState<boolean>(false)
 
     const [firstName, setFirstName] = useState('')
@@ -62,7 +64,7 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
                 setLoading(false)
             })
             .catch((err) => {
-                console.log(err)
+                handleError(err)
                 setLoading(false)
             })
     }, [])
@@ -108,7 +110,6 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
 
     function handleRegistration() {
         setLoading(true)
-        console.log(toISOString(dateOfBirth))
         if (handleValidation()) {
             /*todo Perform request.*/
             postJson<RegistrationModel, void>(PATH_AUTH_REGISTER, getModel())
@@ -116,9 +117,8 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
                     navigate(ROUTE_LOGIN)
                 })
                 .catch((err) => {
-                    console.log(err)
+                    handleError(err)
                 })
-            console.log(getModel())
         }
         setLoading(false)
     }
@@ -141,7 +141,7 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
     const required = <b className={'text-danger me-1'}>*</b>
     return (
         <div>
-            <div className={'flex-center flex-column w-50 mx-auto mt-5 p-3 border border-2 border-secondary rounded'}>
+            <div className={'flex-center flex-column w-60 mx-auto mt-5 p-3 border border-2 border-secondary rounded'}>
                 {loading ? (
                     <Loader />
                 ) : (
@@ -203,7 +203,7 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
 
                             <div className={'row my-4'}>
                                 <FormRow className={formClasses}>
-                                    <span>Password: {required}</span>
+                                    <div>Password: {required}</div>
                                     <Input
                                         type={'password'}
                                         value={password}
@@ -232,14 +232,14 @@ export const RegistrationPage = (props: RegistrationPageProps) => {
 
                             <div className={'row my-4'}>
                                 <FormRow className={formClasses}>
-                                    <label>Relationship status:</label>
+                                    <label className={'col-4'}>Relationship status:</label>
                                     <DropdownSelect
+                                        className={'col-6'}
                                         withEmptyOption
                                         options={relOptions ?? []}
                                         value={relationship}
                                         setValue={(value) => {
                                             setRelationship(value)
-                                            console.log(value)
                                         }}
                                         formatLabel={(value) => value.value}
                                     />

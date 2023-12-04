@@ -1,6 +1,6 @@
 import { ErrorModel } from '../model/error.model'
 
-type RequestParams = { [key: string]: string }
+type RequestParams = { [key: string]: string | number | boolean }
 type RequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE'
 
 export function useFetch() {
@@ -9,7 +9,7 @@ export function useFetch() {
         let reqParamString = '?'
         for (const paramsKey in params) {
             const value = params[paramsKey]
-            reqParamString += `${paramsKey}=${value}&`
+            reqParamString += `${paramsKey}=${String(value)}&`
         }
         return reqParamString.substring(0, reqParamString.length - 1)
     }
@@ -31,7 +31,7 @@ export function useFetch() {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
-                    ...{ Authorization: `Bearer ${token}` },
+                    Authorization: `Bearer ${token ?? ''}`,
                 },
                 body: JSON.stringify(body),
             }).then((res) => {

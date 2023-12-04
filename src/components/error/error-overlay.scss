@@ -1,0 +1,29 @@
+@use '../../App';
+
+.err-component {
+    position: relative;
+    border: 3px solid App.$color-accent-1;
+    min-width: 500px;
+}
+
+.err-close {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+}
+
+.err-close:hover {
+    color: App.$color-danger;
+}
+
+.err-overlay {
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.other {
+    z-index: 1;
+}

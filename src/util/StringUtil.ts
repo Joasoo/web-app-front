@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { StatusCodeModel } from '../model/status-code.model'
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
@@ -16,4 +17,17 @@ export function toISOString(value?: string | Date): string {
     if (!value) return ''
     // Date format example: 2019-01-25T02:00:00.000
     return dayjs(value).format(DATE_ISO_FORMAT)
+}
+
+export function formatStatusCodeString(value?: StatusCodeModel, withCode?: boolean): string {
+    if (!value) return ''
+    if (withCode) {
+        return `${value.code} - ${value.value}`
+    } else {
+        return value.value
+    }
+}
+
+export function isActualNumber(value: any): boolean {
+    return /^\d+$/.test(value)
 }
