@@ -16,7 +16,7 @@ export const FriendSlot = ({ data, ...props }: FriendSlotProps) => {
     const { profileId } = useLoaderData() as ProfilePageLoader
 
     return (
-        <div className={'friend-slot p-3 rounded-4 d-flex flex-row align-items-center'}>
+        <div className={'friend-slot p-3 rounded-4 d-flex flex-row align-items-center mb-2'}>
             {/*todo Replace placeholder for profile pic*/}
             <div
                 style={{ width: '3.5em', height: '3.5em', backgroundColor: 'lightslategray', borderRadius: '100%' }}
