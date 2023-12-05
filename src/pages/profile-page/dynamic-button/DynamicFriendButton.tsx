@@ -8,6 +8,7 @@ export type DynamicButtonProps = {
     personId: number
     friendId: number
     onClick: () => void
+    className?: string
 }
 
 export type DynamicSubButtonProps = {
@@ -15,6 +16,7 @@ export type DynamicSubButtonProps = {
     personId: number
     friendId: number
     onClick: () => void
+    className?: string
 }
 
 export const DynamicFriendButton = (props: DynamicButtonProps) => {
@@ -28,6 +30,7 @@ export const DynamicFriendButton = (props: DynamicButtonProps) => {
                     friendId={props.friendId}
                     friendshipStatusCode={status}
                     onClick={props.onClick}
+                    className={props.className}
                 />
             ) : (
                 ''
@@ -40,12 +43,14 @@ export const DynamicFriendButton = (props: DynamicButtonProps) => {
                         friendId={props.friendId}
                         friendshipStatusCode={status}
                         onClick={props.onClick}
+                        className={props.className}
                     />
                     <RemoveFriendButton
                         personId={props.personId}
                         friendId={props.friendId}
                         friendshipStatusCode={status}
                         onClick={props.onClick}
+                        className={props.className}
                     />
                 </>
             ) : (
@@ -58,6 +63,7 @@ export const DynamicFriendButton = (props: DynamicButtonProps) => {
                     friendId={props.friendId}
                     friendshipStatusCode={status}
                     onClick={props.onClick}
+                    className={props.className}
                 />
             ) : (
                 ''

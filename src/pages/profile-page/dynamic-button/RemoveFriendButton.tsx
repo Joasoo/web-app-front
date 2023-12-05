@@ -55,7 +55,7 @@ export const RemoveFriendButton = (props: DynamicSubButtonProps) => {
 
     return (
         <BaseButton
-            className={getStyling(props.friendshipStatusCode) + ' btn-danger'}
+            className={getStyling(props.friendshipStatusCode) + ' btn-danger ' + props.className ?? ''}
             value={getValue(props.friendshipStatusCode)}
             onClick={removeFriend}
         />
