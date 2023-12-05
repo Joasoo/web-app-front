@@ -32,7 +32,6 @@ export const FriendRequests = (props: FriendRequestsProps) => {
         if (!noLoad) {
             setLoading(true)
         }
-        console.log(token)
         getJson<FriendListModel[]>(PATH_FRIEND_REQUESTS_RECEIVED + `/${personId}`, undefined, token)
             .then((res) => {
                 setPendingRequests(res)
@@ -40,6 +39,7 @@ export const FriendRequests = (props: FriendRequestsProps) => {
             })
             .catch((err) => {
                 handleError(err)
+                clearInterval(timer)
                 setLoading(false)
             })
     }
