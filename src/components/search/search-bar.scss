@@ -1,4 +1,5 @@
 @use '../../App';
+@use '../../util';
 
 .search-input {
     width: 30em;
@@ -7,4 +8,19 @@
 .separator {
     border-left: 1px solid App.$color-accent-1;
     padding-left: 0.5em;
+}
+
+.pop-up-search {
+    @include util.pop-up-common;
+    background-color: App.$color-accent-2;
+    left: 50%;
+    width: max-content;
+    min-width: 50%;
+    bottom: -100%;
+    transform: translate(-50%, 100%);
+}
+
+.underline:hover {
+    cursor: pointer;
+    text-decoration: underline;
 }

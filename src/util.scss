@@ -4,6 +4,15 @@
     justify-content: center !important;
 }
 
+@mixin pop-up-common {
+    position: absolute;
+    padding: 1em;
+    border-radius: 6px;
+    transform: translateY(100%);
+    width: max-content;
+    box-shadow: 2px 2px 4px black;
+}
+
 .fit-content {
     width: fit-content !important;
 }

@@ -7,7 +7,5 @@ type BaseButtonProps = {
 }
 
 export const BaseButton = (props: BaseButtonProps) => {
-    return (
-        <input className={'btn ' + props.className} value={props.value} type={'button'} onClick={props.onClick} />
-    )
+    return <input className={'btn ' + props.className} value={props.value} type={'button'} onClick={props.onClick} />
 }

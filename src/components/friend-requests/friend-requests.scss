@@ -1,40 +1,27 @@
 @use '../../App';
+@use '../../util';
 
 .pending-counter {
-  $size: 1.35em;
+    $size: 1.35em;
 
-  border-radius: 50%;
-  background-color: App.$color-danger;
-  width: $size;
-  height: $size;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  bottom: -0.2em;
-  right: -0.6em;
+    border-radius: 50%;
+    background-color: App.$color-danger;
+    width: $size;
+    height: $size;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: -0.2em;
+    right: -0.6em;
 }
 
 .pop-up {
-  position: absolute;
-  background-color: App.$color-accent-2;
-  padding: 1em;
-  border-radius: 6px;
-  right: 0;
-  bottom: -25%;
-  transform: translateY(100%);
-  width: max-content;
-  justify-content: start;
-  box-shadow: 2px 2px 4px black;
-  scrollbar-gutter: stable;
-  overflow-y: auto;
-  max-height: 50vh;
-}
-
-.friend-name {
-  color: white;
-}
-
-.friend-name:hover {
-  filter: brightness(85%);
+    @include util.pop-up-common;
+    background-color: App.$color-accent-2;
+    right: 0;
+    bottom: -25%;
+    scrollbar-gutter: stable;
+    overflow-y: auto;
+    max-height: 50vh;
 }

@@ -32,7 +32,6 @@ export const FriendRequests = (props: FriendRequestsProps) => {
         if (!noLoad) {
             setLoading(true)
         }
-        console.log(token)
         getJson<FriendListModel[]>(PATH_FRIEND_REQUESTS_RECEIVED + `/${personId}`, undefined, token)
             .then((res) => {
                 setPendingRequests(res)
@@ -40,6 +39,7 @@ export const FriendRequests = (props: FriendRequestsProps) => {
             })
             .catch((err) => {
                 handleError(err)
+                clearInterval(timer)
                 setLoading(false)
             })
     }
@@ -60,8 +60,14 @@ export const FriendRequests = (props: FriendRequestsProps) => {
                 onClick={() => setOpen(!open)}
             />
             {pendingRequests.length > 0 ? <div className={'pending-counter'}>{pendingCountString}</div> : ''}
-            {open && <RequestsPopUp loading={loading} requests={pendingRequests} onClick={getReceivedRequests}
-                                    setOpen={setOpen} />}
+            {open && (
+                <RequestsPopUp
+                    loading={loading}
+                    requests={pendingRequests}
+                    onClick={getReceivedRequests}
+                    setOpen={setOpen}
+                />
+            )}
         </div>
     )
 }

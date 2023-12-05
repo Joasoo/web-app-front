@@ -68,14 +68,18 @@ const router = createBrowserRouter([
     },
     {
         element: (
-            <Layout withFooter>
+            <Layout withFooter withHeader>
                 <EditProfilePage />
             </Layout>
         ),
         path: ROUTE_PROFILE_EDIT,
     },
     {
-        element: <FeedPage />,
+        element: (
+            <Layout withFooter withHeader>
+                <FeedPage />
+            </Layout>
+        ),
         path: ROUTE_FEED,
     },
 ])

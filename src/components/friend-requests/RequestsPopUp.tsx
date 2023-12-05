@@ -1,12 +1,12 @@
 import { Dispatch, SetStateAction, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { FriendListModel } from '../../model/friend-list.model'
 import { DynamicFriendButton } from '../../pages/profile-page/dynamic-button/DynamicFriendButton'
 import { StorageUtil } from '../../util/BrowerStorageUtil'
+import { ROUTE_PROFILE } from '../../util/RouteConstants'
 import { formatFullName } from '../../util/StringUtil'
 import { Loader } from '../loader/Loader'
 import './friend-requests.scss'
-import { Link } from 'react-router-dom'
-import { ROUTE_PROFILE } from '../../util/RouteConstants'
 
 export type RequestsPopUpProps = {
     loading: boolean
@@ -44,9 +44,11 @@ export const RequestsPopUp = (props: RequestsPopUpProps) => {
                                                 borderRadius: '100%',
                                             }}
                                         />
-                                        <Link to={ROUTE_PROFILE + `\/${req.id}`}
-                                              className={'friend-name text-decoration-none'}
-                                              onClick={() => props.setOpen(false)}>
+                                        <Link
+                                            to={ROUTE_PROFILE + `\/${req.id}`}
+                                            className={'friend-name text-decoration-none'}
+                                            onClick={() => props.setOpen(false)}
+                                        >
                                             {formatFullName(req.name)}
                                         </Link>
                                     </div>
