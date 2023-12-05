@@ -21,4 +21,7 @@
     background-color: App.$color-accent-2;
     right: 0;
     bottom: -25%;
+    scrollbar-gutter: stable;
+    overflow-y: auto;
+    max-height: 50vh;
 }
