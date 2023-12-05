@@ -102,6 +102,7 @@ export const ProfilePage = (props: ProfilePageProps) => {
                                 personId={sessionId}
                                 friendId={profileId}
                                 onClick={refreshFriendship}
+                                className={'p-2'}
                             />
                         </div>
                     )}

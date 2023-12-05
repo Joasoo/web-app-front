@@ -47,7 +47,7 @@ export const AddFriendButton = (props: DynamicSubButtonProps) => {
 
     return (
         <BaseButton
-            className={getStyling(props.friendshipStatusCode) + ' btn-secondary'}
+            className={getStyling(props.friendshipStatusCode) + ' btn-secondary ' + props.className ?? ''}
             value={getValue(props.friendshipStatusCode)}
             onClick={addFriend}
         />

@@ -8,6 +8,6 @@ type BaseButtonProps = {
 
 export const BaseButton = (props: BaseButtonProps) => {
     return (
-        <input className={'p-2 btn ' + props.className} value={props.value} type={'button'} onClick={props.onClick} />
+        <input className={'btn ' + props.className} value={props.value} type={'button'} onClick={props.onClick} />
     )
 }

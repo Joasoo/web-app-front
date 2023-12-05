@@ -60,7 +60,8 @@ export const FriendRequests = (props: FriendRequestsProps) => {
                 onClick={() => setOpen(!open)}
             />
             {pendingRequests.length > 0 ? <div className={'pending-counter'}>{pendingCountString}</div> : ''}
-            {open && <RequestsPopUp loading={loading} requests={pendingRequests} onClick={getReceivedRequests} />}
+            {open && <RequestsPopUp loading={loading} requests={pendingRequests} onClick={getReceivedRequests}
+                                    setOpen={setOpen} />}
         </div>
     )
 }
