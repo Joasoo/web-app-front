@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { Loader } from '../../components/loader/Loader'
+import { useErrorHandler } from '../../hooks/useErrorHandler'
 import { useFetch } from '../../hooks/useFetch'
 import { PostModel } from '../../model/post.model'
 import { StorageUtil } from '../../util/BrowerStorageUtil'
@@ -18,6 +19,7 @@ export const FeedPage = () => {
     const sessionId = StorageUtil.get<number>('SESSION', 'personId') as number
     const token = StorageUtil.get<string>('SESSION', 'token')
     const limit = 10
+    const { handleError } = useErrorHandler()
 
     useEffect(() => {
         setLoading(true)
@@ -27,16 +29,24 @@ export const FeedPage = () => {
 
     function getNextPosts() {
         const initialLength = postList.length
-        getJson<PostModel[]>(PATH_POST_FEED + `/${sessionId}`, { pageNumber, limit }, token).then((res) => {
-            var updatedPosts = postList.concat(res)
-            setPostList(updatedPosts)
-            setMore(initialLength < updatedPosts.length)
-            setPageNumber(pageNumber + 1)
-        })
+        getJson<PostModel[]>(PATH_POST_FEED + `/${sessionId}`, { pageNumber, limit }, token)
+            .then((res) => {
+                let updatedPosts = postList.concat(res)
+                setPostList(updatedPosts)
+                setMore(initialLength < updatedPosts.length)
+                setPageNumber(pageNumber + 1)
+            })
+            .catch((err) => {
+                handleError(err)
+            })
     }
 
     if (loading) {
-        return <Loader />
+        return (
+            <div className={'mx-auto'}>
+                <Loader />
+            </div>
+        )
     }
 
     return (
@@ -46,7 +56,11 @@ export const FeedPage = () => {
             <InfiniteScroll
                 next={getNextPosts}
                 hasMore={more}
-                loader={<Loader />}
+                loader={
+                    <div className={'mx-auto fit-content'}>
+                        <Loader />
+                    </div>
+                }
                 dataLength={postList.length}
                 endMessage={
                     <p style={{ textAlign: 'center' }}>
