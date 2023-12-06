@@ -15,6 +15,7 @@ import {
 import { ROUTE_PROFILE } from '../../util/RouteConstants'
 import './edit-profile-page.scss'
 import { EditPageRow } from './EditPageRow'
+import { Bio } from './Bio'
 
 export const EditProfilePage = () => {
     const { getJson, postJson } = useFetch()
@@ -28,7 +29,7 @@ export const EditProfilePage = () => {
     const [workplace, setWorkplace] = useState<string>('')
     const [relationshipStatus, setRelationshipStatus] = useState<StatusCodeModel>()
     const [dateOfBirth, setDateOfBirth] = useState<string>('')
-    const [profileBio, setProfileBio] = useState<string>('')
+    const [bio, setBio] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(false)
     const [relStatusOptions, setRelStatusOptions] = useState<StatusCodeModel[]>([])
     let [editData, setEditData] = useState<EditDataModel>()
@@ -55,7 +56,7 @@ export const EditProfilePage = () => {
                 setWorkplace(res[1].workplace)
                 setRelationshipStatus(res[1].relationshipStatus)
                 setDateOfBirth(res[1].dateOfBirth)
-                setProfileBio(res[1].profileBio)
+                setBio(res[1].bio)
                 setRelStatusOptions(res[0])
                 setLoading(false)
             })
@@ -77,7 +78,7 @@ export const EditProfilePage = () => {
                 hometown,
                 workplace,
                 relationshipStatus,
-                profileBio
+                bio
             )
             postJson(PATH_PROFILE_EDIT_SAVE, newEditDataModel, token)
                 .then(() => {
@@ -109,12 +110,6 @@ export const EditProfilePage = () => {
                     <div className={'col d-flex flex-column'}>
                         <div className={'bg-picture-box bg bg-secondary-subtle rounded-3'} />
                         <InputButton type={'info'} className={buttonClassLarge} label={'Edit Profile Banner'} />
-                    </div>
-                </div>
-                <div className={'row my-3 mx-auto'}>
-                    <div className={'col-12 col-md-6 d-flex flex-column'}>
-                        <div className={'text-box'}>{editData?.profileBio ? <p>{editData?.profileBio}</p> : ''}</div>
-                        <InputButton type={'info'} className={buttonClassLarge} label={'Edit Profile Bio'} />
                     </div>
                 </div>
             </div>
@@ -173,6 +168,11 @@ export const EditProfilePage = () => {
                     value={relationshipStatus}
                     setValue={setRelationshipStatus}
                     defaultValue={editData?.relationshipStatus}
+                />
+                <Bio
+                    value={bio}
+                    setValue={setBio}
+                    defaultValue={editData?.bio}
                 />
             </div>
             <div className={'d-flex flex-row gap-3 justify-content-end m-3'}>
