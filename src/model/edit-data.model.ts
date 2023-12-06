@@ -11,6 +11,6 @@ export class EditDataModel {
         public hometown: string,
         public workplace: string,
         public relationshipStatus: StatusCodeModel | undefined,
-        public profileBio: string
+        public bio: string
     ) {}
 }
