@@ -120,20 +120,29 @@ export const EditProfilePage = () => {
                     value={firstName}
                     setValue={setFirstName}
                     defaultValue={editData?.firstName}
+                    labelRequired
                 />
                 <EditPageRow
                     label={'Last Name:'}
                     value={lastName}
                     setValue={setLastName}
                     defaultValue={editData?.lastName}
+                    labelRequired
                 />
                 <EditPageRow
                     label={'Date of Birth:'}
                     value={dateOfBirth}
                     setValue={setDateOfBirth}
                     defaultValue={editData?.dateOfBirth}
+                    labelRequired
                 />
-                <EditPageRow label={'E-mail:'} value={email} setValue={setEmail} defaultValue={editData?.email} />
+                <EditPageRow
+                    label={'E-mail:'}
+                    value={email}
+                    setValue={setEmail}
+                    defaultValue={editData?.email}
+                    labelRequired
+                />
                 <EditPageRow
                     label={'Residence:'}
                     value={residence}
