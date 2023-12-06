@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useDetectClickOutside } from 'react-detect-click-outside'
 import { useErrorHandler } from '../../hooks/useErrorHandler'
 import { useFetch } from '../../hooks/useFetch'
 import { FriendListModel } from '../../model/friend-list.model'
@@ -27,6 +28,11 @@ export const FriendRequests = (props: FriendRequestsProps) => {
     const [timer, setTimer] = useState<any>(() => {
         return setInterval(() => getReceivedRequests(true), 10_000)
     })
+    const ref = useDetectClickOutside({
+        onTriggered: () => {
+            setOpen(false)
+        },
+    })
 
     const getReceivedRequests = (noLoad?: boolean) => {
         if (!noLoad) {
@@ -47,13 +53,14 @@ export const FriendRequests = (props: FriendRequestsProps) => {
     useEffect(() => {
         getReceivedRequests()
 
+        // Clear the timer when the component unmounts.
         return () => {
             clearInterval(timer)
         }
     }, [])
 
     return (
-        <div className={'position-relative'}>
+        <div className={'position-relative'} ref={ref}>
             <i
                 className={'bi-person-circle cursor-pointer'}
                 style={{ fontSize: props.iconSize ?? _default['iconSize'] }}

@@ -1,3 +1,4 @@
+import { useDetectClickOutside } from 'react-detect-click-outside'
 import { useNavigate } from 'react-router-dom'
 import { PersonFullNameModel } from '../../model/person-full-name-model'
 import { ROUTE_PROFILE } from '../../util/RouteConstants'
@@ -12,8 +13,13 @@ export type SearchDropdownProps = {
 
 export const SearchDropdown = (props: SearchDropdownProps) => {
     const navigate = useNavigate()
+    const ref = useDetectClickOutside({
+        onTriggered: () => {
+            props.setOpen?.(false)
+        },
+    })
     return (
-        <div className={'pop-up-search d-flex flex-column justify-content-center gap-2'}>
+        <div className={'pop-up-search d-flex flex-column justify-content-center gap-2'} ref={ref}>
             {props.loading ? (
                 <div className={'mx-auto'}>
                     <Loader size={'3.5em'} />

@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FriendListModel } from '../../model/friend-list.model'
 import { DynamicFriendButton } from '../../pages/profile-page/dynamic-button/DynamicFriendButton'
@@ -12,16 +11,12 @@ export type RequestsPopUpProps = {
     loading: boolean
     requests: FriendListModel[]
     onClick: () => void
-    setOpen: Dispatch<SetStateAction<boolean>>
+    setOpen: (value: boolean) => void
 }
 
 export const RequestsPopUp = (props: RequestsPopUpProps) => {
     const personId = StorageUtil.get<number>('SESSION', 'personId') as number
     const navigate = useNavigate()
-
-    useEffect(() => {
-        props.onClick()
-    }, [])
 
     return (
         <div className={'pop-up'}>
