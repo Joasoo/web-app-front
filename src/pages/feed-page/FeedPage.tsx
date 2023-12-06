@@ -15,7 +15,7 @@ export const FeedPage = () => {
     const [postList, setPostList] = useState<PostModel[]>([])
     const [loading, setLoading] = useState<boolean>(false)
     const [pageNumber, setPageNumber] = useState(0)
-    const [more, setMore] = useState(true)
+    const [more, setMore] = useState(false)
     const sessionId = StorageUtil.get<number>('SESSION', 'personId') as number
     const token = StorageUtil.get<string>('SESSION', 'token')
     const limit = 10
@@ -28,12 +28,10 @@ export const FeedPage = () => {
     }, [])
 
     function getNextPosts() {
-        const initialLength = postList.length
         getJson<PostModel[]>(PATH_POST_FEED + `/${sessionId}`, { pageNumber, limit }, token)
             .then((res) => {
-                let updatedPosts = postList.concat(res)
-                setPostList(updatedPosts)
-                setMore(initialLength < updatedPosts.length)
+                setPostList(postList.concat(res))
+                setMore(res.length === limit)
                 setPageNumber(pageNumber + 1)
             })
             .catch((err) => {
