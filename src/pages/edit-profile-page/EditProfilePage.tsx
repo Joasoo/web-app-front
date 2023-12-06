@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { InputButton } from '../../components/button/InputButton'
+import { FullNameDispatchContext } from '../../components/layout/Layout'
 import { Loader } from '../../components/loader/Loader'
 import { useErrorHandler } from '../../hooks/useErrorHandler'
 import { useFetch } from '../../hooks/useFetch'
@@ -13,13 +14,14 @@ import {
     PATH_PROFILE_RELATIONSHIP_STATUS,
 } from '../../util/RequestConstants'
 import { ROUTE_PROFILE } from '../../util/RouteConstants'
+import { Bio } from './Bio'
 import './edit-profile-page.scss'
 import { EditPageRow } from './EditPageRow'
-import { Bio } from './Bio'
 
 export const EditProfilePage = () => {
     const { getJson, postJson } = useFetch()
     const { handleError } = useErrorHandler()
+    const setFullName = useContext(FullNameDispatchContext)
 
     const [firstName, setFirstName] = useState<string>('')
     const [lastName, setLastName] = useState<string>('')
@@ -82,6 +84,10 @@ export const EditProfilePage = () => {
             )
             postJson(PATH_PROFILE_EDIT_SAVE, newEditDataModel, token)
                 .then(() => {
+                    setFullName({
+                        firstName: newEditDataModel.firstName,
+                        lastName: newEditDataModel.lastName,
+                    })
                     navigate(ROUTE_PROFILE + `/${profileId}`)
                 })
                 .catch((err) => {
@@ -169,11 +175,7 @@ export const EditProfilePage = () => {
                     setValue={setRelationshipStatus}
                     defaultValue={editData?.relationshipStatus}
                 />
-                <Bio
-                    value={bio}
-                    setValue={setBio}
-                    defaultValue={editData?.bio}
-                />
+                <Bio value={bio} setValue={setBio} defaultValue={editData?.bio} />
             </div>
             <div className={'d-flex flex-row gap-3 justify-content-end m-3'}>
                 <InputButton label={'Save'} onClick={saveChanges} type={'success'} className={'px-4'} />

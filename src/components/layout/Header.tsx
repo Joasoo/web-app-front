@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useErrorHandler } from '../../hooks/useErrorHandler'
 import { useFetch } from '../../hooks/useFetch'
@@ -11,10 +11,12 @@ import { FriendRequests } from '../friend-requests/FriendRequests'
 import { Loader } from '../loader/Loader'
 import { SearchBar } from '../search/SearchBar'
 import './header.scss'
+import { FullNameDispatchContext, FullNameValueContext } from './Layout'
 
-export default function Header(props: any) {
+export default function Header() {
     const navigate = useNavigate()
-    const [name, setName] = useState<FullNameModel>()
+    const name = useContext(FullNameValueContext)
+    const setName = useContext(FullNameDispatchContext)
     const [loading, setLoading] = useState<boolean>(false)
     const { handleError } = useErrorHandler()
     const personId = StorageUtil.get<number>('SESSION', 'personId')
