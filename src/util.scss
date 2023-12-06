@@ -1,3 +1,5 @@
+@use './App';
+
 @mixin flex-center {
     display: flex;
     align-items: center !important;
@@ -23,6 +25,11 @@
 
 .no-wrap {
     white-space: nowrap;
+}
+
+.text-required::after {
+    content: '*';
+    color: App.$color-danger;
 }
 
 .cursor-disabled:hover {
