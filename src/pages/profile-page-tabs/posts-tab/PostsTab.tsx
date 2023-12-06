@@ -30,7 +30,7 @@ export const PostsTab = (props: PostsTabProps) => {
             setPostList(res)
             setLoading(false)
         })
-    }, [])
+    }, [profileId])
 
     function refreshPosts() {
         getJson<PostModel[]>(PATH_POST_PERSON + `/${profileId}`, undefined, token)
