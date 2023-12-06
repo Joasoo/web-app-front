@@ -1,15 +1,26 @@
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { ROUTE_PRIVACY_POLICY, ROUTE_TOS } from '../../util/RouteConstants'
 import './footer.scss'
 
 export default function Footer(props: any) {
+    const navigate = useNavigate()
     return (
         <footer className={'custom-footer custom-card'}>
-            <div className={'justify-content-center'}>
-                <Link to={ROUTE_PRIVACY_POLICY}>Privacy policy</Link>
+            <div
+                className={'underline'}
+                onClick={() => {
+                    navigate(ROUTE_PRIVACY_POLICY)
+                }}
+            >
+                Privacy policy
             </div>
-            <div>
-                <Link to={ROUTE_TOS}>Terms of Service</Link>
+            <div
+                className={'underline'}
+                onClick={() => {
+                    navigate(ROUTE_TOS)
+                }}
+            >
+                Terms of Service
             </div>
             <div>{/*For padding*/}</div>
             <div className={'d-flex gap-2 justify-content-center'}>

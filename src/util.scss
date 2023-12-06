@@ -32,6 +32,11 @@
     color: App.$color-danger;
 }
 
+.underline:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
 .cursor-disabled:hover {
     cursor: not-allowed;
 }
