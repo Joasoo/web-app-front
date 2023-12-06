@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { FriendListModel } from '../../model/friend-list.model'
 import { DynamicFriendButton } from '../../pages/profile-page/dynamic-button/DynamicFriendButton'
 import { StorageUtil } from '../../util/BrowerStorageUtil'
@@ -17,6 +17,7 @@ export type RequestsPopUpProps = {
 
 export const RequestsPopUp = (props: RequestsPopUpProps) => {
     const personId = StorageUtil.get<number>('SESSION', 'personId') as number
+    const navigate = useNavigate()
 
     useEffect(() => {
         props.onClick()
@@ -44,13 +45,15 @@ export const RequestsPopUp = (props: RequestsPopUpProps) => {
                                                 borderRadius: '100%',
                                             }}
                                         />
-                                        <Link
-                                            to={ROUTE_PROFILE + `\/${req.id}`}
-                                            className={'friend-name text-decoration-none'}
-                                            onClick={() => props.setOpen(false)}
+                                        <div
+                                            className={'friend-name'}
+                                            onClick={() => {
+                                                props.setOpen(false)
+                                                navigate(ROUTE_PROFILE + `/${req.id}`)
+                                            }}
                                         >
                                             {formatFullName(req.name)}
-                                        </Link>
+                                        </div>
                                     </div>
                                     <div className={'d-flex gap-2'}>
                                         <DynamicFriendButton
