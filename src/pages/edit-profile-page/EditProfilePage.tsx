@@ -137,6 +137,7 @@ export const EditProfilePage = () => {
                 />
                 <EditPageRow
                     label={'Date of Birth:'}
+                    type={'date'}
                     value={dateOfBirth}
                     setValue={setDateOfBirth}
                     defaultValue={editData?.dateOfBirth}

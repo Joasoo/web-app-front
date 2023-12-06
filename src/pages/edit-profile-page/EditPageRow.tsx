@@ -10,7 +10,7 @@ export type EditPageRowProps = {
     value: any
     setValue: (value: any) => void
     defaultValue: any
-    type?: 'input' | 'dropdown'
+    type?: 'input' | 'dropdown' | 'date'
     options?: any[]
     labelRequired?: boolean
 }
@@ -32,6 +32,11 @@ export const EditPageRow = (props: EditPageRowProps) => {
                     setValue={props.setValue}
                     formatLabel={(value) => value.value}
                 />
+            ) : (
+                ''
+            )}
+            {type === 'date' ? (
+                <Input className={'col-md-4 p-0'} type={'date'} value={props.value} onChange={props.setValue} />
             ) : (
                 ''
             )}
