@@ -12,13 +12,16 @@ export type EditPageRowProps = {
     defaultValue: any
     type?: 'input' | 'dropdown'
     options?: any[]
+    labelRequired?: boolean
 }
 
 export const EditPageRow = (props: EditPageRowProps) => {
     const type = props.type ?? 'input'
     return (
         <FormRow className={'row justify-content-center my-2 gap-2 gap-md-4'}>
-            <div className={'text-start fw-bold col-3'}>{props.label}</div>
+            <div className={'text-start fw-bold col-3 ' + (props.labelRequired ? 'text-required' : '')}>
+                {props.label}
+            </div>
             {type === 'input' ? <Input className={'col-md-4 p-0'} value={props.value} onChange={props.setValue} /> : ''}
             {type === 'dropdown' ? (
                 <DropdownSelect
