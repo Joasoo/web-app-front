@@ -37,6 +37,10 @@
     text-decoration: underline;
 }
 
+.pre-wrap {
+    text-wrap: normal;
+}
+
 .cursor-disabled:hover {
     cursor: not-allowed;
 }
