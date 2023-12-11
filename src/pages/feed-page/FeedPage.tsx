@@ -13,7 +13,7 @@ import './feed-page.scss'
 export const FeedPage = () => {
     const { getJson } = useFetch()
     const [postList, setPostList] = useState<PostModel[]>([])
-    const [loading, setLoading] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(true)
     const [pageNumber, setPageNumber] = useState(0)
     const [more, setMore] = useState(false)
     const sessionId = StorageUtil.get<number>('SESSION', 'personId') as number
@@ -22,31 +22,25 @@ export const FeedPage = () => {
     const { handleError } = useErrorHandler()
 
     useEffect(() => {
-        setLoading(true)
-        getNextPosts()
-        setLoading(false)
+        getNextPosts(true)
     }, [])
 
-    function getNextPosts() {
+    function getNextPosts(loader?: boolean) {
+        if (loader) setLoading(true)
         getJson<PostModel[]>(PATH_POST_FEED + `/${sessionId}`, { pageNumber, limit }, token)
             .then((res) => {
                 setPostList(postList.concat(res))
                 setMore(res.length === limit)
                 setPageNumber(pageNumber + 1)
+                if (loader) setLoading(false)
             })
             .catch((err) => {
                 handleError(err)
+                if (loader) setLoading(false)
             })
     }
 
-    if (loading) {
-        return (
-            <div className={'mx-auto'}>
-                <Loader />
-            </div>
-        )
-    }
-
+    if (loading) return <Loader overlay />
     return (
         <div className={'outer-box'}>
             <h2 className={'align-self-center'}>Feed</h2>
