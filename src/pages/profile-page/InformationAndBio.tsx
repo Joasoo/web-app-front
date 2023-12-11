@@ -68,7 +68,6 @@ export const InformationAndBio = (data: InformationAndBioProps) => {
                     </Card>
                 </div>
 
-                {/* For empty space between Information and Bio */}
                 <div className={'col'} />
 
                 <div className={'col-5'}>

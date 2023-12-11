@@ -19,6 +19,10 @@
     width: fit-content !important;
 }
 
+.fit-content-h {
+    height: fit-content !important;
+}
+
 .flex-center {
     @include flex-center;
 }
@@ -58,5 +62,12 @@
     $v: $i * 5;
     .w-#{$v} {
         width: #{$v} + '%';
+    }
+}
+
+@for $i from 1 through 20 {
+    $v: $i * 5;
+    .h-#{$v} {
+        height: #{$v} + '%';
     }
 }

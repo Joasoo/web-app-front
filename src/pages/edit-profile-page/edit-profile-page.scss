@@ -45,3 +45,21 @@
     height: 10rem;
     resize: none;
 }
+
+$container-width: 80%;
+.row-container {
+    display: grid;
+    grid-template-columns: 3fr 6fr 2fr;
+    width: $container-width;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.bio-container {
+    display: grid;
+    grid-template-columns: 9fr 2fr;
+    width: $container-width;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+}

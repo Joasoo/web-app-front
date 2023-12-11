@@ -14,7 +14,7 @@ import {
     PATH_PROFILE_RELATIONSHIP_STATUS,
 } from '../../util/RequestConstants'
 import { ROUTE_PROFILE } from '../../util/RouteConstants'
-import { Bio } from './Bio'
+import { BioEditor } from './BioEditor'
 import './edit-profile-page.scss'
 import { EditPageRow } from './EditPageRow'
 
@@ -176,7 +176,7 @@ export const EditProfilePage = () => {
                     setValue={setRelationshipStatus}
                     defaultValue={editData?.relationshipStatus}
                 />
-                <Bio value={bio} setValue={setBio} defaultValue={editData?.bio} />
+                <BioEditor value={bio} setValue={setBio} defaultValue={editData?.bio} />
             </div>
             <div className={'d-flex flex-row gap-3 justify-content-end m-3'}>
                 <InputButton label={'Save'} onClick={saveChanges} type={'success'} className={'px-4'} />

@@ -1,9 +1,9 @@
 import { ReactNode } from 'react'
 import { InputButton } from '../../components/button/InputButton'
 import { DropdownSelect } from '../../components/dropdown/DropdownSelect'
-import { FormRow } from '../../components/FormRow'
 import { Input } from '../../components/input/Input'
 import '../../util.scss'
+import './edit-profile-page.scss'
 
 export type EditPageRowProps = {
     label: ReactNode
@@ -18,14 +18,12 @@ export type EditPageRowProps = {
 export const EditPageRow = (props: EditPageRowProps) => {
     const type = props.type ?? 'input'
     return (
-        <FormRow className={'row justify-content-center my-2 gap-2 gap-md-4'}>
-            <div className={'text-start fw-bold col-3 ' + (props.labelRequired ? 'text-required' : '')}>
-                {props.label}
-            </div>
-            {type === 'input' ? <Input className={'col-md-4 p-0'} value={props.value} onChange={props.setValue} /> : ''}
+        <div className={'row-container my-2'}>
+            <div className={'text-start fw-bold ' + (props.labelRequired ? 'text-required' : '')}>{props.label}</div>
+            {type === 'input' ? <Input className={' p-0'} value={props.value} onChange={props.setValue} /> : ''}
             {type === 'dropdown' ? (
                 <DropdownSelect
-                    className={'col-md-4'}
+                    className={''}
                     withEmptyOption
                     options={props.options ?? []}
                     value={props.value}
@@ -36,17 +34,17 @@ export const EditPageRow = (props: EditPageRowProps) => {
                 ''
             )}
             {type === 'date' ? (
-                <Input className={'col-md-4 p-0'} type={'date'} value={props.value} onChange={props.setValue} />
+                <Input className={'p-0'} type={'date'} value={props.value} onChange={props.setValue} />
             ) : (
                 ''
             )}
-            <div className={'col-md-2 d-flex justify-content-end'}>
+            <div className={'d-flex justify-content-end'}>
                 <InputButton
                     className={'px-3 py-1'}
                     label={'Reset'}
                     onClick={() => props.setValue(props.defaultValue ?? '')}
                 />
             </div>
-        </FormRow>
+        </div>
     )
 }
