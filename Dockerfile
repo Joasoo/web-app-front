@@ -1,8 +1,10 @@
-FROM node:lts-alpine
+FROM node:18
+RUN npm install -g http-server
 WORKDIR /app
 COPY package*.json ./
+COPY public ./public
+COPY src ./src
+COPY tsconfig.json .
 RUN npm install
-COPY . .
 RUN npm run build
-EXPOSE 8080
-CMD ["npx", "http-server-spa", "public", "index.html", "8080"]
+CMD ["http-server", "build"]
