@@ -16,11 +16,11 @@ This is a social media platform designed to be something along the lines of Face
 - Johannes Jürgenson
 
 ### Used technologies
-- React 
-- Node 
+- React 18.2.0
+- Node 16.18.48
 - Typescript
 - Bootstrap 5.3.2
-- Sass 
+- Sass 1.68.0
 
 
 ### How to start the application
