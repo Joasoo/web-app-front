@@ -17,8 +17,9 @@ This is a social media platform designed to be something along the lines of Face
 
 ### Used technologies
 - React 18.2.0
-- Node 16.18.48
-- Typescript
+- Node 18.7.1
+- Node Package Manager (npm) 9.6.7
+- Typescript 4.9.5
 - Bootstrap 5.3.2
 - Sass 1.68.0
 
@@ -35,6 +36,10 @@ Navigate to the project directory:
 Make sure the backend application is up and running.
 
 Go to `src/setupProxy.js` and change the `target` field to `http://localhost:8081`
+
+Install any necessary depenencies:
+
+`npm install`
 
 Start the project:
 
