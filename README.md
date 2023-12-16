@@ -37,4 +37,5 @@ Make sure the backend application is up and running.
 Go to `src/setupProxy.js` and change the `target` field to `http://localhost:8081`
 
 Start the project:
+
 `npm start`
