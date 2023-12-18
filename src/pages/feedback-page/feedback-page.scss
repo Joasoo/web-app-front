@@ -1,0 +1,17 @@
+@use '../../util';
+
+.feedback {
+    @include util.flex-center;
+    width: 100vw;
+    height: 100vh;
+}
+
+.feedback-card {
+    position: relative;
+    width: 35em;
+    height: 25em;
+}
+
+.text-comment {
+    resize: none;
+}

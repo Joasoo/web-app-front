@@ -5,6 +5,7 @@ import { LoginPage } from './pages/login-page/LoginPage'
 import reportWebVitals from './reportWebVitals'
 import {
     ROUTE_FEED,
+    ROUTE_FEEDBACK,
     ROUTE_LOGIN,
     ROUTE_PROFILE,
     ROUTE_PROFILE_EDIT,
@@ -17,6 +18,7 @@ import { ErrorOverlay } from './components/error/ErrorOverlay'
 import Layout from './components/layout/Layout'
 import { EditProfilePage } from './pages/edit-profile-page/EditProfilePage'
 import { FeedPage } from './pages/feed-page/FeedPage'
+import { FeedbackPage } from './pages/feedback-page/FeedbackPage'
 import { ProfilePage } from './pages/profile-page/ProfilePage'
 import { RegistrationPage } from './pages/registration-page/RegistrationPage'
 import { RootPage } from './pages/RootPage'
@@ -81,6 +83,14 @@ const router = createBrowserRouter([
             </Layout>
         ),
         path: ROUTE_FEED,
+    },
+    {
+        element: (
+            <Layout>
+                <FeedbackPage />
+            </Layout>
+        ),
+        path: ROUTE_FEEDBACK,
     },
 ])
 

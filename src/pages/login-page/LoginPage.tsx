@@ -1,5 +1,6 @@
 import { ReactNode, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { InputButton } from '../../components/button/InputButton'
 import { Card } from '../../components/card/Card'
 import { Input, SubtextType } from '../../components/input/Input'
 import { Loader } from '../../components/loader/Loader'
@@ -11,7 +12,7 @@ import { QuoteModel } from '../../model/quote.model'
 import { TokenModel } from '../../model/token.model'
 import { StorageUtil } from '../../util/BrowerStorageUtil'
 import { PATH_AUTH_LOGIN, PATH_QUOTE } from '../../util/RequestConstants'
-import { ROUTE_PROFILE, ROUTE_REGISTER } from '../../util/RouteConstants'
+import { ROUTE_FEEDBACK, ROUTE_PROFILE, ROUTE_REGISTER } from '../../util/RouteConstants'
 import './login-page.scss'
 
 type LoginPageProps = {
@@ -137,6 +138,11 @@ export const LoginPage = (props: LoginPageProps) => {
                     </small>
                 </div>
             </Card>
+            <InputButton
+                className={'feedback-button'}
+                label={'Give Feedback'}
+                onClick={() => navigate(ROUTE_FEEDBACK)}
+            />
             {quote ? (
                 <p className={'quote'}>
                     &ldquo;{quote.q}&rdquo; &mdash; {quote.a}

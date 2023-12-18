@@ -26,3 +26,5 @@ export const PATH_FRIEND_REQUESTS_RECEIVED = PATH_FRIEND_REQUESTS + '/received'
 
 export const PATH_AUTOCOMPLETE = '/api/autocomplete'
 export const PATH_AUTOCOMPLETE_SEARCH = PATH_AUTOCOMPLETE + '/search'
+
+export const PATH_FEEDBACK = '/api/feedback'
