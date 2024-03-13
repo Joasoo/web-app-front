@@ -8,6 +8,7 @@ This is a social media platform designed to be something along the lines of Face
 - Feed page
 - Friend request pop-up
 - Search bar for user search
+- External API integration (quotes on Login page)
 
 
 ### Authors
